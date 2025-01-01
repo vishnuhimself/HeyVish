@@ -1,0 +1,42 @@
+---
+title: "WordPress Shortcode to get Estimated Reading Time"
+date: "2024-01-01T15:00:00Z"
+description: "Create a WordPress shortcode to display estimated reading time for your posts. Perfect for improving user experience with reading time indicators."
+category: "WordPress"
+---
+
+Here's a shortcode to get the estimated reading time of a post/page in WordPress:
+
+<Shortcode code="[post-read-time]" />
+
+## Code for the shortcode
+
+```php
+function reading_time() {
+    $content = get_post_field( 'post_content', $post->ID );
+    $word_count = str_word_count( strip_tags( $content ) );
+    $readingtime = ceil($word_count / 200);
+    if ($readingtime == 1) {
+        $timer = " min read";
+    } else {
+        $timer = " mins read";
+    }
+    $totalreadingtime = $readingtime . $timer;
+    return $totalreadingtime;
+}
+
+add_shortcode( 'post-read-time', 'vish_post_read_time_shortcode' );
+function vish_post_read_time_shortcode() {
+    return reading_time();
+}
+```
+
+Wherever you want to display the reading time, you can simply use the `[post-read-time]` shortcode.
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

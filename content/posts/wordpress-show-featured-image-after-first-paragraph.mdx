@@ -1,0 +1,27 @@
+---
+title: "WordPress: Show Featured Image after First Paragraph"
+date: "2024-01-01T14:00:00Z"
+description: "Learn how to display the featured image after the first paragraph in WordPress posts. A simple code solution for better content presentation."
+category: "WordPress"
+---
+
+Most of the WordPress themes let you control where to show/display the featured posts. But most of the times the option is limited to above the post title or below the post title. 
+
+If you want to display the featured image after the first paragraph of your post content, you can use this code:
+
+```php
+add_filter( 'the_content', 'insert_featured_image', 20 );
+
+function insert_featured_image( $content ) {
+    $content = preg_replace( "/<\/p>/", "</p>" . get_the_post_thumbnail($post->ID, 'post-single'), $content, 1 );
+    return $content;
+}
+```
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

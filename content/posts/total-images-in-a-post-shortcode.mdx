@@ -1,0 +1,31 @@
+---
+title: "WordPress Shortcode to get Total Images in a Post"
+date: "2024-01-01"
+description: "Create a simple WordPress shortcode to display the total number of images in your posts. Useful for photo galleries and image-heavy content."
+category: "WordPress"
+---
+
+Here's a shortcode to get the total number of images in a post in WordPress.
+
+<Shortcode code="[post_image_count]" />
+
+## Code for the shortcode
+
+```php
+//Total Images in a post
+function sw_post_image_count(){
+    $wall_count = count( get_attached_media( 'image', $post->ID ) );
+    return $wall_count - 1;
+}
+add_shortcode('post_image_count','sw_post_image_count');
+```
+
+Wherever you want to display the total images at post level, you can simply use the `[post_image_count]` shortcode.
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

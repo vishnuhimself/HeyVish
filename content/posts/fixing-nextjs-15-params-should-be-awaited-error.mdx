@@ -1,0 +1,96 @@
+---
+title: "How to Fix the 'params should be awaited' Error in Next.js 15"
+date: "2024-01-01T12:00:00Z"
+description: "Learn how to resolve the common 'params should be awaited' error that appears after upgrading to Next.js 15. A detailed guide with practical examples and explanations."
+category: "Next.js"
+---
+
+If you've recently upgraded to Next.js 15 and encountered this error:
+
+```bash
+Error: Route "/xxx/[slug]" used `params.slug`. `params` should be awaited before using its properties.
+```
+
+Don't worry! I ran into this exact same issue while building this blog. Let me explain what's happening and how to fix it.
+
+## Understanding the Error
+
+In Next.js 15, several APIs that were previously synchronous have been made asynchronous. This includes:
+- The `params` and `searchParams` props in pages and layouts
+- `cookies()`, `draftMode()`, and `headers()` from `next/headers`
+
+This change was introduced to improve the framework's performance and reliability. However, it means we need to modify how we access these values in our code.
+
+## The Problem in Action
+
+Here's what my blog post page looked like before:
+
+```typescript
+export default function BlogPost({ params }: { params: { slug: string } }) {
+  const post = getPostBySlug(params.slug) // This now throws an error
+  // ...
+}
+```
+
+The error occurs because we're trying to access `params.slug` directly without awaiting the params object first.
+
+## How to Fix It
+
+The solution is to await the params object before accessing its properties. Here's how I fixed it:
+
+```typescript
+export default async function BlogPost({ params }: { params: { slug: string } }) {
+  const { slug } = await params
+  const post = getPostBySlug(slug)
+  // ...
+}
+```
+
+The same applies to metadata generation:
+
+```typescript
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const { slug } = await params
+  const post = getPostBySlug(slug)
+  // ...
+}
+```
+
+## Best Practices
+
+Here are some tips I learned while fixing this issue:
+
+1. **Make the Component Async**: Any component that needs to access params needs to be async.
+2. **Destructure After Await**: It's cleaner to destructure the values after awaiting the params.
+3. **Consider Static Generation**: If you're using `generateStaticParams()`, you might want to evaluate if you need dynamic params at all.
+
+## Client Components
+
+If you need to access these values in a client component, you'll need to use `React.use()` instead:
+
+```typescript
+'use client'
+import * as React from 'react'
+
+function ClientPage({ params }) {
+  const { slug } = React.use(params)
+  return <div>{slug}</div>
+}
+```
+
+## Automated Fix
+
+Next.js provides a codemod to automatically fix many instances of this error:
+
+```bash
+npx @next/codemod@canary next-async-request-api .
+```
+
+However, I recommend understanding the changes and making them manually for critical parts of your application.
+
+## Why This Change Matters
+
+This change in Next.js 15 is part of a broader effort to make the framework more performant and predictable. By making these APIs asynchronous:
+- The framework can better optimize rendering
+- Server components can handle dynamic data more efficiently
+- The code becomes more explicit about its asynchronous nature

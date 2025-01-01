@@ -1,0 +1,30 @@
+---
+title: "WordPress: Remove URL Field in Comments Section"
+date: "2024-01-01T14:30:00Z"
+description: "Learn how to remove the URL field from WordPress comments section to reduce comment spam. Simple code solution without plugins."
+category: "WordPress"
+---
+
+The URL field in the comments section of the WordPress websites are often used for spamming. One of the ways to mitigate comment spam on your WordPress website is by disabling the URL field.
+
+Here's the code to disable the URL field in WordPress comments section:
+
+```php
+add_action( 'after_setup_theme', 'tu_add_comment_url_filter' );
+function tu_add_comment_url_filter() {
+    add_filter( 'comment_form_default_fields', 'tu_disable_comment_url', 20 );
+}
+
+function tu_disable_comment_url($fields) {
+    unset($fields['url']);
+    return $fields;
+}
+```
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

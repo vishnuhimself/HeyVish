@@ -1,0 +1,59 @@
+---
+title: "Disable Comments in WordPress without any Plugin"
+date: "2024-01-01"
+description: "Learn how to completely disable WordPress comments system without using any plugins. Simple code solution to remove comments functionality and clean up your WordPress site."
+category: "WordPress"
+---
+
+Comments are a good way to keep in touch with your audience but you may not always need it. And it's a good idea to disable comments completely, if you don't need them. This helps you to keep the website clean and avoid unnecessary comment spam.
+
+And to disable comments, there are tons of plugins available in the WordPress plugin repo. But, why add more bloat/dependency by installing another plugin, when you can easily disable comments by adding a few lines of code?
+
+## Code to disable WordPress comments
+
+The below PHP code will fully disable the comment system on your WordPress website:
+
+```php
+function disable_comments_feature() {
+    // Disable support for comments and trackbacks in post types
+    $post_types = get_post_types();
+    foreach ($post_types as $post_type) {
+        if (post_type_supports($post_type, 'comments')) {
+            remove_post_type_support($post_type, 'comments');
+            remove_post_type_support($post_type, 'trackbacks');
+        }
+    }
+  
+    // Close comments on the front-end
+    add_filter('comments_open', '__return_false', 20);
+    add_filter('pings_open', '__return_false', 20);
+  
+    // Hide existing comments from the front-end
+    add_filter('comments_array', '__return_empty_array', 10, 2);
+  
+    // Remove comments menu from admin panel
+    add_action('admin_menu', function () {
+        remove_menu_page('edit-comments.php');
+    });
+
+    // Redirect any user trying to access comments page
+    add_action('admin_init', function () {
+        global $pagenow;
+        
+        if ($pagenow === 'comment.php' || $pagenow === 'edit-comments.php') {
+            wp_redirect(admin_url());
+            exit;
+        }
+    });
+}
+
+add_action('init', 'disable_comments_feature');
+```
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

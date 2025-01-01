@@ -1,0 +1,88 @@
+---
+title: "WordPress: Automatically Set the First Image as Featured Image"
+date: "2024-01-01"
+description: "Learn how to make WordPress automatically set the first image in your post as the featured image. Perfect for blogs that want to automate featured image selection."
+category: "WordPress"
+---
+
+Featured images are a great visual asset to let the user know what the post is about and to maybe tease them a bit (like the YouTube thumbnails). 
+
+In some cases, though, you may not always want to spend time in making featured image for each post. At the same time, you don't want to leave the featured image blank either.
+
+I understand. I've been there. What if I told you, that you can make WordPress automatically pick the first image in the post and set it as featured image? Here's how.
+
+## Code to Set the First Image as Featured Image
+
+The below PHP code will make WordPress set the first image in the post as featured image automatically ✨.
+
+```php
+function auto_featured_image($post_id) {
+    // Check for autosaves
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) 
+        return;
+
+    // Check if a transient is set to avoid multiple executions
+    if (get_transient('running_featured_image_function')) 
+        return;
+
+    set_transient('running_featured_image_function', true, 30); // set for 30 seconds
+
+    $post = get_post($post_id);
+
+    if ($post && !has_post_thumbnail($post->ID)) {
+        $attached_images = get_children("post_parent=$post->ID&post_type=attachment&post_mime_type=image&numberposts=1");
+        
+        if ($attached_images) {
+            foreach ($attached_images as $attachment_id => $attachment) {
+                $original_image_path = get_attached_file($attachment_id);
+                $info = pathinfo($original_image_path);
+                $ext = $info['extension'];
+                $new_image_path = $info['dirname'] . '/' . $info['filename'] . '-featured.' . $ext;
+
+                // Check if this file already exists or if the original image already has '-featured' in its name.
+                if (!file_exists($new_image_path) && strpos($info['filename'], '-featured') === false) {
+                    $medium_image_dimensions = wp_get_attachment_image_src($attachment_id, 'medium');
+                    $editor = wp_get_image_editor($original_image_path);
+                    if (!is_wp_error($editor)) {
+                        $editor->resize($medium_image_dimensions[1], $medium_image_dimensions[2], false);
+                        $editor->save($new_image_path);
+                    }
+
+                    // Attach this new image to the post.
+                    $filetype = wp_check_filetype($new_image_path);
+                    $attachment = array(
+                        'guid' => wp_upload_dir()['url'] . '/' . basename($new_image_path),
+                        'post_mime_type' => $filetype['type'],
+                        'post_title' => preg_replace('/\.[^.]+$/', '', basename($new_image_path)),
+                        'post_content' => '',
+                        'post_status' => 'inherit'
+                    );
+                    $new_attachment_id = wp_insert_attachment($attachment, $new_image_path, $post->ID);
+
+                    // Include the image handler.
+                    require_once(ABSPATH . 'wp-admin/includes/image.php');
+                    $attach_data = wp_generate_attachment_metadata($new_attachment_id, $new_image_path);
+                    wp_update_attachment_metadata($new_attachment_id, $attach_data);
+
+                    // Set this new image as the post thumbnail.
+                    set_post_thumbnail($post->ID, $new_attachment_id);
+                }
+            }
+        }
+        
+        // At the end of the function, delete the transient
+        delete_transient('running_featured_image_function');
+    }
+}
+
+// Hook into save_post
+add_action('save_post', 'auto_featured_image', 10, 1);
+```
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

@@ -1,0 +1,37 @@
+---
+title: "WordPress Shortcode to Get Total Number of Images"
+date: "2024-01-01T11:00:00Z"
+description: "Create a WordPress shortcode to display the total number of images uploaded to your media library. Perfect for showcasing your media assets."
+category: "WordPress"
+---
+
+Here's a shortcode to get the total number of images in your WordPress site:
+
+<Shortcode code="[total_images]" />
+
+## Code for the shortcode
+
+```php
+//Total Images in Site
+function total_images_count(){
+    $args = array(
+        'post_type' => 'attachment',
+        'post_mime_type' => 'image',
+        'post_status' => 'inherit',
+        'posts_per_page' => -1,
+    );
+    $query_images = new WP_Query($args);
+    return $query_images->post_count;
+}
+add_shortcode('total_images', 'total_images_count');
+```
+
+Wherever you want to display the total number of images in your site, you can simply use the `[total_images]` shortcode.
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

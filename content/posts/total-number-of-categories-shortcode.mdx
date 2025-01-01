@@ -1,0 +1,31 @@
+---
+title: "WordPress Shortcode to Get Total Number of Categories"
+date: "2024-01-01T10:30:00Z"
+description: "Learn how to create a WordPress shortcode that displays the total number of categories on your site. Useful for showcasing your content organization."
+category: "WordPress"
+---
+
+Here's a shortcode to get the total number of categories in WordPress:
+
+<Shortcode code="[total_categories]" />
+
+## Code for the shortcode
+
+```php
+//Total Categories
+function total_categories_count() {
+    $categories = get_categories();
+    return count($categories);
+}
+add_shortcode('total_categories', 'total_categories_count');
+```
+
+Wherever you want to display the total number of categories, you can simply use the `[total_categories]` shortcode.
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

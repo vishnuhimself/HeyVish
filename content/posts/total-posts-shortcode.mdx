@@ -1,0 +1,31 @@
+---
+title: "WordPress Shortcode to Get Total Number of Posts"
+date: "2024-01-01T10:00:00Z"
+description: "Create a simple WordPress shortcode to display the total number of published posts on your site. Perfect for showing content statistics to your readers."
+category: "WordPress"
+---
+
+Here's a shortcode to get the total number of posts in WordPress:
+
+<Shortcode code="[total_posts]" />
+
+## Code for the shortcode
+
+```php
+//Total Posts
+function total_posts_count() {
+    $count_posts = wp_count_posts();
+    return $count_posts->publish;
+}
+add_shortcode('total_posts', 'total_posts_count');
+```
+
+Wherever you want to display the total number of posts, you can simply use the `[total_posts]` shortcode.
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

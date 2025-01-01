@@ -1,0 +1,30 @@
+---
+title: "Disable Self Pingbacks on WordPress"
+date: "2024-01-01T12:00:00Z"
+description: "Learn how to disable self-pingbacks in WordPress to reduce unnecessary notifications and improve site performance."
+category: "WordPress"
+---
+
+Self-pingbacks are annoying and it is one of the first things I disable after setting up a WordPress site.
+
+Here's the code to disable self-pingbacks on WordPress:
+
+```php
+// Disable self-pingbacks
+function disable_self_ping( &$links ) {
+    $home = get_option( 'home' );
+    foreach ( $links as $l => $link )
+        if ( 0 === strpos( $link, $home ) )
+            unset($links[$l]);
+}
+ 
+add_action( 'pre_ping', 'disable_self_ping' );
+```
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 

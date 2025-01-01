@@ -1,0 +1,30 @@
+---
+title: "Post Modified Date Shortcode for WordPress"
+date: "2024-01-01"
+description: "Learn how to create a simple WordPress shortcode to display the last modified date of your posts. Perfect for showing content freshness to your readers."
+category: "WordPress"
+---
+
+Here's a WordPress shortcode to get the post modified date:
+
+<Shortcode code="[modified_date]" />
+
+## Code for the shortcode
+
+```php
+//Modified Date
+function post_modified_date() {
+    return get_the_modified_date();
+}
+add_shortcode( 'modified_date', 'post_modified_date' );
+```
+
+Wherever you want to display the post modified date, you can simply use the `[modified_date]` shortcode.
+
+## How to add this code to your WordPress site
+
+<LinkCard 
+  href="/blog/add-php-wordpress/"
+  title="How to Add PHP Code to WordPress"
+  isExternal={false}
+/> 
