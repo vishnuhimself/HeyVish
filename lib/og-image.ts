@@ -1,6 +1,10 @@
-import { createCanvas, loadImage } from 'canvas'
+import { createCanvas, loadImage, registerFont } from 'canvas'
 import path from 'path'
 import fs from 'fs'
+
+// Register the font
+const fontPath = path.join(process.cwd(), 'fonts/BeVietnamPro.ttf')
+registerFont(fontPath, { family: 'Be Vietnam Pro' })
 
 export async function generateOGImage(text: string, slug: string): Promise<string> {
   const fileName = `${slug}.png`
@@ -28,7 +32,7 @@ export async function generateOGImage(text: string, slug: string): Promise<strin
   context.fillRect(0, 0, width, height)
 
   // Add text - using system font
-  context.font = 'bold 65px sans-serif'
+  context.font = 'bold 65px "Be Vietnam Pro"'
   context.textAlign = 'center'
   context.textBaseline = 'middle'
   context.fillStyle = '#ffffff'

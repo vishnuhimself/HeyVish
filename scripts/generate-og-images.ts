@@ -6,6 +6,13 @@ import path from 'path'
 async function generateOGImages() {
   console.log('🎨 Generating OG images...')
   
+  // Verify font exists
+  const fontPath = path.join(process.cwd(), 'fonts/BeVietnamPro.ttf')
+  if (!fs.existsSync(fontPath)) {
+    console.error('❌ Be Vietnam Pro font not found!')
+    process.exit(1)
+  }
+
   // Create og directory if it doesn't exist
   const ogDir = path.join(process.cwd(), 'public/og')
   if (!fs.existsSync(ogDir)) {
