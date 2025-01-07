@@ -1,0 +1,232 @@
+---
+title: "Expo App Stuck on Splash Screen | Fix"
+date: "2025-01-08"
+description: "Comprehensive guide to fix Expo app getting stuck on splash screen. Multiple solutions with code examples for both development and production builds."
+category: "React Native"
+---
+
+While developing a React Native app with Expo, I encountered an issue where my app would get stuck on the splash screen. This can happen in different scenarios:
+
+- During development in Expo Go
+- In production builds
+- After upgrading Expo SDK
+- In iOS simulator or TestFlight builds
+
+Let me share all the solutions that worked for me and others in the community.
+
+## Quick Solutions to Try First
+
+1. **Clear Expo Cache and Restart**
+```bash
+# Clear cache
+expo start -c
+
+# If using yarn
+yarn start --clear
+```
+
+2. **Remove node_modules and Reinstall**
+```bash
+# Remove existing dependencies
+rm -rf node_modules
+rm package-lock.json # or yarn.lock if using yarn
+
+# Reinstall
+npm install # or yarn install
+```
+
+## Common Causes and Solutions
+
+### 1. React Native Screens Not Installed
+
+One common cause is missing or improperly installed `react-native-screens`. Here's how to fix it:
+
+```bash
+# Install react-native-screens
+npx expo install react-native-screens
+
+# Add this import at the top of your App.js/App.tsx
+import 'react-native-screens/native-screens';
+```
+
+### 2. Incorrect Import Statements
+
+Sometimes auto-imports can cause this issue. Check for and fix any incorrect imports:
+
+```typescript
+// ❌ Incorrect import
+import { useState } from 'react/cjs/react.development';
+
+// ✅ Correct import
+import { useState } from 'react';
+```
+
+### 3. UUID Resolution Issues
+
+If you're using UUID in your project, remove it from resolutions in package.json:
+
+```json
+{
+  "resolutions": {
+    // ❌ Remove this if present
+    "uuid": "^8.3.2"
+  }
+}
+```
+
+### 4. Modal or Alert on App Launch
+
+If you're showing a modal or alert immediately when the app launches, it can cause the splash screen to hang:
+
+```typescript
+// ❌ Problematic code
+const App = () => {
+  useEffect(() => {
+    Alert.alert('Welcome!') // This can cause splash screen to hang
+  }, [])
+  // ...
+}
+
+// ✅ Better approach
+const App = () => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      Alert.alert('Welcome!')
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [])
+  // ...
+}
+```
+
+### 5. Xcode Related Issues (iOS)
+
+If you're facing this on iOS, try:
+
+```bash
+# Reset Xcode path
+sudo xcode-select --reset
+
+# Or set the correct path
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+```
+
+### 6. Debug Statements
+
+Remove any debugger statements in your code as they can cause hanging:
+
+```typescript
+// ❌ Remove these
+debugger;
+console.debug();
+```
+
+## Production Build Specific Solutions
+
+### 1. Clean Build Directories
+
+```bash
+# For iOS
+cd ios
+rm -rf build
+pod install
+
+# For Android
+cd android
+./gradlew clean
+```
+
+### 2. Check SplashScreen Configuration
+
+Make sure your splash screen is properly configured in app.json:
+
+```json
+{
+  "expo": {
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    }
+  }
+}
+```
+
+### 3. Manual Splash Screen Control
+
+If you're manually controlling the splash screen, ensure proper implementation:
+
+```typescript
+import * as SplashScreen from 'expo-splash-screen';
+
+// Keep splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
+const App = () => {
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Pre-load fonts, make API calls, etc.
+        await loadResourcesAsync();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
+
+  return (
+    <View onLayout={onLayoutRootView}>
+      {/* Your app content */}
+    </View>
+  );
+};
+```
+
+## Development Environment Fixes
+
+1. **Update Expo CLI**
+```bash
+npm install -g expo-cli@latest
+```
+
+2. **Update Expo Go App**
+Delete and reinstall the Expo Go app on your device/simulator.
+
+## Prevention Tips
+
+To prevent this issue in future:
+
+1. Always use the latest stable versions of Expo SDK and dependencies
+2. Test thoroughly after adding new dependencies
+3. Keep development environment updated
+4. Use expo-doctor to check for common issues:
+```bash
+npx expo-doctor
+```
+
+## When Nothing Works
+
+If none of the above solutions work:
+
+1. Create a new Expo project
+2. Gradually move your code to the new project
+3. Compare configurations between working and non-working projects
+4. Check for differences in dependencies and versions
+
+Remember to always test your app thoroughly after applying any of these fixes, especially before deploying to production. 
