@@ -19,7 +19,81 @@ In React Native, you can't render text strings directly inside View or other com
 
 ## Common Scenarios and Solutions
 
-### 1. Direct Text in View Component
+### 1. Logical Conditions and Zero Values
+
+One tricky scenario I encountered was with logical conditions that evaluate to 0 or empty strings:
+
+```jsx
+// ❌ This can cause issues with 0
+const ErrorComponent = ({ count }) => {
+  return (
+    <View>
+      {count && <Text>{count}</Text>} {/* Will not render when count is 0 */}
+    </View>
+  )
+}
+
+// ✅ Use ternary operator instead
+const CorrectComponent = ({ count }) => {
+  return (
+    <View>
+      {count ? <Text>{count}</Text> : null}
+    </View>
+  )
+}
+```
+
+### 2. Empty String Conditions
+
+Similar issues occur with empty strings:
+
+```jsx
+// ❌ This won't render with empty strings
+const ErrorComponent = ({ message }) => {
+  return (
+    <View>
+      {message && <Text>{message}</Text>} {/* Won't render when message is '' */}
+    </View>
+  )
+}
+
+// ✅ Better approach using ternary
+const CorrectComponent = ({ message }) => {
+  return (
+    <View>
+      {message ? <Text>{message}</Text> : null}
+    </View>
+  )
+}
+```
+
+### 3. Comments in JSX
+
+Another common issue is using incorrect comment syntax in JSX:
+
+```jsx
+// ❌ Incorrect comment usage
+const ErrorComponent = () => {
+  return (
+    <View>
+      // This comment will cause an error
+      <Text>Hello World</Text>
+    </View>
+  )
+}
+
+// ✅ Correct comment usage
+const CorrectComponent = () => {
+  return (
+    <View>
+      {/* This is the correct way to comment in JSX */}
+      <Text>Hello World</Text>
+    </View>
+  )
+}
+```
+
+### 4. Direct Text in View Component
 
 Here's what **won't** work:
 
@@ -47,7 +121,7 @@ const CorrectComponent = () => {
 }
 ```
 
-### 2. Rendering Variables
+### 5. Rendering Variables
 
 When I tried to display variables, I encountered the same error. Here's how to fix it:
 
@@ -73,7 +147,7 @@ const CorrectComponent = () => {
 }
 ```
 
-### 3. Conditional Rendering
+### 6. Conditional Rendering
 
 I also ran into this issue with conditional rendering:
 
@@ -99,7 +173,7 @@ const CorrectComponent = ({ isLoggedIn }) => {
 }
 ```
 
-### 4. Template Literals
+### 7. Template Literals
 
 When using template literals, the same rule applies:
 
@@ -123,7 +197,7 @@ const CorrectComponent = ({ count }) => {
 }
 ```
 
-### 5. Nested Text Components
+### 8. Nested Text Components
 
 One thing I learned is that Text components can be nested, which is useful for styling:
 
@@ -155,8 +229,9 @@ const styles = StyleSheet.create({
 ## Best Practices I Follow Now
 
 1. **Always Use Text Components**: Any string that needs to be displayed should be wrapped in a Text component.
-
-2. **Component Structure**: I structure my components like this:
+2. **Use Ternary Over &&**: For conditional rendering, prefer ternary operators over && to handle edge cases like 0 and empty strings.
+3. **Proper JSX Comments**: Use {/* */} for comments within JSX instead of // style comments.
+4. **Component Structure**: I structure my components like this:
 
 ```jsx
 import { View, Text, StyleSheet } from 'react-native'
@@ -182,7 +257,7 @@ const styles = StyleSheet.create({
 })
 ```
 
-3. **Style Organization**: Keep text-related styles (fontSize, fontWeight, color, etc.) on Text components, not View components.
+5. **Style Organization**: Keep text-related styles (fontSize, fontWeight, color, etc.) on Text components, not View components.
 
 ## Common Gotchas to Avoid
 
