@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getAllPosts } from "@/lib/blog";
 import { format, parseISO } from "date-fns";
 import { ArrowRight } from "lucide-react";
+import { CurrentlyBuilding } from "@/components/CurrentlyBuilding"
 
 export default function Home() {
   const recentPosts = getAllPosts().slice(0, 3);
@@ -15,8 +16,9 @@ export default function Home() {
         <div className="flex-1 space-y-4">
           <h1 className="text-4xl font-bold">Hello, I&apos;m Srivishnu Ramakrishnan</h1>
           <p className="text-lg text-muted-foreground">
-          Engineer by profession, web creator by passion. Sharing insights on scripting, data engineering, web development, and building impactful websites. 
+            Engineer by profession, web creator by passion. Sharing insights on scripting, data engineering, web development, and building impactful websites. 
           </p>
+          <CurrentlyBuilding />
           <div className="flex flex-wrap gap-4">
             <Button asChild>
               <Link href="#about">About Me</Link>
