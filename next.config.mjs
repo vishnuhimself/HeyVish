@@ -6,6 +6,15 @@ import remarkGfm from 'remark-gfm'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  // Make canvas optional to avoid build issues on Vercel
+  webpack: (config, { isServer }) => {
+    // Add canvas to the list of ignored modules
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      canvas: false,
+    }
+    return config
+  },
   async redirects() {
     return [
       {

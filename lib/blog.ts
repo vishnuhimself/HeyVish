@@ -1,5 +1,5 @@
-import fs from 'fs'
-import path from 'path'
+import * as fs from 'fs'
+import * as path from 'path'
 import matter from 'gray-matter'
 import { Post } from './types'
 
@@ -7,9 +7,9 @@ const postsDirectory = path.join(process.cwd(), 'content/posts')
 
 export function getAllPosts(): Post[] {
   const fileNames = fs.readdirSync(postsDirectory)
-    .filter(fileName => fileName.endsWith('.mdx'))
+    .filter((fileName: string) => fileName.endsWith('.mdx'))
   
-  const allPostsData = fileNames.map((fileName) => {
+  const allPostsData = fileNames.map((fileName: string) => {
     const slug = fileName.replace(/\.mdx$/, '')
     const fullPath = path.join(postsDirectory, fileName)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
@@ -22,7 +22,7 @@ export function getAllPosts(): Post[] {
     }
   })
 
-  return allPostsData.sort((a, b) => {
+  return allPostsData.sort((a: Post, b: Post) => {
     return new Date(b.date).getTime() - new Date(a.date).getTime()
   })
 }

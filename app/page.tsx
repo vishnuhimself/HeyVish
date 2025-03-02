@@ -3,8 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getAllPosts } from "@/lib/blog";
 import { format, parseISO } from "date-fns";
-import { ArrowRight } from "lucide-react";
-import { CurrentlyBuilding } from "@/components/CurrentlyBuilding"
+import { ArrowRight, Rocket } from "lucide-react";
 
 export default function Home() {
   const recentPosts = getAllPosts().slice(0, 3);
@@ -18,7 +17,22 @@ export default function Home() {
           <p className="text-lg text-muted-foreground">
             Engineer by profession, web creator by passion. Sharing insights on scripting, data engineering, web development, and building impactful websites. 
           </p>
-          <CurrentlyBuilding />
+          
+          <Link 
+            href="https://justshipthings.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block transition-colors hover:border-primary"
+          >
+            <div className="flex items-center gap-2 p-3 border rounded-md bg-muted/50">
+              <Rocket className="w-5 h-5 text-primary" />
+              <p className="text-sm">
+                <span className="font-medium">See what I&apos;m shipping right now</span>{" "}
+                <span className="text-primary">→</span>
+              </p>
+            </div>
+          </Link>
+          
           <div className="flex flex-wrap gap-4">
             <Button asChild>
               <Link href="#about">About Me</Link>
@@ -48,6 +62,32 @@ export default function Home() {
       <section className="py-12 border-t">
         <h2 className="text-2xl font-bold mb-6">I love building with</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="relative w-12 h-12">
+                <Image
+                  src="/expo.svg"
+                  alt="Expo Logo"
+                  fill
+                  className="object-contain dark:invert"
+                />
+              </div>
+              <span className="text-lg font-semibold">Expo</span>
+            </div>
+          </div>
+          <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="relative w-12 h-12">
+                <Image
+                  src="/react-native.svg"
+                  alt="React Native Logo"
+                  fill
+                  className="object-contain dark:invert"
+                />
+              </div>
+              <span className="text-lg font-semibold">React Native</span>
+            </div>
+          </div>
           <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
             <div className="flex items-center gap-4">
               <div className="relative w-12 h-12">
