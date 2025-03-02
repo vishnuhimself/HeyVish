@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "tsx scripts/generate-og-images.ts && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "npm rebuild canvas --build-from-source=false"
   },
   "dependencies": {
     "@next/mdx": "^15.1.3",
