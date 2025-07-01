@@ -22,7 +22,7 @@ const Header = () => {
         <nav className="flex flex-col sm:flex-row items-center justify-between min-h-16 py-4">
           <div className="flex items-center gap-3 mb-4 sm:mb-0">
             <Link href="/" className="text-2xl font-bold">
-              Srivishnu Ramakrishnan
+              vish
             </Link>
             
           </div>
@@ -33,32 +33,6 @@ const Header = () => {
             </Link>
             <Link href="/contact" className="hover:text-primary text-base">
               Contact
-            </Link>
-            <Link 
-              href="https://www.linkedin.com/in/srivishnu-ramakrishnan" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="relative w-5 h-5"
-            >
-              <Image
-                src="/linked-in.svg"
-                alt="LinkedIn"
-                fill
-                className="object-contain dark:invert hover:opacity-80 transition-opacity"
-              />
-            </Link>
-            <Link 
-              href="https://twitter.com/vishhimself" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="relative w-6 h-6"
-            >
-              <Image
-                src="/twitter-square.svg"
-                alt="Twitter"
-                fill
-                className="object-contain dark:invert hover:opacity-80 transition-opacity"
-              />
             </Link>
             <ModeToggle />
           </div>

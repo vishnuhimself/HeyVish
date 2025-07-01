@@ -1,265 +1,157 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { getAllPosts } from "@/lib/blog";
-import { format, parseISO } from "date-fns";
-import { ArrowRight, Rocket } from "lucide-react";
+import Image from "next/image";
+import { ExternalLink, Github } from "lucide-react";
 
 export default function Home() {
-  const recentPosts = getAllPosts().slice(0, 3);
-
   return (
-    <div className="max-w-3xl mx-auto">
-      {/* Hero Section */}
-      <section className="flex flex-col-reverse md:flex-row items-center gap-8 py-8">
-        <div className="flex-1 space-y-4">
-          <h1 className="text-4xl font-bold">Hello, I&apos;m Srivishnu Ramakrishnan</h1>
-          <p className="text-lg text-muted-foreground">
-            Engineer by profession, web creator by passion. Sharing insights on scripting, data engineering, web development, and building impactful websites. 
-          </p>
+    <div className="min-h-screen flex items-center justify-center p-6 bg-[#FBFBF9] dark:bg-black">
+      <div className="w-full max-w-md text-center space-y-8">
+        {/* Profile Image */}
+        <div className="flex justify-center">
+                      <div className="relative w-24 h-24 rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800">
+            <Image
+              src="/Srivishnu-Social-DP-Small.PNG"
+              alt="Srivishnu Ramakrishnan"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Name with hover animation - isolated container */}
+        <div className="space-y-2">
+          <div className="flex justify-center">
+            <h1 className="text-3xl sm:text-4xl md:text-3xl font-medium group cursor-pointer flex items-baseline whitespace-nowrap px-1">
+              <span className="inline-block align-baseline overflow-hidden max-w-0 group-hover:max-w-[3ch] transition-all duration-700 ease-out text-neutral-400">
+                Sri
+              </span>
+              <span className="text-foreground align-baseline">vish</span>
+              <span className="inline-block align-baseline overflow-hidden max-w-0 group-hover:max-w-[15ch] transition-all duration-700 ease-out text-neutral-400">
+                nu Ramakrishnan
+              </span>
+            </h1>
+          </div>
           
-          <Link 
-            href="https://justshipthings.com" 
-            target="_blank" 
+          <p className="text-muted-foreground text-lg leading-relaxed">
+          apps, domains, tiktok experiments. 
+          </p>
+        </div>
+
+        {/* Follow on X */}
+        <div className="w-full">
+          <Link
+            href="https://x.com/VishHimself"
+            target="_blank"
             rel="noopener noreferrer"
-            className="block transition-colors hover:border-primary"
+            className="group flex items-center justify-between w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg
+                       hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
           >
-            <div className="flex items-center gap-2 p-3 border rounded-md bg-muted/50">
-              <Rocket className="w-5 h-5 text-primary" />
-              <p className="text-sm">
-                <span className="font-medium">See what I&apos;m shipping right now</span>{" "}
-                <span className="text-primary">→</span>
-              </p>
+            <div className="flex items-center gap-3">
+              <div className="relative w-4 h-4">
+                <svg viewBox="0 0 300 300.251" className="w-full h-full fill-current">
+                  <path d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/>
+                </svg>
+              </div>
+              <div className="text-left">
+                <div className="font-medium">follow @vishhimself</div>
+                <div className="text-xs text-muted-foreground">this is where i yap the most</div>
+              </div>
+            </div>
+            <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </Link>
+        </div>
+
+        {/* Projects Section */}
+        <div className="space-y-4 w-full">
+          <h2 className="text-sm font-medium text-muted-foreground">projects</h2>
+          <div className="space-y-3">
+          <Link
+            href="https://apps.apple.com/in/app/growthkit-track-height-weight/id6740914430"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-between w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg
+                       hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden">
+                  <Image
+                    src="/growthkit-logo.png"
+                    alt="GrowthKit Logo"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="text-left">
+                  <div className="font-medium">GrowthKit</div>
+                  <div className="text-xs text-muted-foreground">Track height & weight</div>
+                </div>
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+                iOS
+              </div>
             </div>
           </Link>
-          
-          <div className="flex flex-wrap gap-4">
-            <Button asChild>
-              <Link href="#about">About Me</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/contact">Contact</Link>
-            </Button>
-            <Button variant="outline" asChild className="inline-flex items-center gap-2">
-              <Link href="/blog">
-                Read Blog <ArrowRight className="w-4 h-4" />
-              </Link>
-            </Button>
+
+          <Link
+            href="https://apps.apple.com/in/app/mood-tracker-journal-moosh/id6746203544"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-between w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg
+                       hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden">
+                  <Image
+                    src="/moosh-logo.png"
+                    alt="Moosh Logo"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="text-left">
+                  <div className="font-medium">Moosh</div>
+                  <div className="text-xs text-muted-foreground">Mood tracker & journal</div>
+                </div>
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+                iOS
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="https://github.com/vishnuhimself/UGCVidGen"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-between w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg
+                       hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden">
+                  <Image
+                    src="/UGC Video Gen.png"
+                    alt="UGC Video Generator Logo"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="text-left">
+                  <div className="font-medium">UGC Video Generator</div>
+                  <div className="text-xs text-muted-foreground">Bulk Generate UGC Videos</div>
+                </div>
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+                Open Source
+              </div>
+            </div>
+          </Link>
           </div>
         </div>
-        <div className="relative w-48 h-48 md:w-64 md:h-64">
-          <Image
-            src="/Srivishnu-Ramakrishnan.jpg"
-            alt="Srivishnu Ramakrishnan"
-            fill
-            className="rounded-sm object-cover"
-            priority
-          />
-        </div>
-      </section>
-
-      {/* Tech Stack Section */}
-      <section className="py-12 border-t">
-        <h2 className="text-2xl font-bold mb-6">I love building with</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/expo.svg"
-                  alt="Expo Logo"
-                  fill
-                  className="object-contain dark:invert"
-                />
-              </div>
-              <span className="text-lg font-semibold">Expo</span>
-            </div>
-          </div>
-          <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/react-native.svg"
-                  alt="React Native Logo"
-                  fill
-                  className="object-contain dark:invert"
-                />
-              </div>
-              <span className="text-lg font-semibold">React Native</span>
-            </div>
-          </div>
-          <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/next-js.svg"
-                  alt="Next.js Logo"
-                  fill
-                  className="object-contain dark:invert"
-                />
-              </div>
-              <span className="text-lg font-semibold">Next.js</span>
-            </div>
-          </div>
-          <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/wordpress-logo.svg"
-                  alt="WordPress Logo"
-                  fill
-                  className="object-contain dark:invert"
-                />
-              </div>
-              <span className="text-lg font-semibold">WordPress</span>
-            </div>
-          </div>
-          <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/informatica.svg"
-                  alt="Informatica Logo"
-                  fill
-                  className="object-contain dark:invert"
-                />
-              </div>
-              <span className="text-lg font-semibold">Informatica PowerCenter</span>
-            </div>
-          </div>
-          <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/sql.svg"
-                  alt="SQL Logo"
-                  fill
-                  className="object-contain dark:invert"
-                />
-              </div>
-              <span className="text-lg font-semibold">SQL</span>
-            </div>
-          </div>
-          <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/python.svg"
-                  alt="Python Logo"
-                  fill
-                  className="object-contain dark:invert"
-                />
-              </div>
-              <span className="text-lg font-semibold">Python</span>
-            </div>
-          </div>
-          <div className="group border rounded-lg p-6 hover:border-primary transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/shell.svg"
-                  alt="Shell Scripting Logo"
-                  fill
-                  className="object-contain dark:invert"
-                />
-              </div>
-              <span className="text-lg font-semibold">Shell Scripting</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Me Section */}
-      <section className="py-12 border-t" id="about">
-        <h2 className="text-2xl font-bold mb-6">About Me</h2>
-        <div className="space-y-8">
-          <p className="text-lg text-muted-foreground">
-            I&apos;m a computer science graduate working as a data engineer in an MNC. Beyond the day job, 
-            I&apos;m deeply passionate about blogging and web development.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4 p-6 border rounded-lg hover:border-primary transition-colors">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">📈</span>
-                <h3 className="text-lg font-semibold">pSEO</h3>
-              </div>
-              <p className="text-muted-foreground">
-                I love building programmatic SEO websites that provide useful content to the audience at scale.
-              </p>
-            </div>
-
-            <div className="space-y-4 p-6 border rounded-lg hover:border-primary transition-colors">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🚀</span>
-                <h3 className="text-lg font-semibold">Serial Website Builder</h3>
-              </div>
-              <p className="text-muted-foreground">
-                Managing 10+ websites focused on evergreen content and pSEO. 
-                Powered by Next.js and WordPress.
-              </p>
-            </div>
-
-            <div className="space-y-4 p-6 border rounded-lg hover:border-primary transition-colors">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🌐</span>
-                <h3 className="text-lg font-semibold">Domain Collector</h3>
-              </div>
-              <p className="text-muted-foreground">
-                I purchase domains for fun. At this point, it&apos;s more than a hobby 
-                – it&apos;s a delightful addiction.
-              </p>
-            </div>
-
-            <div className="space-y-4 p-6 border rounded-lg hover:border-primary transition-colors">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">✉️</span>
-                <h3 className="text-lg font-semibold">Let&apos;s Connect</h3>
-              </div>
-              <p className="text-muted-foreground">
-                Need help with blog content or website design? Feel free to reach out 
-                – I&apos;m always happy to help!
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Recent Posts Section */}
-      {recentPosts.length > 0 && (
-        <section className="py-12 border-t">
-          <h2 className="text-2xl font-bold mb-6">Recent Scribbles ✍️</h2>
-          <div className="space-y-6">
-            {recentPosts.map((post) => (
-              <article key={post.slug} className="group">
-                <Link href={`/blog/${post.slug}`}>
-                  <div className="space-y-2">
-                    <h3 className="text-xl font-semibold group-hover:text-primary">
-                      {post.title}
-                    </h3>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <time dateTime={post.date} suppressHydrationWarning>
-                        {format(parseISO(post.date), "MMMM d, yyyy")}
-                      </time>
-                      {post.category && (
-                        <>
-                          <span>•</span>
-                          <span>{Array.isArray(post.category) ? post.category[0] : post.category}</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              </article>
-            ))}
-          </div>
-          <div className="mt-8">
-            <Button variant="outline" asChild>
-              <Link href="/blog">View All Posts</Link>
-            </Button>
-          </div>
-        </section>
-      )}
+      </div>
     </div>
   );
 }

@@ -5,18 +5,11 @@ import { generateMetadata as genMeta } from "@/lib/metadata"
 
 export const metadata = genMeta({
   title: "Contact",
-  description: "Get in touch with me through LinkedIn, Twitter, or Email. I&apos;m always happy to connect and help!",
+  description: "Get in touch with me through Twitter or Email. I&apos;m always happy to connect and help!",
   path: "/contact",
 })
 
 const contactMethods = [
-  {
-    name: "LinkedIn",
-    description: "Let&apos;s connect professionally",
-    icon: Linkedin,
-    href: "https://www.linkedin.com/in/srivishnu-ramakrishnan",
-    color: "bg-primary/10 text-primary",
-  },
   {
     name: "Twitter",
     description: "Follow me for updates",
@@ -38,14 +31,11 @@ export default function ContactPage() {
     <div className="max-w-3xl mx-auto">
       <div className="space-y-4 text-center mb-12">
 
-        <h1 className="text-4xl font-bold">Let&apos;s Connect</h1>
+        <h1 className="text-4xl font-bold">say hi</h1>
         
-        <p className="text-lg text-muted-foreground">
-          Feel free to reach out through any of these platforms
-        </p>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-2">
         {contactMethods.map((method) => {
           const Icon = method.icon
           return (

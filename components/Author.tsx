@@ -17,27 +17,13 @@ export function Author() {
           <div className="text-sm text-muted-foreground">Engineer & Web Creator</div>
           <div className="flex items-center gap-2">
             <Link 
-              href="https://www.linkedin.com/in/srivishnu-ramakrishnan"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
-            >
-              <Image 
-                src="/linked-in.svg"
-                alt="LinkedIn"
-                width={16}
-                height={16}
-                className="dark:invert"
-              />
-            </Link>
-            <Link 
               href="https://twitter.com/vishhimself"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:opacity-80 transition-opacity"
             >
               <Image 
-                src="/twitter-square.svg"
+                src="/x.svg"
                 alt="Twitter"
                 width={16}
                 height={16}
