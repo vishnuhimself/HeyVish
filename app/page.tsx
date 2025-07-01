@@ -4,7 +4,7 @@ import { ExternalLink } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-[#FBFBF9] dark:bg-black">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-[#F5F4ED] dark:bg-black">
       <div className="w-full max-w-md text-center space-y-8">
         {/* Profile Image */}
         <div className="flex justify-center">
@@ -44,7 +44,7 @@ export default function Home() {
             href="https://x.com/VishHimself"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-between w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg
+            className="group flex items-center justify-between w-full p-4 border border-gray-300 dark:border-gray-800 rounded-lg
                        hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
           >
             <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ export default function Home() {
             href="https://apps.apple.com/in/app/growthkit-track-height-weight/id6740914430"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-between w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg
+            className="group flex items-center justify-between w-full p-4 border border-gray-300 dark:border-gray-800 rounded-lg
                        hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
           >
             <div className="flex items-center justify-between w-full">
@@ -88,7 +88,7 @@ export default function Home() {
                   <div className="text-xs text-muted-foreground">Track height & weight</div>
                 </div>
               </div>
-              <div className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+              <div className="bg-[#D97757] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
                 iOS
               </div>
             </div>
@@ -98,7 +98,7 @@ export default function Home() {
             href="https://apps.apple.com/in/app/mood-tracker-journal-moosh/id6746203544"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-between w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg
+            className="group flex items-center justify-between w-full p-4 border border-gray-300 dark:border-gray-800 rounded-lg
                        hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
           >
             <div className="flex items-center justify-between w-full">
@@ -116,7 +116,7 @@ export default function Home() {
                   <div className="text-xs text-muted-foreground">Mood tracker & journal</div>
                 </div>
               </div>
-              <div className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+              <div className="bg-[#D97757] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
                 iOS
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function Home() {
             href="https://github.com/vishnuhimself/UGCVidGen"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-between w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg
+            className="group flex items-center justify-between w-full p-4 border border-gray-300 dark:border-gray-800 rounded-lg
                        hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
           >
             <div className="flex items-center justify-between w-full">
@@ -144,7 +144,7 @@ export default function Home() {
                   <div className="text-xs text-muted-foreground">Bulk Generate UGC Videos</div>
                 </div>
               </div>
-              <div className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+              <div className="bg-[#D97757] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
                 Open Source
               </div>
             </div>
