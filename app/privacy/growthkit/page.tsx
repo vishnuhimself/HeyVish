@@ -60,15 +60,15 @@ export default function GrowthKitPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3">Data Security</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Your data is secured by your device's built-in security features. Since all data is stored locally, it benefits from your device's encryption and security measures.
+                Your data is secured by your device&apos;s built-in security features. Since all data is stored locally, it benefits from your device&apos;s encryption and security measures.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Children's Privacy</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                While GrowthKit can be used to track children's growth, all data management must be done by parents or legal guardians. We do not knowingly collect any personal information from children.
-              </p>
+                          <h2 className="text-xl font-semibold mb-3">Children&apos;s Privacy</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              While GrowthKit can be used to track children&apos;s growth, all data management must be done by parents or legal guardians. We do not knowingly collect any personal information from children.
+            </p>
             </div>
 
             <div>

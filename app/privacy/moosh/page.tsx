@@ -60,15 +60,15 @@ export default function MooshPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3">Data Security</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Your mood data and journal entries are secured by your device's built-in security features. Since all data is stored locally, it benefits from your device's encryption and security measures.
+                Your mood data and journal entries are secured by your device&apos;s built-in security features. Since all data is stored locally, it benefits from your device&apos;s encryption and security measures.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Children's Privacy</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                While Moosh can be used by teenagers to track their mood and emotional well-being, all data management for users under 13 must be done by parents or legal guardians. We do not knowingly collect any personal information from children.
-              </p>
+                          <h2 className="text-xl font-semibold mb-3">Children&apos;s Privacy</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              While Moosh can be used by teenagers to track their mood and emotional well-being, all data management for users under 13 must be done by parents or legal guardians. We do not knowingly collect any personal information from children.
+            </p>
             </div>
 
             <div>

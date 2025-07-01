@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Linkedin, Twitter, Mail } from "lucide-react"
+import { Twitter, Mail } from "lucide-react"
 import { generateMetadata as genMeta } from "@/lib/metadata"
 
 export const metadata = genMeta({
