@@ -30,6 +30,9 @@ const Header = () => {
             <Link href="/blog" className="hover:text-primary text-base">
               Blog
             </Link>
+            <Link href="/gold" className="hover:text-primary text-base">
+              Gold
+            </Link>
             <Link href="/contact" className="hover:text-primary text-base">
               Contact
             </Link>

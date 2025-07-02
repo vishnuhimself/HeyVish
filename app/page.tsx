@@ -149,6 +149,27 @@ export default function Home() {
               </div>
             </div>
           </Link>
+
+          <Link
+            href="/gold"
+            className="group flex items-center justify-between w-full p-4 border border-gray-300 dark:border-gray-800 rounded-lg
+                       hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 hover:scale-[1.02]"
+          >
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">Au</span>
+                </div>
+                <div className="text-left">
+                  <div className="font-medium">Gold Portfolio Tracker</div>
+                  <div className="text-xs text-muted-foreground">Track gold investments & P&L</div>
+                </div>
+              </div>
+              <div className="bg-[#D97757] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+                Personal
+              </div>
+            </div>
+          </Link>
           </div>
         </div>
       </div>

@@ -1,0 +1,32 @@
+name: Gold Price Scraper
+
+on:
+  schedule:
+    # Runs at 5:00 AM UTC (10:30 AM IST)
+    - cron: '0 5 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  scrape-gold-price:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install cheerio axios
+        
+    - name: Scrape gold price and update data
+      run: |
+        node scripts/scrape-gold-price.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOLD_DATA_REPO: ${{ vars.GOLD_DATA_REPO || 'gold-data' }}
+        ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'vishnu0923' }} 
