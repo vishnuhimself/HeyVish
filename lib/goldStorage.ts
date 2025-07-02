@@ -42,24 +42,7 @@ export class GoldStorage {
     return bytes.toString(CryptoJS.enc.Utf8);
   }
 
-  // Local storage methods (only for migration)
-  static loadFromLocal(): GoldData | null {
-    try {
-      const encrypted = localStorage.getItem("goldPortfolioData");
-      if (!encrypted) return null;
-      
-      const decrypted = this.decrypt(encrypted);
-      const data = JSON.parse(decrypted);
-      
-      // Clean up after loading for migration
-      localStorage.removeItem("goldPortfolioData");
-      
-      return data;
-    } catch (error) {
-      console.error("Error loading from local storage:", error);
-      return null;
-    }
-  }
+
 
   // GitHub storage methods
   static async saveToGitHub(data: GoldData): Promise<boolean> {
@@ -123,7 +106,11 @@ export class GoldStorage {
   }
 
   static async loadFromGitHub(): Promise<GoldData | null> {
+    console.log('🔍 GitHub Token Status:', GITHUB_TOKEN ? 'Present' : 'Missing');
+    console.log('🔍 Environment:', process.env.NODE_ENV);
+    
     if (!GITHUB_TOKEN) {
+      console.error("❌ GitHub token not configured. Please set up NEXT_PUBLIC_GITHUB_TOKEN in your environment variables.");
       throw new Error("GitHub token not configured. Please set up NEXT_PUBLIC_GITHUB_TOKEN in your environment variables.");
     }
 
@@ -158,32 +145,5 @@ export class GoldStorage {
     }
   }
 
-  // Migration method to move localStorage data to new encrypted format
-  static migrateLegacyData(): GoldData | null {
-    try {
-      // Try to load old unencrypted data
-      const oldEntries = localStorage.getItem("goldEntries");
-      const oldPrice = localStorage.getItem("currentGoldPrice");
-      
-      if (oldEntries || oldPrice) {
-        const data: GoldData = {
-          entries: oldEntries ? JSON.parse(oldEntries) : [],
-          currentGoldPrice: oldPrice ? parseFloat(oldPrice) : 6500,
-          lastUpdated: new Date().toISOString(),
-        };
-        
-        // Return the data for migration (will be saved to GitHub by caller)
-        
-        // Clean up old data
-        localStorage.removeItem("goldEntries");
-        localStorage.removeItem("currentGoldPrice");
-        
-        return data;
-      }
-    } catch (error) {
-      console.error("Error migrating legacy data:", error);
-    }
-    
-    return null;
-  }
+
 } 

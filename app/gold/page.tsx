@@ -105,31 +105,24 @@ function GoldTrackingPageContent() {
 
   const loadData = async () => {
     try {
-      // First try to migrate any legacy data
-      const legacyData = GoldStorage.migrateLegacyData();
-      
-      if (legacyData) {
-        // Migrate legacy data to GitHub
-        setEntries(legacyData.entries);
-        setCurrentGoldPrice(legacyData.currentGoldPrice);
-        setLastUpdated(legacyData.lastUpdated);
-        await GoldStorage.saveToGitHub(legacyData);
-        return;
-      }
-      
-      // Load data from GitHub
+      console.log('📥 Loading data from GitHub...');
       const data = await GoldStorage.loadFromGitHub();
       
       if (data) {
+        console.log('✅ Data loaded from GitHub successfully');
         setEntries(data.entries);
         setCurrentGoldPrice(data.currentGoldPrice);
         setLastUpdated(data.lastUpdated);
       } else {
+        console.log('📝 No GitHub data found, using defaults');
         setCurrentGoldPrice(6500); // Default price per gram in INR
         setLastUpdated(new Date().toISOString());
       }
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('❌ Error loading data from GitHub:', error);
+      // Set defaults if GitHub fails
+      setCurrentGoldPrice(6500);
+      setLastUpdated(new Date().toISOString());
     } finally {
       setIsLoading(false);
     }
