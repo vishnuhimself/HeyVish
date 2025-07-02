@@ -11,49 +11,23 @@ const GITHUB_DATA_KEY = 'gold-portfolio-data.json';
 
 // Encryption functions (matching your goldStorage.ts)
 function encrypt(data) {
+  const algorithm = 'aes-256-cbc';
   const key = crypto.scryptSync(ENCRYPTION_KEY, 'salt', 32);
   const iv = crypto.randomBytes(16);
   
-  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+  const cipher = crypto.createCipher('aes-256-cbc', ENCRYPTION_KEY);
   let encrypted = cipher.update(data, 'utf8', 'base64');
   encrypted += cipher.final('base64');
   
-  // Prepend IV to encrypted data
-  return iv.toString('base64') + ':' + encrypted;
+  return encrypted;
 }
 
 function decrypt(encryptedData) {
-  // Try new method first (if data contains ':' separator)
-  if (encryptedData.includes(':')) {
-    try {
-      const parts = encryptedData.split(':');
-      if (parts.length === 2) {
-        const iv = Buffer.from(parts[0], 'base64');
-        const encrypted = parts[1];
-        const key = crypto.scryptSync(ENCRYPTION_KEY, 'salt', 32);
-        
-        const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-        let decrypted = decipher.update(encrypted, 'base64', 'utf8');
-        decrypted += decipher.final('utf8');
-        
-        return decrypted;
-      }
-    } catch (error) {
-      console.log('🔄 New decryption method failed, trying old method...');
-      // Fall through to old method
-    }
-  }
+  const decipher = crypto.createDecipher('aes-256-cbc', ENCRYPTION_KEY);
+  let decrypted = decipher.update(encryptedData, 'base64', 'utf8');
+  decrypted += decipher.final('utf8');
   
-  // Fall back to old method for backwards compatibility
-  try {
-    const decipher = crypto.createDecipher('aes-256-cbc', ENCRYPTION_KEY);
-    let decrypted = decipher.update(encryptedData, 'base64', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
-  } catch (error) {
-    console.error('❌ Failed to decrypt data with both methods');
-    throw new Error('Unable to decrypt data. This could be due to a wrong encryption key or corrupted data.');
-  }
+  return decrypted;
 }
 
 // Scrape 22K gold price from BankBazaar Coimbatore
