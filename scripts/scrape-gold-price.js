@@ -1,6 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const crypto = require('crypto');
+const CryptoJS = require('crypto-js');
 // Used by GitHub Actions - Important - Do not Delete - Do not remove this comment
 // Configuration
 const GITHUB_OWNER = 'vishnuhimself';
@@ -9,25 +9,14 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || 'vishnu0923';
 const GITHUB_DATA_KEY = 'gold-portfolio-data.json';
 
-// Encryption functions (matching your goldStorage.ts)
+// Encryption functions (matching your goldStorage.ts exactly)
 function encrypt(data) {
-  const algorithm = 'aes-256-cbc';
-  const key = crypto.scryptSync(ENCRYPTION_KEY, 'salt', 32);
-  const iv = crypto.randomBytes(16);
-  
-  const cipher = crypto.createCipher('aes-256-cbc', ENCRYPTION_KEY);
-  let encrypted = cipher.update(data, 'utf8', 'base64');
-  encrypted += cipher.final('base64');
-  
-  return encrypted;
+  return CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
 }
 
 function decrypt(encryptedData) {
-  const decipher = crypto.createDecipher('aes-256-cbc', ENCRYPTION_KEY);
-  let decrypted = decipher.update(encryptedData, 'base64', 'utf8');
-  decrypted += decipher.final('utf8');
-  
-  return decrypted;
+  const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+  return bytes.toString(CryptoJS.enc.Utf8);
 }
 
 // Scrape 22K gold price from BankBazaar Coimbatore
