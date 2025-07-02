@@ -27,6 +27,6 @@ jobs:
       run: |
         node scripts/scrape-gold-price.js
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GOLD_DATA_TOKEN || secrets.GITHUB_TOKEN }}
         GOLD_DATA_REPO: ${{ vars.GOLD_DATA_REPO || 'gold-data' }}
         ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'vishnu0923' }} 

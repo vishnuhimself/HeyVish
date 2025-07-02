@@ -11,20 +11,33 @@ const GITHUB_DATA_KEY = 'gold-portfolio-data.json';
 
 // Encryption functions (matching your goldStorage.ts)
 function encrypt(data) {
-  const algorithm = 'aes-256-cbc';
   const key = crypto.scryptSync(ENCRYPTION_KEY, 'salt', 32);
   const iv = crypto.randomBytes(16);
   
-  const cipher = crypto.createCipher('aes-256-cbc', ENCRYPTION_KEY);
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
   let encrypted = cipher.update(data, 'utf8', 'base64');
   encrypted += cipher.final('base64');
   
-  return encrypted;
+  // Prepend IV to encrypted data
+  return iv.toString('base64') + ':' + encrypted;
 }
 
 function decrypt(encryptedData) {
-  const decipher = crypto.createDecipher('aes-256-cbc', ENCRYPTION_KEY);
-  let decrypted = decipher.update(encryptedData, 'base64', 'utf8');
+  const parts = encryptedData.split(':');
+  if (parts.length !== 2) {
+    // Fall back to old method for backwards compatibility
+    const decipher = crypto.createDecipher('aes-256-cbc', ENCRYPTION_KEY);
+    let decrypted = decipher.update(encryptedData, 'base64', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+  }
+  
+  const iv = Buffer.from(parts[0], 'base64');
+  const encrypted = parts[1];
+  const key = crypto.scryptSync(ENCRYPTION_KEY, 'salt', 32);
+  
+  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+  let decrypted = decipher.update(encrypted, 'base64', 'utf8');
   decrypted += decipher.final('utf8');
   
   return decrypted;
