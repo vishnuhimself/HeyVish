@@ -108,9 +108,12 @@ export class GoldStorage {
   static async loadFromGitHub(): Promise<GoldData | null> {
     console.log('🔍 GitHub Token Status:', GITHUB_TOKEN ? 'Present' : 'Missing');
     console.log('🔍 Environment:', process.env.NODE_ENV);
+    console.log('🔍 All NEXT_PUBLIC env vars:', Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC_')));
+    console.log('🔍 Raw token value:', process.env.NEXT_PUBLIC_GITHUB_TOKEN ? 'EXISTS' : 'UNDEFINED');
     
     if (!GITHUB_TOKEN) {
       console.error("❌ GitHub token not configured. Please set up NEXT_PUBLIC_GITHUB_TOKEN in your environment variables.");
+      console.error("🔍 Available env vars:", Object.keys(process.env));
       throw new Error("GitHub token not configured. Please set up NEXT_PUBLIC_GITHUB_TOKEN in your environment variables.");
     }
 

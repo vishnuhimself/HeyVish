@@ -4,13 +4,13 @@ import { ExternalLink } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-[#F5F4ED] dark:bg-black">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-[#FFF] dark:bg-black">
       <div className="w-full max-w-md text-center space-y-8">
         {/* Profile Image */}
         <div className="flex justify-center">
                       <div className="relative w-24 h-24 rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800">
             <Image
-              src="/Srivishnu-Social-DP-Small.PNG"
+              src="/Vish_DP.PNG"
               alt="Srivishnu Ramakrishnan"
               fill
               className="object-cover"
@@ -88,7 +88,7 @@ export default function Home() {
                   <div className="text-xs text-muted-foreground">Track height & weight</div>
                 </div>
               </div>
-              <div className="bg-[#D97757] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+              <div className="bg-[#000] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
                 iOS
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function Home() {
                   <div className="text-xs text-muted-foreground">Mood tracker & journal</div>
                 </div>
               </div>
-              <div className="bg-[#D97757] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+              <div className="bg-[#000] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
                 iOS
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function Home() {
                   <div className="text-xs text-muted-foreground">Bulk Generate UGC Videos</div>
                 </div>
               </div>
-              <div className="bg-[#D97757] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
+              <div className="bg-[#000] dark:bg-gray-800 text-white dark:text-gray-200 text-xs px-2 py-1 rounded-md font-medium">
                 Open Source
               </div>
             </div>
