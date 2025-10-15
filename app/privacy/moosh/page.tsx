@@ -22,19 +22,19 @@ export default function MooshPrivacy() {
       <div className="max-w-4xl mx-auto py-8">
         {/* Privacy Policy Content */}
         <article className="prose prose-gray max-w-none">
-          <h1 className="text-3xl font-bold mb-2">Moosh Privacy Policy</h1>
+          <h1 className="text-3xl font-bold mb-2 text-foreground">Moosh Privacy Policy</h1>
           <p className="text-muted-foreground mb-8">Last updated: May 24, 2025</p>
 
           <section className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold mb-3">Introduction</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Introduction</h2>
               <p className="text-muted-foreground leading-relaxed">
                 At Moosh, we take your privacy seriously. This Privacy Policy explains how we handle your data in our mood tracking and journaling application. We believe in complete transparency and user control over personal data.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Data Collection and Storage</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Data Collection and Storage</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
                 Moosh is designed with privacy at its core. All data is stored locally on your device:
               </p>
@@ -51,28 +51,28 @@ export default function MooshPrivacy() {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">No Account Required</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">No Account Required</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Moosh operates without user accounts or registration. You can start tracking your mood and journaling immediately without providing any personal information.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Data Security</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Data Security</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Your mood data and journal entries are secured by your device&apos;s built-in security features. Since all data is stored locally, it benefits from your device&apos;s encryption and security measures.
               </p>
             </div>
 
             <div>
-                          <h2 className="text-xl font-semibold mb-3">Children&apos;s Privacy</h2>
+                          <h2 className="text-xl font-semibold mb-3 text-foreground">Children&apos;s Privacy</h2>
             <p className="text-muted-foreground leading-relaxed">
               While Moosh can be used by teenagers to track their mood and emotional well-being, all data management for users under 13 must be done by parents or legal guardians. We do not knowingly collect any personal information from children.
             </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Data Backup and Deletion</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Data Backup and Deletion</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
                 You have complete control over your mood data and journal entries:
               </p>
@@ -84,14 +84,14 @@ export default function MooshPrivacy() {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Third-Party Services</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Third-Party Services</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Moosh does not integrate with any third-party services or analytics platforms. We do not share any of your mood data or journal entries with external parties.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">App Permissions</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">App Permissions</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
                 Moosh requires minimal device permissions:
               </p>
@@ -102,21 +102,21 @@ export default function MooshPrivacy() {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Sensitive Information</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Sensitive Information</h2>
               <p className="text-muted-foreground leading-relaxed">
                 We understand that mood data and journal entries are highly personal and sensitive. Moosh is designed to keep this information completely private and accessible only to you. We never analyze, process, or access your personal reflections and mood entries.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Changes to Privacy Policy</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Changes to Privacy Policy</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Any updates to this privacy policy will be reflected in the app and on our website. Users will be notified of significant changes through app updates.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Contact Us</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact Us</h2>
               <p className="text-muted-foreground leading-relaxed">
                 If you have any questions about our privacy policy or data handling practices, please contact us at:{" "}
                 <a href="mailto:hey@heyvish.com" className="text-foreground hover:underline">
@@ -126,7 +126,7 @@ export default function MooshPrivacy() {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3">Compliance</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Compliance</h2>
               <p className="text-muted-foreground leading-relaxed">
                 This privacy policy complies with the requirements of the Apple App Store and Google Play Store. We are committed to protecting your privacy and maintaining the security of your personal and emotional information.
               </p>
