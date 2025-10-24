@@ -11,9 +11,10 @@ export default function ConditionalLayout({ children }: ConditionalLayoutProps) 
   const pathname = usePathname();
   const isHomePage = pathname === "/";
   const isPrivacyPage = pathname.startsWith("/privacy");
+  const isSupportPage = pathname.startsWith("/support");
   const isGoldPage = pathname === "/gold";
 
-  if (isHomePage || isPrivacyPage || isGoldPage) {
+  if (isHomePage || isPrivacyPage || isSupportPage || isGoldPage) {
     return (
       <main className="min-h-screen">
         {children}
