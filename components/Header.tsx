@@ -21,7 +21,7 @@ const Header = () => {
         <nav className="flex flex-col sm:flex-row items-center justify-between min-h-16 py-4">
           <div className="flex items-center gap-3 mb-4 sm:mb-0">
             <Link href="/" className="text-2xl font-bold">
-              vish
+              Srivishnu Ramakrishnan
             </Link>
             
           </div>

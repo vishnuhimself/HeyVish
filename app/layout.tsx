@@ -11,7 +11,7 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "vish",
+  title: "Srivishnu Ramakrishnan",
   description: "Portfolio of Srivishnu Ramakrishnan. Writing about web development, Next.js, WordPress, and more.",
   icons: {
     icon: [
