@@ -1,5 +1,16 @@
 {
   "buildCommand": "npm run build",
   "installCommand": "npm install --omit=optional",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/rummy",
+      "destination": "https://rummytrack.vercel.app/"
+    },
+    {
+      "source": "/rummy/:path*",
+      "destination": "https://rummytrack.vercel.app/:path*"
+    }
+  ]
 } 
+
