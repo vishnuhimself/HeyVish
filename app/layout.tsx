@@ -12,7 +12,7 @@ const beVietnamPro = Be_Vietnam_Pro({
 
 export const metadata: Metadata = {
   title: "Srivishnu Ramakrishnan",
-  description: "Portfolio of Srivishnu Ramakrishnan. Writing about web development, Next.js, WordPress, and more.",
+  description: "Indie app developer. Building iOS apps people actually use.",
   icons: {
     icon: [
       {
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-      title: "Srivishnu Ramakrishnan - Engineer | Web Creator",
-    description: "Portfolio of Srivishnu Ramakrishnan. Writing about web development, Next.js, WordPress, and more.",
+      title: "Srivishnu Ramakrishnan - Engineer | Indie App Developer",
+    description: "Indie app developer. Building iOS apps people actually use.",
     url: "https://heyvish.com",
     siteName: "Srivishnu Ramakrishnan",
     locale: "en_US",
