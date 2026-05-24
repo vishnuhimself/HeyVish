@@ -1,11 +1,16 @@
-import { generateOGImage } from './og-image'
+import { generateOGImage } from "./og-image";
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://heyvish.com";
 
 const siteConfig = {
-  title: "Srivishnu Ramakrishnan",
-  description: "Engineer by day, web creator by passion. Sharing insights on web development, Next.js, WordPress, and building impactful websites",
+  title: "HeyVish",
+  defaultDescription:
+    "Srivishnu Ramakrishnan — indie iOS developer building Stepsly, Expenly, and GrowthKit. Notes on shipping software.",
   author: "Srivishnu Ramakrishnan",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://heyvish.com", // fallback for dev
-}
+  url: SITE_URL,
+  twitter: "@VishHimself",
+};
 
 export async function generateMetadata({
   title,
@@ -13,33 +18,31 @@ export async function generateMetadata({
   path,
   type = "website",
   slug,
+  publishedTime,
+  modifiedTime,
 }: {
-  title: string
-  description: string
-  path?: string
-  type?: "website" | "article"
-  slug?: string
+  title: string;
+  description: string;
+  path?: string;
+  type?: "website" | "article";
+  slug?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
 }) {
-  const url = siteConfig.url
-  const canonical = path ? `${url}${path}` : url
-  
-  // Generate OG image with slug if provided
-  const ogImage = slug 
+  const canonicalPath = path ?? "/";
+  const ogImage = slug
     ? await generateOGImage(title, slug)
-    : await generateOGImage(title, 'default')
-  const ogImageUrl = `${url}${ogImage}`
+    : await generateOGImage(title, "default");
 
   return {
-    title: {
-      template: `%s`,
-      default: title,
-    },
+    metadataBase: new URL(siteConfig.url),
+    title,
     description,
-    authors: [{ name: siteConfig.author }],
+    authors: [{ name: siteConfig.author, url: siteConfig.url }],
     creator: siteConfig.author,
-    metadataBase: new URL(url),
+    publisher: siteConfig.author,
     alternates: {
-      canonical,
+      canonical: canonicalPath,
     },
     robots: {
       index: true,
@@ -47,30 +50,40 @@ export async function generateMetadata({
       googleBot: {
         index: true,
         follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
+        "max-video-preview": -1,
+        "max-image-preview": "large" as const,
+        "max-snippet": -1,
       },
     },
     openGraph: {
       title,
       description,
-      url: canonical,
+      url: canonicalPath,
       siteName: siteConfig.title,
       locale: "en_US",
       type,
-      images: [{
-        url: ogImageUrl,
-        width: 1200,
-        height: 630,
-        alt: title,
-      }],
+      ...(type === "article" && publishedTime
+        ? {
+            publishedTime,
+            modifiedTime: modifiedTime ?? publishedTime,
+            authors: [siteConfig.url],
+          }
+        : {}),
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image" as const,
       title,
       description,
-      images: [ogImageUrl],
+      creator: siteConfig.twitter,
+      images: [ogImage],
     },
-  }
-} 
+  };
+}

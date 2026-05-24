@@ -4,20 +4,27 @@ import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
-import { Button } from "@/components/ui/button"
+export function ModeToggle({ className = "" }: { className?: string }) {
+  const { theme, setTheme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
 
-export function ModeToggle() {
-  const { theme, setTheme } = useTheme()
+  React.useEffect(() => setMounted(true), [])
+
+  const current = mounted ? (theme === "system" ? resolvedTheme : theme) : "light"
+  const isDark = current === "dark"
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+    <button
+      type="button"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      className={`inline-flex items-center justify-center w-full h-full px-4 py-3 hover:bg-foreground hover:text-background transition-colors ${className}`}
     >
-      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="sr-only">Toggle theme</span>
-    </Button>
+      {isDark ? (
+        <Sun className="h-3.5 w-3.5" strokeWidth={2.25} />
+      ) : (
+        <Moon className="h-3.5 w-3.5" strokeWidth={2.25} />
+      )}
+    </button>
   )
-} 
+}

@@ -52,12 +52,13 @@ export default {
   			}
   		},
   		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			lg: '0px',
+  			md: '0px',
+  			sm: '0px'
   		},
   		fontFamily: {
-  			'vietnam-pro': ['Be Vietnam Pro Variable', 'sans-serif'],
+  			mono: ['var(--font-space-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+  			sans: ['var(--font-space-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
   		},
   	}
   },

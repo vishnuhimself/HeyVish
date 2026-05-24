@@ -1,10 +1,10 @@
 export function Shortcode({ code }: { code: string }) {
   return (
-    <div className="my-4 inline-flex items-center gap-2 bg-muted rounded-lg px-4 py-2">
-      <span className="font-medium">Shortcode:</span>
-      <span className="font-mono bg-secondary px-2 py-0.5 rounded text-secondary-foreground">
+    <span className="not-prose inline-flex items-center gap-2 border border-foreground px-3 py-1 text-[11px] uppercase tracking-[0.2em] font-bold align-middle">
+      <span className="opacity-60">Shortcode</span>
+      <span className="bg-foreground text-background px-2 py-0.5">
         {code.replace(/['"]/g, '')}
       </span>
-    </div>
+    </span>
   )
-} 
+}

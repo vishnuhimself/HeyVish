@@ -18,10 +18,10 @@ export const metadata: Metadata = {
 
 export default function ExpenseKitPrivacy() {
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-4xl mx-auto py-8">
+    <div>
+      <div className="max-w-4xl mx-auto">
         {/* Privacy Policy Content */}
-        <article className="prose prose-gray max-w-none">
+        <article className="prose dark:prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-a:underline prose-a:underline-offset-4 prose-hr:border-foreground">
           <h1 className="text-3xl font-bold mb-2 text-foreground">ExpenseKit Privacy Policy</h1>
           <p className="text-muted-foreground mb-8">Last updated: December 12, 2025</p>
 

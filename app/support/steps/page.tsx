@@ -18,10 +18,10 @@ export const metadata: Metadata = {
 
 export default function StepsSupport() {
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-4xl mx-auto py-8">
+    <div>
+      <div className="max-w-4xl mx-auto">
         {/* Support Page Content */}
-        <article className="prose prose-gray max-w-none">
+        <article className="prose dark:prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-a:underline prose-a:underline-offset-4 prose-hr:border-foreground">
           <h1 className="text-3xl font-bold mb-2 text-foreground">Steps App Support</h1>
           <p className="text-muted-foreground mb-8">We&apos;re here to help you get the most out of Steps App</p>
 
@@ -31,7 +31,7 @@ export default function StepsSupport() {
               <p className="text-muted-foreground leading-relaxed mb-4">
                 For any support inquiries, bug reports, feature requests, or general questions, please email us at:
               </p>
-              <div className="bg-muted p-6 rounded-lg border-2 border-foreground/10">
+              <div className="border border-foreground p-6">
                 <a 
                   href="mailto:hey@heyvish.com" 
                   className="text-2xl font-bold text-foreground hover:underline block text-center"
