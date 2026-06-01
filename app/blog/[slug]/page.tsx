@@ -112,57 +112,54 @@ export default async function BlogPost({ params }: Props) {
   }
 
   return (
-    <article className="max-w-3xl mx-auto">
+    <article className="max-w-2xl">
       <JsonLd data={[blogPostingSchema, breadcrumbSchema]} />
       <Link
         href="/blog"
-        className="inline-flex items-center border border-foreground px-3 py-2 text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-foreground hover:text-background transition-colors mb-8"
+        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-12 gap-1"
       >
-        ← Back to index
+        ← All posts
       </Link>
 
-      <header className="border border-foreground mb-10">
-        <div className="flex items-stretch border-b border-foreground text-[10px] uppercase tracking-[0.3em]">
-          <time dateTime={post.date} className="px-4 py-2 border-r border-foreground font-bold">
-            {formattedDate}
-          </time>
+      <header className="mb-12 pb-10 border-b border-border">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-5">
+          <time dateTime={post.date}>{formattedDate}</time>
           {post.category && (
-            <div className="px-4 py-2 border-r border-foreground flex items-center gap-2">
-              {Array.isArray(post.category) ? (
-                post.category.map((cat, index) => (
-                  <span key={cat}>
-                    <Link
-                      href={`/blog/category/${cat.toLowerCase()}`}
-                      className="hover:underline"
-                    >
-                      {cat}
-                    </Link>
-                    {index < (post.category as string[]).length - 1 && ", "}
-                  </span>
-                ))
-              ) : (
-                <Link
-                  href={`/blog/category/${post.category.toLowerCase()}`}
-                  className="hover:underline"
-                >
-                  {post.category}
-                </Link>
-              )}
-            </div>
+            <>
+              <span className="opacity-40">·</span>
+              <span>
+                {Array.isArray(post.category) ? (
+                  post.category.map((cat, index) => (
+                    <span key={cat}>
+                      <Link
+                        href={`/blog/category/${cat.toLowerCase()}`}
+                        className="hover:text-foreground transition-colors"
+                      >
+                        {cat}
+                      </Link>
+                      {index < (post.category as string[]).length - 1 && ", "}
+                    </span>
+                  ))
+                ) : (
+                  <Link
+                    href={`/blog/category/${post.category.toLowerCase()}`}
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {post.category}
+                  </Link>
+                )}
+              </span>
+            </>
           )}
         </div>
-        <div className="p-6 sm:p-8">
-          <h1 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight leading-[1.05]">
-            {post.title}
-          </h1>
-        </div>
-        <div className="border-t border-foreground px-6 sm:px-8 py-4">
-          <Author />
-        </div>
+        <h1 className="font-display font-semibold text-3xl sm:text-4xl text-foreground tracking-tight leading-[1.1] mb-8">
+          {post.title}
+        </h1>
+        <Author />
       </header>
 
       <div
-        className="prose dark:prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-a:underline prose-a:underline-offset-4 prose-pre:border prose-pre:border-foreground prose-pre:bg-secondary prose-code:before:content-none prose-code:after:content-none prose-img:border prose-img:border-foreground prose-blockquote:border-l-4 prose-blockquote:border-foreground prose-blockquote:not-italic prose-hr:border-foreground"
+        className="prose dark:prose-invert max-w-none prose-headings:font-display prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-foreground prose-a:underline prose-a:underline-offset-4 prose-a:decoration-border hover:prose-a:opacity-70 prose-pre:bg-secondary prose-code:before:content-none prose-code:after:content-none prose-img:rounded-xl prose-blockquote:border-l-2 prose-blockquote:border-border prose-blockquote:not-italic prose-blockquote:text-muted-foreground"
         suppressHydrationWarning
       >
         {content}

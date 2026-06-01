@@ -21,20 +21,16 @@ const Header = () => {
   if (!mounted) return null
 
   return (
-    <header className="border-b border-foreground sticky top-0 z-50 bg-background">
-      <div className="mx-auto max-w-6xl flex items-stretch">
+    <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+      <div className="mx-auto max-w-5xl px-5 sm:px-8 h-14 flex items-center justify-between">
         <Link
           href="/"
-          className="flex items-center px-4 sm:px-6 py-3 border-r border-foreground text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-foreground hover:text-background transition-colors"
+          className="font-display text-base font-semibold text-foreground hover:opacity-60 transition-opacity tracking-tight"
         >
-          ← HEYVISH
+          Vish
         </Link>
 
-        <div className="hidden sm:flex items-center px-4 py-3 border-r border-foreground text-[11px] uppercase tracking-[0.2em] text-muted-foreground flex-1 truncate">
-          Srivishnu Ramakrishnan
-        </div>
-
-        <nav className="flex items-stretch ml-auto">
+        <nav className="flex items-center gap-0.5">
           {NAV.map((item) => {
             const active =
               item.href === "/blog"
@@ -44,17 +40,17 @@ const Header = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center px-4 py-3 border-l border-foreground text-[11px] uppercase tracking-[0.2em] font-bold transition-colors ${
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
                   active
-                    ? "bg-foreground text-background"
-                    : "hover:bg-foreground hover:text-background"
+                    ? "text-foreground font-medium"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {item.label}
               </Link>
             )
           })}
-          <div className="flex items-stretch border-l border-foreground">
+          <div className="ml-1">
             <ModeToggle />
           </div>
         </nav>

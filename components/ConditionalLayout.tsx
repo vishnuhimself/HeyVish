@@ -22,33 +22,33 @@ export default function ConditionalLayout({ children }: ConditionalLayoutProps) 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 mx-auto w-full max-w-6xl px-4 sm:px-6 py-10 sm:py-14">
+      <main className="flex-1 mx-auto w-full max-w-5xl px-5 sm:px-8 py-12 sm:py-16">
         {children}
       </main>
-      <footer className="border-t border-foreground">
-        <div className="mx-auto max-w-6xl grid grid-cols-2 md:grid-cols-4 text-[11px] uppercase tracking-[0.2em]">
+      <footer className="border-t border-border py-8 mt-8">
+        <div className="mx-auto max-w-5xl px-5 sm:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <Link
             href="/"
-            className="px-4 sm:px-6 py-4 border-r border-foreground hover:bg-foreground hover:text-background transition-colors font-bold flex items-center gap-2"
+            className="font-display font-semibold text-sm text-foreground hover:opacity-60 transition-opacity"
           >
-            ← HEYVISH
+            HeyVish
           </Link>
-          <a
-            href="mailto:hey@heyvish.com"
-            className="px-4 sm:px-6 py-4 md:border-r border-foreground hover:bg-foreground hover:text-background transition-colors truncate flex items-center"
-          >
-            hey@heyvish.com
-          </a>
-          <a
-            href="https://x.com/VishHimself"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 sm:px-6 py-4 md:border-r border-foreground hover:bg-foreground hover:text-background transition-colors border-t md:border-t-0 border-r flex items-center"
-          >
-            @VishHimself
-          </a>
-          <div className="px-4 sm:px-6 py-4 border-t md:border-t-0 font-bold text-muted-foreground flex items-center">
-            © {year}
+          <div className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+            <a
+              href="mailto:hey@heyvish.com"
+              className="hover:text-foreground transition-colors"
+            >
+              hey@heyvish.com
+            </a>
+            <a
+              href="https://x.com/VishHimself"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors"
+            >
+              @VishHimself
+            </a>
+            <span>© {year}</span>
           </div>
         </div>
       </footer>

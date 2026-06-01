@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Image from "next/image"
 import { generateMetadata as genMeta } from "@/lib/metadata"
 import { JsonLd } from "@/components/JsonLd"
@@ -50,77 +49,58 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-xl">
       <JsonLd data={contactSchema} />
-      <div className="border border-foreground mb-10">
-        <div className="flex items-stretch border-b border-foreground">
-          <div className="px-4 py-2 border-r border-foreground text-[10px] uppercase tracking-[0.3em] font-bold">
-            [ Contact / Open Channels ]
-          </div>
-          <div className="ml-auto px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-muted-foreground hidden sm:block">
-            Response &lt; 24h
-          </div>
-        </div>
-        <div className="p-6 sm:p-8">
-          <h1 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight leading-none">
-            Say hi.
-          </h1>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-foreground/80">
-            Two ways to reach me. Pick whichever feels right.
-          </p>
-        </div>
+      <div className="mb-12">
+        <h1 className="font-display font-semibold text-4xl sm:text-5xl text-foreground tracking-tight leading-tight mb-3">
+          Say hi.
+        </h1>
+        <p className="text-base text-muted-foreground">
+          Two ways to reach me. Usually responds within 24 hours.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 border border-foreground">
-        {contactMethods.map((m, i) => (
-          <Link
+      <div className="space-y-4">
+        {contactMethods.map((m) => (
+          <a
             key={m.id}
             href={m.href}
             target={m.href.startsWith("http") ? "_blank" : undefined}
             rel="noopener noreferrer"
-            className={`group p-6 sm:p-8 border-foreground transition-colors hover:bg-foreground hover:text-background flex flex-col gap-6 ${
-              i === 0 ? "border-b md:border-b-0 md:border-r" : ""
-            }`}
+            className="group block p-6 rounded-xl border border-border bg-secondary/30 hover:border-foreground/25 transition-colors"
           >
-            <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.3em] font-bold">
-              <span>{m.id}</span>
-              <span className="opacity-60 group-hover:opacity-100">Open</span>
-            </div>
-
-            <div>
-              <div className="text-[11px] uppercase tracking-[0.3em] opacity-70 mb-2">
-                {m.name}
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">
+                  {m.name}
+                </p>
+                <p className="font-display font-semibold text-xl text-foreground tracking-tight">
+                  {m.handle}
+                </p>
               </div>
-              <div className="text-2xl sm:text-3xl font-bold uppercase tracking-tight leading-none break-all">
-                {m.handle}
-              </div>
+              <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors shrink-0 mt-1">
+                {m.cta}
+              </span>
             </div>
-
-            <p className="text-sm leading-relaxed opacity-80">{m.description}</p>
-
-            <div className="mt-auto flex items-center justify-between text-[11px] uppercase tracking-[0.2em] font-bold">
-              <span>{m.cta}</span>
-              <span className="transition-transform group-hover:translate-x-1">→</span>
-            </div>
-          </Link>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {m.description}
+            </p>
+          </a>
         ))}
       </div>
 
-      <div className="mt-10 border border-foreground p-6 flex items-center gap-4">
-        <div className="relative w-12 h-12 border border-foreground overflow-hidden shrink-0">
+      <div className="mt-10 flex items-center gap-4">
+        <div className="relative w-10 h-10 rounded-full overflow-hidden bg-muted shrink-0">
           <Image
             src="/Srivishnu-Ramakrishnan-Author.png"
             alt="Srivishnu Ramakrishnan"
             fill
-            className="object-cover grayscale"
+            className="object-cover"
           />
         </div>
-        <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground leading-relaxed">
-          Usually responds within 24 hours.
-          <br className="sm:hidden" />
-          <span className="hidden sm:inline"> · </span>
-          Based in India.
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Usually responds within 24 hours · Based in India.
+        </p>
       </div>
     </div>
   )

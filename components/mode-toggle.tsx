@@ -18,12 +18,12 @@ export function ModeToggle({ className = "" }: { className?: string }) {
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className={`inline-flex items-center justify-center w-full h-full px-4 py-3 hover:bg-foreground hover:text-background transition-colors ${className}`}
+      className={`inline-flex items-center justify-center w-8 h-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors ${className}`}
     >
       {isDark ? (
-        <Sun className="h-3.5 w-3.5" strokeWidth={2.25} />
+        <Sun className="h-4 w-4" strokeWidth={1.75} />
       ) : (
-        <Moon className="h-3.5 w-3.5" strokeWidth={2.25} />
+        <Moon className="h-4 w-4" strokeWidth={1.75} />
       )}
     </button>
   )

@@ -5,8 +5,6 @@ import { format, parseISO } from "date-fns"
 import type { Post } from "@/lib/types"
 import { notFound } from "next/navigation"
 import { generateMetadata as genMeta } from "@/lib/metadata"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 const POSTS_PER_PAGE = 10
 
@@ -69,91 +67,70 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     paginate(categoryPosts, currentPage, POSTS_PER_PAGE)
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <Link 
-        href="/blog" 
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary mb-6 group"
+    <div>
+      <Link
+        href="/blog"
+        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-10 gap-1"
       >
-        <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-        Back to all articles
+        ← All posts
       </Link>
 
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold">
+      <div className="mb-12">
+        <h1 className="font-display font-semibold text-4xl sm:text-5xl text-foreground tracking-tight leading-tight mb-2">
           {decodedCategory.charAt(0).toUpperCase() + decodedCategory.slice(1)}
         </h1>
-        <p className="text-muted-foreground">
-          {categoryPosts.length} article{categoryPosts.length === 1 ? '' : 's'} about {decodedCategory.toLowerCase()}
+        <p className="text-sm text-muted-foreground">
+          {categoryPosts.length} article{categoryPosts.length === 1 ? "" : "s"}
         </p>
       </div>
 
-      <div className="space-y-8 mt-8">
+      <div>
         {paginatedPosts.map((post: Post) => (
-          <article key={post.slug} className="group">
-            <Link href={`/blog/${post.slug}`}>
-              <div className="space-y-2">
-                <h2 className="text-2xl font-semibold group-hover:text-primary">
-                  {post.title}
-                </h2>
-                <p className="text-muted-foreground">{post.description}</p>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <time dateTime={post.date}>
-                    {format(parseISO(post.date), "MMMM d, yyyy")}
-                  </time>
-                </div>
-              </div>
-            </Link>
-          </article>
+          <Link
+            key={post.slug}
+            href={`/blog/${post.slug}`}
+            className="group flex items-baseline justify-between gap-6 py-4 border-b border-border first:border-t hover:opacity-60 transition-opacity"
+          >
+            <div>
+              <h2 className="text-base font-medium text-foreground leading-snug mb-1">
+                {post.title}
+              </h2>
+              {post.description && (
+                <p className="text-sm text-muted-foreground">{post.description}</p>
+              )}
+            </div>
+            <time
+              dateTime={post.date}
+              className="text-sm text-muted-foreground shrink-0"
+            >
+              {format(parseISO(post.date), "MMM yyyy")}
+            </time>
+          </Link>
         ))}
       </div>
 
       {/* Pagination */}
       {pageCount > 1 && (
-        <div className="flex justify-center gap-2 mt-8">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={validPage === 1}
-            asChild
+        <div className="flex items-center justify-between mt-10">
+          <Link
+            href={validPage > 1 ? `/blog/category/${category}?page=${validPage - 1}` : "#"}
+            aria-disabled={validPage === 1}
+            className={`text-sm ${validPage === 1 ? "text-muted-foreground pointer-events-none" : "text-foreground hover:opacity-60 transition-opacity"}`}
           >
-            <Link 
-              href={`/blog/category/${category}?page=${validPage - 1}`}
-              className="flex items-center gap-2"
-            >
-              <ChevronLeft className="w-4 h-4" /> Previous
-            </Link>
-          </Button>
-          
-          <div className="flex items-center gap-2">
-            {Array.from({ length: pageCount }, (_, i) => i + 1).map((page) => (
-              <Button
-                key={page}
-                variant={page === validPage ? "default" : "outline"}
-                size="sm"
-                asChild
-              >
-                <Link href={`/blog/category/${category}?page=${page}`}>
-                  {page}
-                </Link>
-              </Button>
-            ))}
-          </div>
-
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={validPage === pageCount}
-            asChild
+            ← Previous
+          </Link>
+          <span className="text-sm text-muted-foreground">
+            {validPage} / {pageCount}
+          </span>
+          <Link
+            href={validPage < pageCount ? `/blog/category/${category}?page=${validPage + 1}` : "#"}
+            aria-disabled={validPage === pageCount}
+            className={`text-sm ${validPage === pageCount ? "text-muted-foreground pointer-events-none" : "text-foreground hover:opacity-60 transition-opacity"}`}
           >
-            <Link 
-              href={`/blog/category/${category}?page=${validPage + 1}`}
-              className="flex items-center gap-2"
-            >
-              Next <ChevronRight className="w-4 h-4" />
-            </Link>
-          </Button>
+            Next →
+          </Link>
         </div>
       )}
     </div>
   )
-} 
+}
