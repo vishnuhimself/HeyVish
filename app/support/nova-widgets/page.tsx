@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     title: "Nova Widgets Support",
     description: "Need help with Nova Widgets? Contact us for support, bug reports, or feature suggestions.",
     type: "website",
-    url: "https://heyvish.com/support/nova",
+    url: "https://heyvish.com/support/nova-widgets",
   },
   alternates: {
-    canonical: "https://heyvish.com/support/nova",
+    canonical: "https://heyvish.com/support/nova-widgets",
   },
 };
 
@@ -95,7 +95,7 @@ export default function NovaSupport() {
               <h2 className="text-xl font-semibold mb-3 text-foreground">Privacy & Data Questions</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Have questions about how we handle your data or HealthKit permissions? Check out our{" "}
-                <a href="/privacy/nova" className="text-foreground hover:underline font-medium">
+                <a href="/privacy/nova-widgets" className="text-foreground hover:underline font-medium">
                   Privacy Policy
                 </a>
                 {" "}or contact us directly with any privacy-related concerns.
@@ -131,7 +131,7 @@ export default function NovaSupport() {
                   <h3 className="font-semibold text-foreground mb-2">Is my data secure?</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Yes! All your preferences and health data are stored locally on your device. We never transmit your data to external servers. Learn more in our{" "}
-                    <a href="/privacy/nova" className="text-foreground hover:underline">
+                    <a href="/privacy/nova-widgets" className="text-foreground hover:underline">
                       Privacy Policy
                     </a>.
                   </p>

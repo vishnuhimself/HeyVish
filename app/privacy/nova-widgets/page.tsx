@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     title: "Nova Widgets Privacy Policy",
     description: "Learn how Nova Widgets protects your data with local-only storage and secure Apple Health integration.",
     type: "website",
-    url: "https://heyvish.com/privacy/nova",
+    url: "https://heyvish.com/privacy/nova-widgets",
   },
   alternates: {
-    canonical: "https://heyvish.com/privacy/nova",
+    canonical: "https://heyvish.com/privacy/nova-widgets",
   },
 };
 
