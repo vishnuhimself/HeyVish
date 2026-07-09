@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@/lib/dashboardDb";
+import { getSql } from "@/lib/dashboardDb";
 
 export async function GET(request: NextRequest) {
   try {
+    const sql = getSql();
     const { searchParams } = new URL(request.url);
     const days = parseInt(searchParams.get("days") || "30");
 
