@@ -9,24 +9,24 @@ on:
 jobs:
   scrape-gold-price:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
-        
+        node-version: '20'
+
     - name: Install dependencies
       run: |
-        npm install cheerio axios crypto-js
-        
-    - name: Scrape gold price and update data
+        npm install cheerio axios @neondatabase/serverless
+
+    - name: Scrape gold price and update database
       run: |
-        node scripts/scrape-gold-price.js
+        node scripts/scrape-gold-price.mjs
       env:
-        GITHUB_TOKEN: ${{ secrets.GOLD_DATA_TOKEN || secrets.GITHUB_TOKEN }}
-        GOLD_DATA_REPO: ${{ vars.GOLD_DATA_REPO || 'gold-data' }}
-        ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'vishnu0923' }} 
+        # Neon Postgres connection string. Add this as a repository secret:
+        # Settings -> Secrets and variables -> Actions -> New repository secret
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}

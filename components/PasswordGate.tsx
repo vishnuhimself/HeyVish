@@ -8,10 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lock } from "lucide-react";
 
 interface PasswordGateProps {
-  onSuccess: () => void;
+  onSuccess: (expiresAt?: number) => void;
 }
-
-const CORRECT_PASSWORD = "vishnu0923"; // Change this to your preferred password
 
 export default function PasswordGate({ onSuccess }: PasswordGateProps) {
   const [password, setPassword] = useState("");
@@ -23,21 +21,31 @@ export default function PasswordGate({ onSuccess }: PasswordGateProps) {
     setIsLoading(true);
     setError("");
 
-    // Simple delay to prevent brute force
-    await new Promise(resolve => setTimeout(resolve, 500));
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
 
-    if (password === CORRECT_PASSWORD) {
-      // Store in sessionStorage with timestamp for automatic logout
-      const loginTime = Date.now();
-      sessionStorage.setItem("goldPortfolioAccess", "granted");
-      sessionStorage.setItem("goldPortfolioLoginTime", loginTime.toString());
-      onSuccess();
-    } else {
-      setError("Incorrect password. Please try again.");
+      if (res.ok) {
+        const data = await res.json();
+        setPassword("");
+        onSuccess(data.expiresAt);
+        return;
+      }
+
+      if (res.status === 429) {
+        setError("Too many attempts. Please try again later.");
+      } else {
+        setError("Incorrect password. Please try again.");
+      }
       setPassword("");
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (

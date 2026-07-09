@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { format } from "date-fns";
 import PasswordGate from "@/components/PasswordGate";
-import { GoldStorage, type GoldEntry, type GoldData } from "@/lib/goldStorage";
+import { GoldStorage, type GoldEntry } from "@/lib/goldStorage";
 import { SessionManager } from "@/lib/sessionManager";
 import { ToastProvider, useToast } from "@/components/ui/toast";
 
@@ -42,6 +42,7 @@ function GoldTrackingPageContent() {
   const [priceDialogOpen, setPriceDialogOpen] = useState(false);
   const [editingEntry, setEditingEntry] = useState<GoldEntry | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [sessionExpiresAt, setSessionExpiresAt] = useState<number | undefined>(undefined);
   const [sessionSeconds, setSessionSeconds] = useState<number>(0);
   const [isRefreshingPrice, setIsRefreshingPrice] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string>("");
@@ -71,31 +72,42 @@ function GoldTrackingPageContent() {
     ? (portfolioStats.profitLoss / portfolioStats.totalInvestment) * 100 
     : 0;
 
+  // Check the server-side session on mount.
   useEffect(() => {
-    if (!SessionManager.isAuthenticated()) {
-      setIsAuthenticated(false);
-      setIsLoading(false);
-      return;
-    }
+    let cancelled = false;
+    (async () => {
+      const state = await SessionManager.check();
+      if (cancelled) return;
+      if (state.authenticated) {
+        setIsAuthenticated(true);
+        setSessionExpiresAt(state.expiresAt);
+      } else {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-    setIsAuthenticated(true);
-    
-    // Timer for countdown
-    const timerInterval = setInterval(() => {
-      const remainingSeconds = SessionManager.getRemainingSeconds();
-      setSessionSeconds(remainingSeconds);
+  // Countdown timer driven by the cookie's expiry.
+  useEffect(() => {
+    if (!isAuthenticated || !sessionExpiresAt) return;
 
-      if (remainingSeconds <= 0) {
-        // Time's up - logout
+    const tick = () => {
+      const remaining = SessionManager.remainingSeconds(sessionExpiresAt);
+      setSessionSeconds(remaining);
+      if (remaining <= 0) {
         setIsAuthenticated(false);
         setIsLoggedOut(true);
-        clearInterval(timerInterval);
-        return;
       }
-    }, 1000);
+    };
 
+    tick();
+    const timerInterval = setInterval(tick, 1000);
     return () => clearInterval(timerInterval);
-  }, []);
+  }, [isAuthenticated, sessionExpiresAt]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -103,43 +115,35 @@ function GoldTrackingPageContent() {
     }
   }, [isAuthenticated]);
 
+  const handleUnauthorized = () => {
+    setIsAuthenticated(false);
+    setIsLoggedOut(true);
+  };
+
   const loadData = async () => {
     try {
-      console.log('📥 Loading data from GitHub...');
-      const data = await GoldStorage.loadFromGitHub();
-      
-      if (data) {
-        console.log('✅ Data loaded from GitHub successfully');
-        setEntries(data.entries);
-        setCurrentGoldPrice(data.currentGoldPrice);
-        setLastUpdated(data.lastUpdated);
-      } else {
-        console.log('📝 No GitHub data found, using defaults');
-        setCurrentGoldPrice(6500); // Default price per gram in INR
-        setLastUpdated(new Date().toISOString());
+      const data = await GoldStorage.getData();
+
+      if (data === null) {
+        // Session expired between the check and the load.
+        handleUnauthorized();
+        return;
       }
+
+      setEntries(data.entries);
+      setCurrentGoldPrice(data.currentGoldPrice || 6500);
+      setLastUpdated(data.lastUpdated || new Date().toISOString());
     } catch (error) {
-      console.error('❌ Error loading data from GitHub:', error);
-      // Set defaults if GitHub fails
+      console.error("Error loading data:", error);
+      addToast({
+        title: "Failed to Load Portfolio",
+        description: "Could not load your gold data. Please try again.",
+        variant: "destructive",
+      });
       setCurrentGoldPrice(6500);
       setLastUpdated(new Date().toISOString());
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const saveData = async (newEntries: GoldEntry[], newPrice: number) => {
-    const data: GoldData = {
-      entries: newEntries,
-      currentGoldPrice: newPrice,
-      lastUpdated: new Date().toISOString(),
-      priceHistory: []
-    };
-    
-    try {
-      await GoldStorage.saveToGitHub(data);
-    } catch (error) {
-      console.error("Error saving data:", error);
     }
   };
 
@@ -148,11 +152,11 @@ function GoldTrackingPageContent() {
     try {
       const response = await fetch('/api/gold-price');
       const data = await response.json();
-      
+
       if (data.success) {
-        setCurrentGoldPrice(data.price);
-        setLastUpdated(data.timestamp);
-        await saveData(entries, data.price);
+        const result = await GoldStorage.updatePrice(data.price, true);
+        setCurrentGoldPrice(result.currentGoldPrice);
+        setLastUpdated(result.lastUpdated);
         addToast({
           title: "Price Updated Successfully!",
           description: `22K Gold price updated to ₹${data.price.toLocaleString('en-IN')} per gram`,
@@ -162,6 +166,10 @@ function GoldTrackingPageContent() {
         throw new Error(data.error || 'Failed to fetch price');
       }
     } catch (error) {
+      if (error instanceof Error && error.message === "UNAUTHORIZED") {
+        handleUnauthorized();
+        return;
+      }
       console.error('Error refreshing price:', error);
       addToast({
         title: "Failed to Update Price",
@@ -173,36 +181,41 @@ function GoldTrackingPageContent() {
     }
   };
 
-  const onSubmit = (data: GoldEntryForm) => {
-    const effectivePricePerGram = data.pricePerGram + data.extraChargesPerGram;
-    const totalInvestment = effectivePricePerGram * data.totalGrams;
-    
-    const newEntry: GoldEntry = {
-      id: editingEntry?.id || crypto.randomUUID(),
+  const onSubmit = async (data: GoldEntryForm) => {
+    const input = {
       date: data.date,
       pricePerGram: data.pricePerGram,
       extraChargesPerGram: data.extraChargesPerGram,
-      effectivePricePerGram,
       totalGrams: data.totalGrams,
-      totalInvestment,
       notes: data.notes || "",
     };
 
-    let newEntries: GoldEntry[];
-    if (editingEntry) {
-      newEntries = entries.map(entry => 
-        entry.id === editingEntry.id ? newEntry : entry
-      );
-    } else {
-      newEntries = [...entries, newEntry];
-    }
+    try {
+      if (editingEntry) {
+        const updated = await GoldStorage.updateEntry(editingEntry.id, input);
+        setEntries((prev) =>
+          prev.map((entry) => (entry.id === updated.id ? updated : entry))
+        );
+      } else {
+        const created = await GoldStorage.createEntry(input);
+        setEntries((prev) => [...prev, created]);
+      }
 
-    setEntries(newEntries);
-    saveData(newEntries, currentGoldPrice);
-    
-    reset();
-    setEditingEntry(null);
-    setIsDialogOpen(false);
+      reset();
+      setEditingEntry(null);
+      setIsDialogOpen(false);
+    } catch (error) {
+      if (error instanceof Error && error.message === "UNAUTHORIZED") {
+        handleUnauthorized();
+        return;
+      }
+      console.error("Error saving entry:", error);
+      addToast({
+        title: "Failed to Save Entry",
+        description: "Could not save your entry. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleEdit = (entry: GoldEntry) => {
@@ -215,10 +228,26 @@ function GoldTrackingPageContent() {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    const newEntries = entries.filter(entry => entry.id !== id);
-    setEntries(newEntries);
-    saveData(newEntries, currentGoldPrice);
+  const handleDelete = async (id: string) => {
+    const previous = entries;
+    // Optimistic update.
+    setEntries((prev) => prev.filter((entry) => entry.id !== id));
+    try {
+      await GoldStorage.deleteEntry(id);
+    } catch (error) {
+      // Roll back on failure.
+      setEntries(previous);
+      if (error instanceof Error && error.message === "UNAUTHORIZED") {
+        handleUnauthorized();
+        return;
+      }
+      console.error("Error deleting entry:", error);
+      addToast({
+        title: "Failed to Delete Entry",
+        description: "Could not delete the entry. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const formatCurrency = (amount: number) => {
@@ -229,20 +258,34 @@ function GoldTrackingPageContent() {
     }).format(amount);
   };
 
-  const handlePriceUpdate = (newPrice: number) => {
-    setCurrentGoldPrice(newPrice);
-    setLastUpdated(new Date().toISOString());
-    saveData(entries, newPrice);
-    addToast({
-      title: "Price Updated Manually",
-      description: `Gold price set to ₹${newPrice.toLocaleString('en-IN')} per gram`,
-      variant: "success"
-    });
+  const handlePriceUpdate = async (newPrice: number) => {
+    try {
+      const result = await GoldStorage.updatePrice(newPrice);
+      setCurrentGoldPrice(result.currentGoldPrice);
+      setLastUpdated(result.lastUpdated);
+      addToast({
+        title: "Price Updated Manually",
+        description: `Gold price set to ₹${newPrice.toLocaleString('en-IN')} per gram`,
+        variant: "success"
+      });
+    } catch (error) {
+      if (error instanceof Error && error.message === "UNAUTHORIZED") {
+        handleUnauthorized();
+        return;
+      }
+      console.error("Error updating price:", error);
+      addToast({
+        title: "Failed to Update Price",
+        description: "Could not update the price. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleLogout = () => {
-    SessionManager.clearSession();
+  const handleLogout = async () => {
+    await SessionManager.logout();
     setIsAuthenticated(false);
+    setSessionExpiresAt(undefined);
     setIsLoggedOut(false); // Reset auto logout flag
   };
 
@@ -268,7 +311,7 @@ function GoldTrackingPageContent() {
                     Session Expired
                   </h3>
                   <p className="text-amber-700 dark:text-amber-300 text-sm mt-1">
-                    You have been automatically logged out after 5 minutes of inactivity.
+                    Your session has expired. Please log in again to continue.
                   </p>
                 </div>
               </div>
@@ -277,7 +320,14 @@ function GoldTrackingPageContent() {
         )}
         
         {/* Login Form - PasswordGate handles its own centering */}
-        <PasswordGate onSuccess={() => setIsAuthenticated(true)} />
+        <PasswordGate
+          onSuccess={(expiresAt) => {
+            setIsLoggedOut(false);
+            setIsLoading(true);
+            setSessionExpiresAt(expiresAt);
+            setIsAuthenticated(true);
+          }}
+        />
       </div>
     );
   }
