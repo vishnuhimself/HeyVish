@@ -65,9 +65,9 @@ export async function GET(request: NextRequest) {
     `;
 
     return NextResponse.json({
-      rankings: rankings.rows || [],
-      history: history.rows || [],
-      summary: summary.rows || [],
+      rankings: rankings || [],
+      history: history || [],
+      summary: summary || [],
     });
   } catch (error) {
     console.error("Dashboard ASO error:", error);
