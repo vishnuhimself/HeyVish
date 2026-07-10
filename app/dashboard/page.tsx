@@ -31,15 +31,16 @@ export default function DashboardPage() {
   const [auth, setAuth] = useState(false);
   const [aso, setAso] = useState<any>(null);
   const [fin, setFin] = useState<any>(null);
+  const [seoData, setSeoData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
-  const [tab, setTab] = useState<"aso"|"finance">("aso");
+  const [tab, setTab] = useState<"aso"|"finance"|"seo">("aso");
   const [sel, setSel] = useState("GrowthKit");
   const [exp, setExp] = useState<string|null>(null);
 
   useEffect(()=>{if(auth) load();},[auth]);
 
-  async function load(){setLoading(true);try{const[a,f]=await Promise.all([fetch("/api/dashboard/aso?days=30"),fetch("/api/dashboard/finance?view=summary")]);if(a.status===401){setAuth(false);return}setAso(await a.json());const fd=await f.json();setFin(fd);}catch{setErr("Load failed")}setLoading(false)}
+  async function load(){setLoading(true);try{const[a,f,s]=await Promise.all([fetch("/api/dashboard/aso?days=30"),fetch("/api/dashboard/finance?view=summary"),fetch("/api/dashboard/seo")]);if(a.status===401){setAuth(false);return}setAso(await a.json());const fd=await f.json();setFin(fd);const sd=await s.json();setSeoData(sd);}catch{setErr("Load failed")}setLoading(false)}
 
   if(!auth)return<div className="min-h-screen bg-white dark:bg-black"><style>{`header,footer,nav{display:none!important}`}</style><PG onSuccess={()=>setAuth(true)}/></div>;
   if(loading)return<div className="min-h-screen bg-white dark:bg-black flex items-center justify-center"><style>{`header,footer,nav{display:none!important}`}</style><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"/></div>;
@@ -66,6 +67,7 @@ export default function DashboardPage() {
         <div className="flex gap-1 bg-gray-100 dark:bg-gray-900 p-1 rounded-lg w-fit">
           <button onClick={()=>setTab("aso")} className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${tab==="aso"?"bg-white dark:bg-gray-800 shadow":"text-muted-foreground hover:text-foreground"}`}>📱 App Store</button>
           <button onClick={()=>setTab("finance")} className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${tab==="finance"?"bg-white dark:bg-gray-800 shadow":"text-muted-foreground hover:text-foreground"}`}>💰 Finance</button>
+          <button onClick={()=>setTab("seo")} className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${tab==="seo"?"bg-white dark:bg-gray-800 shadow":"text-muted-foreground hover:text-foreground"}`}>📋 SEO Reports</button>
         </div>
 
         {tab==="aso"&&aso&&(<>
@@ -102,6 +104,15 @@ export default function DashboardPage() {
           {/* Monthly table */}
           <Card><CardHeader><CardTitle>Monthly Breakdown</CardTitle></CardHeader><CardContent>
             <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="border-b text-left text-muted-foreground"><th className="py-2 pr-4 font-medium">Month</th><th className="py-2 pr-4 font-medium text-right">Income</th><th className="py-2 pr-4 font-medium text-right">Expenses</th><th className="py-2 pr-4 font-medium text-right">Net</th></tr></thead><tbody>{(monthly||[]).map((m:any)=>(<tr key={m.month} className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-gray-900"><td className="py-2 pr-4 font-medium">{M[(Number(m.month_num)||1)-1]} {m.year}</td><td className="py-2 pr-4 text-right">{(Number(m.income)||0)>0?fmtR(m.income):"—"}</td><td className="py-2 pr-4 text-right">{(Number(m.expenses)||0)>0?fmtR(m.expenses):"—"}</td><td className={`py-2 pr-4 text-right font-semibold ${(Number(m.net)||0)>=0?"text-green-600":"text-red-600"}`}>{fmtR(m.net)}</td></tr>))}</tbody></table></div>
+          </CardContent></Card>
+        </>)}
+
+        {tab==="seo"&&(<>
+          <Card><CardHeader><CardTitle>📋 SEO Audit Reports</CardTitle><p className="text-sm text-muted-foreground">Last 4 reports. Click Download to get the full markdown file for your content team.</p></CardHeader><CardContent>
+            {(seoData?.reports||[]).length===0 && <p className="text-muted-foreground text-sm py-4">No reports yet. The first one will appear after the next biweekly SEO audit.</p>}
+            <div className="space-y-4">
+              {(seoData?.reports||[]).map((r:any)=>(<Card key={r.id} className="p-4"><div className="flex items-center justify-between"><div><div className="font-medium">{new Date(r.date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}</div><div className="text-xs text-muted-foreground mt-1">Sites: {(r.sites||[]).join(", ")}</div></div><a href={`/api/dashboard/seo?download=${r.id}`} className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" download>⬇ Download .md</a></div></Card>))}
+            </div>
           </CardContent></Card>
         </>)}
       </div>
