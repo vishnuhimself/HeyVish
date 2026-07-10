@@ -45,20 +45,27 @@ export async function GET(request: NextRequest) {
         ORDER BY type, total DESC
       `;
 
-      const totals = await sql`
+      const totalsResult = await sql`
         SELECT 
-          SUM(amount) FILTER (WHERE type = 'Income') as total_income,
-          SUM(amount) FILTER (WHERE type = 'Expense') as total_expenses,
-          SUM(amount) FILTER (WHERE type = 'Income') - SUM(amount) FILTER (WHERE type = 'Expense') as total_net,
+          COALESCE(SUM(amount) FILTER (WHERE type = 'Income'), 0) as total_income,
+          COALESCE(SUM(amount) FILTER (WHERE type = 'Expense'), 0) as total_expenses,
+          COALESCE(SUM(amount) FILTER (WHERE type = 'Income'), 0) - COALESCE(SUM(amount) FILTER (WHERE type = 'Expense'), 0) as total_net,
           COUNT(*) as total_tx
         FROM transactions
       `;
+
+      const totalsRow = (totalsResult as any[])[0] || { total_income: 0, total_expenses: 0, total_net: 0, total_tx: 0 };
 
       return NextResponse.json({
         yearly: yearly || [],
         monthly: monthly || [],
         byCategory: byCategory || [],
-        totals: totals?.[0] || { total_income: 0, total_expenses: 0, total_net: 0, total_tx: 0 },
+        totals: {
+          total_income: Number(totalsRow.total_income),
+          total_expenses: Number(totalsRow.total_expenses),
+          total_net: Number(totalsRow.total_net),
+          total_tx: Number(totalsRow.total_tx),
+        },
       });
     }
 
@@ -68,12 +75,8 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get("type") || "";
     const year = searchParams.get("year") || "";
 
-    let where = "WHERE 1=1";
-    if (type) where += ` AND type = '${type}'`;
-    if (year) where += ` AND EXTRACT(YEAR FROM date) = ${year}`;
-
-    const countResult = await sql(`SELECT COUNT(*) as count FROM transactions ${where}`);
-    const total = countResult?.[0]?.count || 0;
+    const countResult = await sql`SELECT COUNT(*) as count FROM transactions`;
+    const total = (countResult as any[])[0]?.count || 0;
 
     const transactions = await sql`
       SELECT id, date, type, category, merchant, name, amount, notes
