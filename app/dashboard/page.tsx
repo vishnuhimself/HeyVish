@@ -38,6 +38,20 @@ export default function DashboardPage() {
   const [sel, setSel] = useState("GrowthKit");
   const [exp, setExp] = useState<string|null>(null);
 
+  const handleDownload = async (reportId: number) => {
+    try {
+      const res = await fetch(`/api/dashboard/seo?download=${reportId}`);
+      if (!res.ok) throw new Error("Download failed");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `seo-report-${reportId}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch { alert("Download failed. Try again."); }
+  };
+
   useEffect(()=>{if(auth) load();},[auth]);
 
   async function load(){setLoading(true);try{const[a,f,s]=await Promise.all([fetch("/api/dashboard/aso?days=30"),fetch("/api/dashboard/finance?view=summary"),fetch("/api/dashboard/seo")]);if(a.status===401){setAuth(false);return}setAso(await a.json());const fd=await f.json();setFin(fd);const sd=await s.json();setSeoData(sd);}catch{setErr("Load failed")}setLoading(false)}
@@ -111,7 +125,7 @@ export default function DashboardPage() {
           <Card><CardHeader><CardTitle>📋 SEO Audit Reports</CardTitle><p className="text-sm text-muted-foreground">Last 4 reports. Click Download to get the full markdown file for your content team.</p></CardHeader><CardContent>
             {(seoData?.reports||[]).length===0 && <p className="text-muted-foreground text-sm py-4">No reports yet. The first one will appear after the next biweekly SEO audit.</p>}
             <div className="space-y-4">
-              {(seoData?.reports||[]).map((r:any)=>(<Card key={r.id} className="p-4"><div className="flex items-center justify-between"><div><div className="font-medium">{new Date(r.date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}</div><div className="text-xs text-muted-foreground mt-1">Sites: {(r.sites||[]).join(", ")}</div></div><a href={`/api/dashboard/seo?download=${r.id}`} className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" download>⬇ Download .md</a></div></Card>))}
+              {(seoData?.reports||[]).map((r:any)=>(<Card key={r.id} className="p-4"><div className="flex items-center justify-between"><div><div className="font-medium">{new Date(r.date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}</div><div className="text-xs text-muted-foreground mt-1">Sites: {(r.sites||[]).join(", ")}</div></div><button onClick={()=>handleDownload(r.id)} className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">⬇ Download .md</button></div></Card>))}
             </div>
           </CardContent></Card>
         </>)}
