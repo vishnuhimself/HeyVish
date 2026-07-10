@@ -118,9 +118,15 @@ export default function DashboardPage() {
   if (error||!finData) return <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center"><style>{`header,footer,nav{display:none!important}`}</style><p className="text-red-500">{error||"No data"}</p></div>;
 
   const { totals, yearly, monthly, byCategory } = finData;
-  const incomeCats = byCategory.filter(c => c.type === "Income");
-  const expenseCats = byCategory.filter(c => c.type === "Expense");
+  const incomeCats = (byCategory || []).filter((c:any) => c.type === "Income");
+  const expenseCats = (byCategory || []).filter((c:any) => c.type === "Expense");
   const colors = ["#3b82f6","#8b5cf6","#f59e0b","#10b981","#ef4444","#ec4899","#06b6d4"];
+  
+  // Safe number coercion
+  const totalInc = Number(totals?.total_income) || 0;
+  const totalExp = Number(totals?.total_expenses) || 0;
+  const totalNet = Number(totals?.total_net) || 0;
+  const totalTx = Number(totals?.total_tx) || 0;
 
   return (
     <div className="min-h-screen bg-white dark:bg-black p-6 font-sans">
@@ -156,19 +162,19 @@ export default function DashboardPage() {
             {/* Top Cards */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <Card className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950 border-green-200 dark:border-green-800">
-                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><ArrowUpRight className="w-4 h-4 text-green-600"/><span className="text-xs text-muted-foreground">Total Income</span></div><div className="text-xl font-bold text-green-700 dark:text-green-400">{fmt(totals.total_income)}</div></CardContent>
+                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><ArrowUpRight className="w-4 h-4 text-green-600"/><span className="text-xs text-muted-foreground">Total Income</span></div><div className="text-xl font-bold text-green-700 dark:text-green-400">{fmt(totalInc)}</div></CardContent>
               </Card>
               <Card className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950 dark:to-rose-950 border-red-200 dark:border-red-800">
-                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><ArrowDownRight className="w-4 h-4 text-red-600"/><span className="text-xs text-muted-foreground">Total Expenses</span></div><div className="text-xl font-bold text-red-700 dark:text-red-400">{fmt(totals.total_expenses)}</div></CardContent>
+                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><ArrowDownRight className="w-4 h-4 text-red-600"/><span className="text-xs text-muted-foreground">Total Expenses</span></div><div className="text-xl font-bold text-red-700 dark:text-red-400">{fmt(totalExp)}</div></CardContent>
               </Card>
-              <Card className={`bg-gradient-to-br ${totals.total_net>=0?"from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800":"from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 border-orange-200 dark:border-orange-800"}`}>
-                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><Wallet className="w-4 h-4 text-blue-600"/><span className="text-xs text-muted-foreground">Net Profit</span></div><div className={`text-xl font-bold ${totals.total_net>=0?"text-blue-700 dark:text-blue-400":"text-orange-700 dark:text-orange-400"}`}>{fmt(totals.total_net)}</div></CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><Calendar className="w-4 h-4 text-gray-500"/><span className="text-xs text-muted-foreground">Transactions</span></div><div className="text-xl font-bold">{totals.total_tx}</div></CardContent>
+              <Card className={`bg-gradient-to-br ${totalNet>=0?"from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800":"from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 border-orange-200 dark:border-orange-800"}`}>
+                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><Wallet className="w-4 h-4 text-blue-600"/><span className="text-xs text-muted-foreground">Net Profit</span></div><div className={`text-xl font-bold ${totalNet>=0?"text-blue-700 dark:text-blue-400":"text-orange-700 dark:text-orange-400"}`}>{fmt(totalNet)}</div></CardContent>
               </Card>
               <Card>
-                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><DollarSign className="w-4 h-4 text-gray-500"/><span className="text-xs text-muted-foreground">2026 YTD Net</span></div><div className="text-xl font-bold text-green-600">{(yearly.find(y=>y.year===2026)||{net:0}) as any ? fmt((yearly.find(y=>y.year===2026)||{net:0}).net) : "—"}</div></CardContent>
+                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><Calendar className="w-4 h-4 text-gray-500"/><span className="text-xs text-muted-foreground">Transactions</span></div><div className="text-xl font-bold">{totalTx}</div></CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><DollarSign className="w-4 h-4 text-gray-500"/><span className="text-xs text-muted-foreground">2026 YTD Net</span></div><div className="text-xl font-bold text-green-600">{(()=>{const y=yearly.find((x:any)=>x.year===2026); return y?fmt(y.net):"—"})()}</div></CardContent>
               </Card>
             </div>
 
@@ -188,10 +194,10 @@ export default function DashboardPage() {
                 <CardHeader><CardTitle>Category Breakdown</CardTitle></CardHeader>
                 <CardContent className="space-y-6">
                   <div><p className="text-xs font-medium text-muted-foreground mb-2">Income</p>
-                    <DonutRing segments={incomeCats.map((c,i)=>({label:c.category,value:c.total,color:colors[i%colors.length]}))} total={totals.total_income} size={100}/>
+                    <DonutRing segments={incomeCats.map((c:any,i:number)=>({label:c.category,value:c.total,color:colors[i%colors.length]}))} total={totalInc} size={100}/>
                   </div>
                   <div><p className="text-xs font-medium text-muted-foreground mb-2">Expenses</p>
-                    <DonutRing segments={expenseCats.map((c,i)=>({label:c.category,value:c.total,color:colors[i%colors.length]}))} total={totals.total_expenses} size={100}/>
+                    <DonutRing segments={expenseCats.map((c,i)=>({label:c.category,value:c.total,color:colors[i%colors.length]}))} total={totalExp} size={100}/>
                   </div>
                 </CardContent>
               </Card>
