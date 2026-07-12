@@ -48,6 +48,16 @@ async function processEvent(event: any) {
       VALUES (${data.email_id}, ${from}, ${to}, ${subject}, ${JSON.stringify(data)}, NOW())
     `;
     console.log(`📥 Received: ${subject} from ${from}`);
+
+    // Log attachments for processing
+    const attachments = data.attachments || [];
+    if (attachments.length > 0) {
+      for (const att of attachments) {
+        console.log(`  📎 Attachment: ${att.filename} (${att.content_type}) — id: ${att.id}`);
+        // Attachments can be downloaded via GET /emails/attachments/{id}
+        // The download is handled by the email processor cron
+      }
+    }
   } catch (e) {
     console.error("Failed to store email:", e);
   }
