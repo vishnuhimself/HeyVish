@@ -144,7 +144,6 @@ export default function DashboardPage() {
     <section className={styles.workspace}>
       <header className={styles.toolbar}>
         <div className={styles.mobileBrand}><div className={styles.appMark}><BarChart3 /></div><strong>Mission Control</strong></div>
-        <SegmentedNavigation value={tab} onChange={(next) => { setTab(next); setExpanded(null); }} />
         <div className={styles.toolbarActions}><span>{lastSync ? `Updated ${formatSync(lastSync)}` : "Updated now"}</span><button onClick={load} aria-label="Refresh data"><RefreshCw /></button><ModeToggle className={styles.themeToggle} /></div>
       </header>
       {error && <div className={styles.notice}>{error}</div>}
@@ -188,5 +187,8 @@ export default function DashboardPage() {
         </>}
       </div>
     </section>
+    <div className={styles.mobileBottomNav}>
+      <SegmentedNavigation value={tab} onChange={(next) => { setTab(next); setExpanded(null); }} />
+    </div>
   </main>;
 }
