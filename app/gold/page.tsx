@@ -297,7 +297,7 @@ function GoldTrackingPageContent() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#ffffff] dark:bg-black relative">
+      <div className="gold-page min-h-screen bg-white dark:bg-black relative">
         {/* Session Expired Message - Positioned at top */}
         {isLoggedOut && (
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2 w-full max-w-md px-6 z-10">
@@ -334,21 +334,24 @@ function GoldTrackingPageContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#ffffff] dark:bg-black flex items-center justify-center">
+      <div className="gold-page min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 dark:border-white"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#ffffff] dark:bg-black p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="gold-page min-h-screen bg-white dark:bg-black p-4 sm:p-8 lg:p-12">
+      <div className="max-w-[88rem] mx-auto space-y-6">
 
 
         {/* Header */}
         <div className="flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <h1 className="text-3xl font-bold">Gold Portfolio</h1>
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">Private workspace</p>
+              <h1 className="font-display text-4xl sm:text-5xl font-medium tracking-[-0.045em]">Gold Portfolio</h1>
+            </div>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span>Session expires in {formatCountdown(sessionSeconds)}</span>
               <Button 

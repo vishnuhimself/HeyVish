@@ -67,41 +67,42 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     paginate(categoryPosts, currentPage, POSTS_PER_PAGE)
 
   return (
-    <div>
+    <div className="max-w-6xl mx-auto">
       <Link
         href="/blog"
-        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-10 gap-1"
+        className="inline-flex items-center text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground transition-colors mb-14 gap-2"
       >
         ← All posts
       </Link>
 
-      <div className="mb-12">
-        <h1 className="font-display font-semibold text-4xl sm:text-5xl text-foreground tracking-tight leading-tight mb-2">
+      <div className="grid md:grid-cols-[1fr_auto] items-end gap-6 mb-16 sm:mb-20">
+        <h1 className="font-display font-medium text-6xl sm:text-7xl text-foreground tracking-[-0.06em] leading-[0.9]">
           {decodedCategory.charAt(0).toUpperCase() + decodedCategory.slice(1)}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground md:pb-2">
           {categoryPosts.length} article{categoryPosts.length === 1 ? "" : "s"}
         </p>
       </div>
 
-      <div>
-        {paginatedPosts.map((post: Post) => (
+      <div className="border-t border-border">
+        {paginatedPosts.map((post: Post, index: number) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group flex items-baseline justify-between gap-6 py-4 border-b border-border first:border-t hover:opacity-60 transition-opacity"
+            className="group grid grid-cols-[2.5rem_1fr_auto] sm:grid-cols-[4rem_1fr_8rem] items-center gap-4 sm:gap-6 py-5 sm:py-7 border-b border-border"
           >
+            <span className="text-xs text-muted-foreground tabular-nums">{String(index + 1).padStart(2, "0")}</span>
             <div>
-              <h2 className="text-base font-medium text-foreground leading-snug mb-1">
+              <h2 className="font-display text-xl sm:text-2xl font-medium tracking-[-0.035em] leading-tight group-hover:text-accent transition-colors">
                 {post.title}
               </h2>
               {post.description && (
-                <p className="text-sm text-muted-foreground">{post.description}</p>
+                <p className="hidden sm:block text-sm text-muted-foreground mt-1.5 max-w-2xl">{post.description}</p>
               )}
             </div>
             <time
               dateTime={post.date}
-              className="text-sm text-muted-foreground shrink-0"
+              className="text-xs sm:text-sm text-muted-foreground text-right shrink-0"
             >
               {format(parseISO(post.date), "MMM yyyy")}
             </time>

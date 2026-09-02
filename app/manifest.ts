@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "HeyVish — Srivishnu Ramakrishnan",
     short_name: "HeyVish",
     description:
-      "Indie iOS developer building Stepsly, Expenly, and GrowthKit.",
+      "Indie iOS developer building Calmraine, MNML, Applio, Nova Widgets, Expenly, Stepsly, and GrowthKit.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

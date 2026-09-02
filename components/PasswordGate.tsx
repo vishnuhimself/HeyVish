@@ -50,13 +50,14 @@ export default function PasswordGate({ onSuccess }: PasswordGateProps) {
 
   return (
     <div className="flex items-center justify-center p-6 min-h-screen">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md rounded-3xl border-border/80 shadow-[0_28px_90px_rgba(0,0,0,0.08)]">
         <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto w-12 h-12 bg-amber-50 dark:bg-amber-950 rounded-2xl border border-amber-200/70 dark:border-amber-800 flex items-center justify-center mb-4">
             <Lock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
           </div>
-          <CardTitle className="text-2xl">Gold Portfolio Access</CardTitle>
-          <p className="text-muted-foreground">Enter password to access your gold investments</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">Private workspace</p>
+          <CardTitle className="font-display text-3xl font-medium tracking-[-0.035em]">Gold Portfolio</CardTitle>
+          <p className="text-sm text-muted-foreground">Enter your passcode to open the ledger.</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

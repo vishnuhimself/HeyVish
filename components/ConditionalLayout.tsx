@@ -4,51 +4,35 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Header from "./Header";
 
-interface ConditionalLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function ConditionalLayout({ children }: ConditionalLayoutProps) {
+export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isHomePage = pathname === "/";
-  const isGoldPage = pathname === "/gold";
+  const ownsItsShell = pathname === "/" || pathname === "/gold" || pathname === "/dashboard";
 
-  if (isHomePage || isGoldPage) {
-    return <main className="min-h-screen">{children}</main>;
-  }
+  if (ownsItsShell) return <>{children}</>;
 
   const year = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="site-shell">
       <Header />
-      <main className="flex-1 mx-auto w-full max-w-5xl px-5 sm:px-8 py-12 sm:py-16">
-        {children}
-      </main>
-      <footer className="border-t border-border py-8 mt-8">
-        <div className="mx-auto max-w-5xl px-5 sm:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <Link
-            href="/"
-            className="font-display font-semibold text-sm text-foreground hover:opacity-60 transition-opacity"
-          >
-            HeyVish
-          </Link>
-          <div className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
-            <a
-              href="mailto:hey@heyvish.com"
-              className="hover:text-foreground transition-colors"
-            >
-              hey@heyvish.com
-            </a>
-            <a
-              href="https://x.com/VishHimself"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
-            >
-              @VishHimself
-            </a>
-            <span>© {year}</span>
+      <main className="site-main">{children}</main>
+      <footer className="site-footer">
+        <div className="site-footer-inner">
+          <div className="site-footer-callout">
+            <span>Built independently in India.</span>
+            <a href="mailto:hey@heyvish.com">Come say hey.</a>
+          </div>
+          <div className="site-footer-meta">
+            <Link href="/" className="site-wordmark">
+              Vish<span>.</span>
+            </Link>
+            <div>
+              <a href="mailto:hey@heyvish.com">Email</a>
+              <a href="https://x.com/VishHimself" target="_blank" rel="noreferrer">
+                @VishHimself
+              </a>
+              <span>© {year}</span>
+            </div>
           </div>
         </div>
       </footer>

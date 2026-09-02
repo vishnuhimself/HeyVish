@@ -4,49 +4,48 @@
 
 @layer base {
   :root {
-    /* Warm off-white palette — light mode */
-    --background: 40 22% 97%;
-    --foreground: 30 12% 12%;
-    --card: 40 18% 95%;
-    --card-foreground: 30 12% 12%;
+    --background: 0 0% 100%;
+    --foreground: 48 7% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 48 7% 13%;
     --popover: 0 0% 100%;
-    --popover-foreground: 30 12% 12%;
-    --primary: 30 12% 12%;
-    --primary-foreground: 40 22% 97%;
-    --secondary: 38 14% 92%;
-    --secondary-foreground: 30 12% 12%;
-    --muted: 38 14% 92%;
-    --muted-foreground: 28 7% 46%;
-    --accent: 38 14% 90%;
-    --accent-foreground: 30 12% 12%;
+    --popover-foreground: 48 7% 13%;
+    --primary: 48 7% 13%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 48 7% 13%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 42 6% 39%;
+    --accent: 13 71% 60%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 44%;
     --destructive-foreground: 40 22% 97%;
-    --border: 35 12% 87%;
-    --input: 35 12% 87%;
-    --ring: 30 12% 12%;
-    --radius: 0.5rem;
+    --border: 0 0% 87%;
+    --input: 0 0% 87%;
+    --ring: 13 71% 60%;
+    --radius: 0.75rem;
   }
   .dark {
     /* Warm dark palette */
-    --background: 28 10% 8%;
-    --foreground: 40 16% 94%;
-    --card: 28 10% 10%;
+    --background: 60 8% 8%;
+    --foreground: 45 24% 92%;
+    --card: 48 9% 11%;
     --card-foreground: 40 16% 94%;
     --popover: 28 10% 10%;
     --popover-foreground: 40 16% 94%;
     --primary: 40 16% 94%;
     --primary-foreground: 28 10% 8%;
-    --secondary: 28 8% 14%;
+    --secondary: 48 8% 14%;
     --secondary-foreground: 40 16% 94%;
-    --muted: 28 8% 14%;
+    --muted: 48 8% 14%;
     --muted-foreground: 35 6% 56%;
-    --accent: 28 8% 14%;
-    --accent-foreground: 40 16% 94%;
+    --accent: 13 66% 58%;
+    --accent-foreground: 45 24% 94%;
     --destructive: 0 65% 55%;
     --destructive-foreground: 40 16% 94%;
-    --border: 28 8% 19%;
-    --input: 28 8% 19%;
-    --ring: 40 16% 80%;
+    --border: 48 7% 20%;
+    --input: 48 7% 20%;
+    --ring: 13 66% 58%;
   }
 }
 
@@ -60,6 +59,9 @@
     font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  html {
+    scroll-behavior: smooth;
   }
   ::selection {
     background: hsl(var(--foreground) / 0.1);
@@ -95,6 +97,249 @@
   letter-spacing: -0.02em;
 }
 
+.site-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(90deg, hsl(var(--border) / 0.44) 1px, transparent 1px) 50% 0 / min(9vw, 8rem) 100%,
+    hsl(var(--background));
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 0 clamp(1rem, 3vw, 3rem);
+  background: hsl(var(--background) / 0.78);
+  backdrop-filter: blur(22px) saturate(130%);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+}
+
+.site-header-inner {
+  width: min(100%, 88rem);
+  min-height: 4.5rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.site-wordmark {
+  justify-self: start;
+  color: hsl(var(--foreground));
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 1.16rem;
+  font-weight: 620;
+  letter-spacing: -0.04em;
+}
+
+.site-wordmark span {
+  color: hsl(var(--accent));
+}
+
+.site-header-context {
+  margin: 0;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.67rem;
+  font-weight: 650;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.site-nav {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.12rem;
+}
+
+.site-nav > a {
+  padding: 0.48rem 0.68rem;
+  border-radius: 999px;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.76rem;
+  font-weight: 550;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.site-nav > a[aria-current="page"] {
+  color: hsl(var(--foreground));
+  background: hsl(var(--foreground) / 0.06);
+}
+
+.site-theme-toggle {
+  border-radius: 999px !important;
+}
+
+.site-main {
+  width: min(100% - clamp(2rem, 6vw, 6rem), 88rem);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 9vw, 9rem) 0 clamp(6rem, 10vw, 10rem);
+  flex: 1;
+}
+
+.site-footer {
+  padding: 0 clamp(1rem, 3vw, 3rem) 1.5rem;
+}
+
+.site-footer-inner {
+  width: min(100%, 88rem);
+  margin: 0 auto;
+  padding-top: clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid hsl(var(--border));
+}
+
+.site-footer-callout {
+  padding-bottom: clamp(4rem, 8vw, 8rem);
+  display: grid;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 6.4rem);
+  font-weight: 420;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.site-footer-callout a {
+  width: fit-content;
+  color: hsl(var(--foreground));
+  font-style: italic;
+  text-decoration: underline;
+  text-decoration-color: hsl(var(--accent) / 0.55);
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.08em;
+}
+
+.site-footer-meta {
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  font-size: 0.66rem;
+  font-weight: 620;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.site-footer-meta > div {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.site-main .prose {
+  font-size: 1.02rem;
+  line-height: 1.82;
+}
+
+.site-main .prose h1 {
+  max-width: 13ch;
+  margin-bottom: 0.4rem;
+  font-size: clamp(3rem, 6vw, 6rem) !important;
+  font-weight: 460 !important;
+  line-height: 0.93 !important;
+  letter-spacing: -0.06em !important;
+  text-transform: none !important;
+}
+
+.site-main .prose h2 {
+  margin-top: 3.4rem;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 520;
+  line-height: 1.05;
+  text-transform: none !important;
+}
+
+.site-main .prose h3,
+.site-main .prose h4 {
+  text-transform: none !important;
+}
+
+.site-main .prose p,
+.site-main .prose li {
+  color: hsl(var(--muted-foreground));
+}
+
+.site-main .prose > section > div {
+  padding-top: 0.25rem;
+  border-top: 1px solid hsl(var(--border) / 0.72);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-nav > a:hover {
+    color: hsl(var(--foreground));
+    background: hsl(var(--accent) / 0.1);
+  }
+
+  .site-footer a:hover {
+    color: hsl(var(--accent));
+  }
+}
+
+@media (max-width: 760px) {
+  .site-header-inner {
+    grid-template-columns: 1fr auto;
+    min-height: 4rem;
+  }
+
+  .site-header-context {
+    display: none;
+  }
+
+  .site-nav > a {
+    padding-inline: 0.44rem;
+    font-size: 0.7rem;
+  }
+
+  .site-main {
+    width: min(100% - 1.8rem, 88rem);
+  }
+
+  .site-footer-meta {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header {
+    background: hsl(var(--background));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Private ledger: same crisp white system, without the old tinted card wash. */
+.gold-page {
+  background-color: #fff !important;
+  background-image: linear-gradient(90deg, hsl(var(--border) / 0.42) 1px, transparent 1px);
+  background-position: 50% 0;
+  background-size: min(9vw, 8rem) 100%;
+}
+
+.gold-page .bg-gradient-to-r,
+.gold-page .bg-gradient-to-br {
+  background-image: none !important;
+  background-color: hsl(var(--card)) !important;
+}
+
+.gold-page h2,
+.gold-page h3 {
+  letter-spacing: -0.025em;
+}
+
+.dark .gold-page {
+  background-color: hsl(var(--background)) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* ── Code blocks ── */
 
 [data-rehype-pretty-code-fragment] {
@@ -112,4 +357,3 @@
   @apply grid min-w-full break-words bg-transparent;
   counter-reset: line;
 }
-

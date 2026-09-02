@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s — HeyVish",
   },
   description:
-    "Srivishnu Ramakrishnan (HeyVish) — indie iOS developer building Stepsly, Expenly, and GrowthKit. Tiny, focused apps and notes on shipping software.",
+    "Srivishnu Ramakrishnan (HeyVish) — indie iOS developer building Calmraine, MNML, Applio, Nova Widgets, Expenly, Stepsly, and GrowthKit.",
   applicationName: "HeyVish",
   authors: [{ name: "Srivishnu Ramakrishnan", url: SITE_URL }],
   creator: "Srivishnu Ramakrishnan",
@@ -43,6 +43,10 @@ export const metadata: Metadata = {
     "Stepsly",
     "Expenly",
     "GrowthKit",
+    "Calmraine",
+    "MNML",
+    "Applio",
+    "Nova Widgets",
     "Swift",
     "React Native",
     "Next.js",
@@ -66,7 +70,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Srivishnu Ramakrishnan — Indie iOS App Developer",
     description:
-      "Indie developer building tiny, focused iOS apps — Stepsly, Expenly, GrowthKit. Notes & essays on shipping software.",
+      "Indie developer building focused iOS apps — Calmraine, MNML, Applio, Nova Widgets, Expenly, Stepsly, and GrowthKit.",
     url: SITE_URL,
     siteName: "HeyVish",
     locale: "en_US",
@@ -84,7 +88,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Srivishnu Ramakrishnan — Indie iOS App Developer",
     description:
-      "Indie developer building tiny, focused iOS apps — Stepsly, Expenly, GrowthKit.",
+      "Indie developer building focused iOS apps — Calmraine, MNML, Applio, Nova Widgets, Expenly, Stepsly, and GrowthKit.",
     creator: "@VishHimself",
     images: ["/Srivishnu-Ramakrishnan-Author.png"],
   },

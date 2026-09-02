@@ -7,40 +7,29 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="border border-foreground">
-        <div className="flex items-stretch border-b border-foreground">
-          <div className="px-4 py-2 border-r border-foreground text-[10px] uppercase tracking-[0.3em] font-bold">
-            [ Error / 404 ]
-          </div>
-          <div className="ml-auto px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-            Page not found
-          </div>
-        </div>
-        <div className="p-8 sm:p-12">
-          <h1 className="text-5xl sm:text-7xl font-bold uppercase tracking-tight leading-none">
-            404
-          </h1>
-          <p className="mt-6 text-sm leading-relaxed text-foreground/80 max-w-md">
+    <div className="max-w-6xl mx-auto min-h-[65svh] flex flex-col justify-center">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-7">Error 404 · Page not found</p>
+      <div className="grid md:grid-cols-[1fr_0.55fr] gap-10 md:gap-24 items-end">
+        <h1 className="font-display text-[clamp(6rem,18vw,14rem)] font-light tracking-[-0.09em] leading-[0.7]">404.</h1>
+        <div className="md:pb-2">
+          <p className="text-base leading-relaxed text-muted-foreground max-w-md">
             The page you&apos;re looking for doesn&apos;t exist or has been moved.
             Try the homepage or browse the blog index.
           </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-foreground">
+          <div className="flex flex-wrap gap-2 mt-8">
           <Link
             href="/"
-            className="px-5 sm:px-6 py-4 border-b sm:border-b-0 sm:border-r border-foreground text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-foreground hover:text-background transition-colors flex items-center justify-between"
+            className="rounded-full bg-foreground text-background px-5 py-3 text-xs font-semibold"
           >
-            ← Back home
-            <span>HEYVISH</span>
+            Back home
           </Link>
           <Link
             href="/blog"
-            className="px-5 sm:px-6 py-4 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-foreground hover:text-background transition-colors flex items-center justify-between"
+            className="rounded-full border border-border px-5 py-3 text-xs font-semibold hover:bg-secondary transition-colors"
           >
-            Browse blog
-            <span>→</span>
+            Browse notes →
           </Link>
+          </div>
         </div>
       </div>
     </div>
