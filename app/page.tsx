@@ -6,8 +6,6 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://heyvish.com";
 
 export default function Home() {
-  const year = new Date().getFullYear();
-
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -67,7 +65,7 @@ export default function Home() {
   return (
     <>
       <JsonLd data={[personSchema, websiteSchema, appsSchema]} />
-      <HomeExperience apps={APP_STORE_PORTFOLIO} year={year} />
+      <HomeExperience apps={APP_STORE_PORTFOLIO} />
     </>
   );
 }

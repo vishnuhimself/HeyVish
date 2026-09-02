@@ -4,7 +4,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import {
   Activity, ArrowDownRight, ArrowLeft, ArrowUpRight, BarChart3, ChevronRight,
-  Download, IndianRupee, Loader2, Lock, RefreshCw, Search, Wallet,
+  Download, Loader2, Lock, RefreshCw,
 } from "lucide-react";
 import {
   Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer,
@@ -14,14 +14,14 @@ import { ModeToggle } from "@/components/mode-toggle";
 import styles from "./dashboard.module.css";
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const appMeta: Record<string, { icon: string; color: string }> = {
-  Expenly: { icon: "/expenly-icon.jpg", color: "#ff9f0a" },
-  GrowthKit: { icon: "/growthkit-icon.jpg", color: "#5856d6" },
-  "Nova Widgets": { icon: "/nova-widgets-icon.jpg", color: "#30d158" },
-  Stepsly: { icon: "/stepsly-icon.jpg", color: "#ff375f" },
-  Applio: { icon: "/applio-icon.jpg", color: "#0a84ff" },
-  Calmraine: { icon: "/calmraine-icon.jpg", color: "#64d2ff" },
-  MNML: { icon: "/mnml-icon.jpg", color: "#8e8e93" },
+const appMeta: Record<string, { icon: string }> = {
+  Expenly: { icon: "/expenly-icon.jpg" },
+  GrowthKit: { icon: "/growthkit-icon.jpg" },
+  "Nova Widgets": { icon: "/nova-widgets-icon.jpg" },
+  Stepsly: { icon: "/stepsly-icon.jpg" },
+  Applio: { icon: "/applio-icon.jpg" },
+  Calmraine: { icon: "/calmraine-icon.jpg" },
+  MNML: { icon: "/mnml-icon.jpg" },
 };
 
 const money = (value: unknown) => `₹${(Number(value) || 0).toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
@@ -92,8 +92,20 @@ function Delta({ now, previous }: { now: unknown; previous: unknown }) {
   return <span className={delta > 0 ? styles.up : styles.down}>{delta > 0 ? "↑" : "↓"} {Math.abs(delta)}</span>;
 }
 
+function StoreTabIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fillRule="evenodd" d="M10.25 3a7.25 7.25 0 1 0 4.47 12.96l4.66 4.66 1.24-1.24-4.66-4.66A7.25 7.25 0 0 0 10.25 3Zm0 2a5.25 5.25 0 1 0 0 10.5 5.25 5.25 0 0 0 0-10.5Z" clipRule="evenodd" /></svg>;
+}
+
+function FinanceTabIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 5.25A2.25 2.25 0 0 1 6.25 3h10.5A2.25 2.25 0 0 1 19 5.25V7H6.5A2.5 2.5 0 0 0 4 9.5V5.25Z" /><path fill="currentColor" fillRule="evenodd" d="M4 9.5A1.5 1.5 0 0 1 5.5 8h14A1.5 1.5 0 0 1 21 9.5v9a2.5 2.5 0 0 1-2.5 2.5h-12A2.5 2.5 0 0 1 4 18.5v-9Zm12.75 4a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5Z" clipRule="evenodd" /></svg>;
+}
+
+function ReportsTabIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 13.5A1.5 1.5 0 0 1 5.5 12h1A1.5 1.5 0 0 1 8 13.5V20H4v-6.5ZM10 9.5A1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5V20h-4V9.5ZM16 5.5A1.5 1.5 0 0 1 17.5 4h1A1.5 1.5 0 0 1 20 5.5V20h-4V5.5Z" /></svg>;
+}
+
 function SegmentedNavigation({ value, onChange }: { value: Tab; onChange: (tab: Tab) => void }) {
-  const items = [{ id: "aso" as const, label: "App Store", icon: Search }, { id: "finance" as const, label: "Finance", icon: IndianRupee }, { id: "seo" as const, label: "Reports", icon: Activity }];
+  const items = [{ id: "aso" as const, label: "App Store", icon: StoreTabIcon }, { id: "finance" as const, label: "Finance", icon: FinanceTabIcon }, { id: "seo" as const, label: "Reports", icon: ReportsTabIcon }];
   return <nav className={styles.nav} aria-label="Workspace">{items.map(({ id, label, icon: Icon }) => <button key={id} aria-current={value === id ? "page" : undefined} onClick={() => onChange(id)}><Icon />{label}</button>)}</nav>;
 }
 
@@ -151,7 +163,7 @@ export default function DashboardPage() {
       <div className={styles.view} key={tab}>
         {tab === "aso" && aso && <>
           <header className={styles.pageHeader}><div><p>App Store</p><h1>Search visibility</h1><span>Keyword positions across your apps over the last 30 days.</span></div><div className={styles.headerStat}><span>Keywords ranking</span><strong>{(aso.rankings || []).filter((item: any) => item.found).length}</strong></div></header>
-          <section className={styles.appSelector} aria-label="Choose app">{(aso.summary || []).map((item: any) => { const meta = appMeta[item.app] || { icon: "/favicon.png", color: "#007aff" }; return <button key={item.app} aria-pressed={selectedApp === item.app} onClick={() => { setSelectedApp(item.app); setExpanded(null); }}><Image src={meta.icon} alt="" width={46} height={46} /><span><strong>{item.app}</strong><small>{item.ranking_keywords} of {item.total_keywords} ranking</small></span><i style={{ "--color": meta.color } as React.CSSProperties}><em style={{ width: `${item.ranking_keywords / Math.max(1, item.total_keywords) * 100}%` }} /></i></button>; })}</section>
+          <section className={styles.appSelector} aria-label="Choose app">{(aso.summary || []).map((item: any) => { const meta = appMeta[item.app] || { icon: "/favicon.png" }; return <button key={item.app} aria-pressed={selectedApp === item.app} onClick={() => { setSelectedApp(item.app); setExpanded(null); }}><Image src={meta.icon} alt="" width={46} height={46} /><span><strong>{item.app}</strong><small>{item.ranking_keywords} of {item.total_keywords} ranking</small></span><i><em style={{ width: `${item.ranking_keywords / Math.max(1, item.total_keywords) * 100}%` }} /></i></button>; })}</section>
           <section className={styles.panel}>
             <PanelHeader title={`${selectedApp} keywords`} detail={<span className={styles.pill}>{(aso.rankings || []).filter((item: any) => item.app === selectedApp && item.found).length} found</span>} />
             <div className={styles.tableWrap}><table><thead><tr><th>Keyword</th><th>Position</th><th>Change</th><th>State</th></tr></thead><tbody>{[...(aso.rankings || []).filter((item: any) => item.app === selectedApp)].sort((a: any, b: any) => Number(!a.found) - Number(!b.found) || (Number(a.position) || 999) - (Number(b.position) || 999)).map((rank: any) => <Fragment key={rank.keyword}>

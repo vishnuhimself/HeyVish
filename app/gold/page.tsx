@@ -458,7 +458,6 @@ function GoldTrackingPageContent() {
                         <span className="text-3xl font-bold text-green-600 dark:text-green-400">
                           {formatCurrency(currentGoldPrice)}/g
                         </span>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">(Coimbatore)</span>
                       </div>
                       {lastUpdated && (
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">

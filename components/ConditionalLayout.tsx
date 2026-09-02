@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Header from "./Header";
+import { SiteFooter } from "./SiteFooter";
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -9,13 +10,11 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
   if (ownsItsShell) return <>{children}</>;
 
-  const year = new Date().getFullYear();
-
   return (
     <div className="site-shell">
       <Header />
       <main className="site-main">{children}</main>
-      <footer className="site-footer"><div className="site-footer-inner"><span>© {year} Vish</span><div><a href="https://x.com/VishHimself" target="_blank" rel="noreferrer">X</a><a href="mailto:hey@heyvish.com">Email</a></div></div></footer>
+      <SiteFooter />
     </div>
   );
 }
