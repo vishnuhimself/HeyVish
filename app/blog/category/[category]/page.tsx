@@ -67,44 +67,43 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     paginate(categoryPosts, currentPage, POSTS_PER_PAGE)
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div>
       <Link
         href="/blog"
-        className="inline-flex items-center text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground transition-colors mb-14 gap-2"
+        className="inline-flex items-center text-xs text-muted-foreground hover:text-foreground transition-colors mb-12 gap-2"
       >
         ← All posts
       </Link>
 
-      <div className="grid md:grid-cols-[1fr_auto] items-end gap-6 mb-16 sm:mb-20">
-        <h1 className="font-display font-medium text-6xl sm:text-7xl text-foreground tracking-[-0.06em] leading-[0.9]">
+      <div className="mb-14">
+        <h1 className="text-3xl font-normal tracking-[-0.035em] mb-3">
           {decodedCategory.charAt(0).toUpperCase() + decodedCategory.slice(1)}
         </h1>
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground md:pb-2">
+        <p className="text-sm text-muted-foreground">
           {categoryPosts.length} article{categoryPosts.length === 1 ? "" : "s"}
         </p>
       </div>
 
       <div className="border-t border-border">
-        {paginatedPosts.map((post: Post, index: number) => (
+        {paginatedPosts.map((post: Post) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group grid grid-cols-[2.5rem_1fr_auto] sm:grid-cols-[4rem_1fr_8rem] items-center gap-4 sm:gap-6 py-5 sm:py-7 border-b border-border"
+            className="group grid grid-cols-[1fr_auto] items-baseline gap-5 py-4 border-b border-border"
           >
-            <span className="text-xs text-muted-foreground tabular-nums">{String(index + 1).padStart(2, "0")}</span>
             <div>
-              <h2 className="font-display text-xl sm:text-2xl font-medium tracking-[-0.035em] leading-tight group-hover:text-accent transition-colors">
+              <h2 className="text-sm font-normal leading-snug group-hover:opacity-50 transition-opacity">
                 {post.title}
               </h2>
               {post.description && (
-                <p className="hidden sm:block text-sm text-muted-foreground mt-1.5 max-w-2xl">{post.description}</p>
+                <p className="hidden sm:block text-xs text-muted-foreground mt-1.5">{post.description}</p>
               )}
             </div>
             <time
               dateTime={post.date}
-              className="text-xs sm:text-sm text-muted-foreground text-right shrink-0"
+              className="text-xs text-muted-foreground text-right shrink-0"
             >
-              {format(parseISO(post.date), "MMM yyyy")}
+              {format(parseISO(post.date), "dd/MM/yy")}
             </time>
           </Link>
         ))}

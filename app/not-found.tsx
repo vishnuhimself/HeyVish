@@ -7,31 +7,26 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <div className="max-w-6xl mx-auto min-h-[65svh] flex flex-col justify-center">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-7">Error 404 · Page not found</p>
-      <div className="grid md:grid-cols-[1fr_0.55fr] gap-10 md:gap-24 items-end">
-        <h1 className="font-display text-[clamp(6rem,18vw,14rem)] font-light tracking-[-0.09em] leading-[0.7]">404.</h1>
-        <div className="md:pb-2">
-          <p className="text-base leading-relaxed text-muted-foreground max-w-md">
+    <div className="min-h-[55svh] flex flex-col justify-center">
+      <h1 className="text-3xl font-normal tracking-[-0.035em] mb-6">Page not found</h1>
+          <p className="text-base leading-relaxed max-w-md">
             The page you&apos;re looking for doesn&apos;t exist or has been moved.
             Try the homepage or browse the blog index.
           </p>
-          <div className="flex flex-wrap gap-2 mt-8">
+          <div className="flex flex-wrap gap-5 mt-8 text-sm underline decoration-border underline-offset-4">
           <Link
             href="/"
-            className="rounded-full bg-foreground text-background px-5 py-3 text-xs font-semibold"
+            className=""
           >
             Back home
           </Link>
           <Link
             href="/blog"
-            className="rounded-full border border-border px-5 py-3 text-xs font-semibold hover:bg-secondary transition-colors"
+            className=""
           >
             Browse notes →
           </Link>
           </div>
-        </div>
-      </div>
     </div>
   );
 }

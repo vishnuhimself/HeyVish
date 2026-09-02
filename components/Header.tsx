@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { ModeToggle } from "./mode-toggle";
 
 const NAV = [
-  { href: "/blog", label: "Notes" },
+  { href: "/blog", label: "Writing" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -15,11 +15,7 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="site-header-inner">
-        <Link href="/" className="site-wordmark" aria-label="Vish, home">
-          Vish<span>.</span>
-        </Link>
-
-        <p className="site-header-context">Independent iOS developer · India</p>
+        <Link href="/" className="site-wordmark" aria-label="Vish, home">Vish</Link>
 
         <nav className="site-nav" aria-label="Primary navigation">
           {NAV.map((item) => {
@@ -33,9 +29,7 @@ export default function Header() {
               </Link>
             );
           })}
-          <a href="https://x.com/VishHimself" target="_blank" rel="noreferrer">
-            X
-          </a>
+          <a href="mailto:hey@heyvish.com">Email</a>
           <ModeToggle className="site-theme-toggle" />
         </nav>
       </div>

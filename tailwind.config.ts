@@ -62,9 +62,9 @@ export default {
   			full: '9999px',
   		},
   		fontFamily: {
-  			sans: ['var(--font-dm-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-  			display: ['var(--font-fraunces)', 'Georgia', 'ui-serif', 'serif'],
-  			serif: ['var(--font-fraunces)', 'Georgia', 'ui-serif', 'serif'],
+				sans: ['var(--font-alata)', 'sans-serif'],
+				display: ['var(--font-alata)', 'sans-serif'],
+				serif: ['var(--font-alata)', 'sans-serif'],
   			mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
   		},
   	}

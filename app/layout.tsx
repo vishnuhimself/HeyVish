@@ -1,23 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, DM_Sans } from "next/font/google";
+import { Alata } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ConditionalLayout from "@/components/ConditionalLayout";
 
-const fraunces = Fraunces({
+const alata = Alata({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-alata",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700", "900"],
-  style: ["normal", "italic"],
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-  display: "swap",
-  weight: ["300", "400", "500", "600"],
+  weight: "400",
 });
 
 const SITE_URL =
@@ -109,8 +101,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F9F7F4" },
-    { media: "(prefers-color-scheme: dark)", color: "#141210" },
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#111111" },
   ],
 };
 
@@ -120,8 +112,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${fraunces.variable} ${dmSans.variable}`}>
-      <body className={`${dmSans.className} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={alata.variable}>
+      <body className={`${alata.className} antialiased`}>
         <Providers>
           <ConditionalLayout>{children}</ConditionalLayout>
         </Providers>
