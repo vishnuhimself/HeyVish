@@ -1,10 +1,10 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import {
-  Activity, ArrowDownRight, ArrowLeft, ArrowUpRight, BarChart3, ChevronRight,
-  Download, Loader2, Lock, RefreshCw,
+  Activity, ArrowDownRight, ArrowLeft, ArrowUpRight, BarChart3, ChevronDown,
+  ChevronRight, Download, Loader2, Lock, ReceiptText, RefreshCw, Tags, WalletCards,
 } from "lucide-react";
 import {
   Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer,
@@ -28,6 +28,8 @@ const money = (value: unknown) => `₹${(Number(value) || 0).toLocaleString("en-
 const compactMoney = (value: unknown) => new Intl.NumberFormat("en-IN", { notation: "compact", maximumFractionDigits: 1 }).format(Number(value) || 0);
 const formatSync = (value: string) => new Date(value).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata", hour: "numeric", minute: "2-digit" });
 const formatDay = (value: string) => new Date(value).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+const periodKey = (year: unknown, month: unknown) => `${year}-${String(month).padStart(2, "0")}`;
+const monthTitle = (year: unknown, month: unknown) => `${monthNames[(Number(month) || 1) - 1]} ${year}`;
 
 function PasswordGate({ unlock }: { unlock: () => void }) {
   const [password, setPassword] = useState("");
@@ -113,12 +115,53 @@ function PanelHeader({ title, detail }: { title: string; detail?: React.ReactNod
   return <div className={styles.panelHeader}><h2>{title}</h2>{detail}</div>;
 }
 
+function PeriodDetails({ period, detail, loading }: { period: any; detail: any; loading: boolean }) {
+  if (loading) return <div className={styles.periodDetails}><div className={styles.periodLoading}><Loader2 className={styles.spin} /> Loading {monthTitle(period.year, period.month_num)}…</div></div>;
+  if (!detail) return null;
+  const summary = detail.summary || {};
+  const categories = detail.categories || [];
+  const transactions = detail.transactions || [];
+  const largestCategory = Math.max(...categories.map((item: any) => Number(item.total) || 0), 1);
+  return <div className={styles.periodDetails}>
+    <div className={styles.periodHeadline}>
+      <div><span>{monthTitle(period.year, period.month_num)} in detail</span><strong>{money(summary.net)} <small>net</small></strong></div>
+      <span>{summary.total_tx || 0} transactions</span>
+    </div>
+    <div className={styles.periodStats}>
+      <div><span>Income</span><strong>{money(summary.income)}</strong></div>
+      <div><span>Expenses</span><strong>{money(summary.expenses)}</strong></div>
+      <div><span>Saved</span><strong>{money(summary.net)}</strong></div>
+    </div>
+    <div className={styles.periodBody}>
+      <section className={styles.categoryBreakdown}>
+        <div className={styles.detailTitle}><Tags /><span>Spend by category</span></div>
+        {categories.length ? categories.map((category: any) => <div className={styles.categoryRow} key={category.category}>
+          <div><span>{category.category}</span><strong>{money(category.total)}</strong></div>
+          <i><em style={{ width: `${Math.max(4, Number(category.total) / largestCategory * 100)}%` }} /></i>
+          <small>{category.count} {category.count === 1 ? "transaction" : "transactions"}</small>
+        </div>) : <p className={styles.detailEmpty}>No expenses were recorded this month.</p>}
+      </section>
+      <section className={styles.transactionList}>
+        <div className={styles.detailTitle}><ReceiptText /><span>All transactions</span></div>
+        {transactions.length ? transactions.map((transaction: any) => <article key={transaction.id}>
+          <time>{formatDay(transaction.date)}</time>
+          <div><strong>{transaction.merchant || transaction.name || transaction.category}</strong><span>{transaction.category}{transaction.notes ? ` · ${transaction.notes}` : ""}</span></div>
+          <b className={transaction.type === "Income" ? styles.up : ""}>{transaction.type === "Income" ? "+" : "−"}{money(transaction.amount)}</b>
+        </article>) : <p className={styles.detailEmpty}>No transactions were recorded this month.</p>}
+      </section>
+    </div>
+  </div>;
+}
+
 type Tab = "aso" | "finance" | "seo";
 
 export default function DashboardPage() {
   const [auth, setAuth] = useState(false), [loading, setLoading] = useState(true);
   const [aso, setAso] = useState<any>(null), [finance, setFinance] = useState<any>(null), [seo, setSeo] = useState<any>(null);
   const [tab, setTab] = useState<Tab>("aso"), [selectedApp, setSelectedApp] = useState("GrowthKit"), [expanded, setExpanded] = useState<string | null>(null);
+  const [expandedYear, setExpandedYear] = useState<number | null>(null), [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
+  const [periodDetail, setPeriodDetail] = useState<any>(null), [periodLoading, setPeriodLoading] = useState(false);
+  const periodRequest = useRef<string | null>(null);
   const [error, setError] = useState(""), [lastSync, setLastSync] = useState("");
 
   async function load() {
@@ -137,19 +180,43 @@ export default function DashboardPage() {
     catch { setError("The report couldn’t be downloaded."); }
   }
 
+  async function selectPeriod(year: number, month: number) {
+    const key = periodKey(year, month);
+    if (selectedPeriod === key) { periodRequest.current = null; setSelectedPeriod(null); setPeriodDetail(null); return; }
+    periodRequest.current = key;
+    setSelectedPeriod(key); setPeriodDetail(null); setPeriodLoading(true);
+    try {
+      const response = await fetch(`/api/dashboard/finance?view=period&year=${year}&month=${month}`);
+      if (!response.ok) throw new Error();
+      const detail = await response.json();
+      if (periodRequest.current === key) setPeriodDetail(detail);
+    } catch { if (periodRequest.current === key) setError("That month’s transactions couldn’t be loaded."); }
+    if (periodRequest.current === key) setPeriodLoading(false);
+  }
+
   if (!auth) return <PasswordGate unlock={() => setAuth(true)} />;
   if (loading) return <main className={styles.status}><div className={styles.appMark}><Loader2 className={styles.spin} /></div><p>Updating workspace…</p></main>;
   if (error && !aso) return <main className={styles.status}><p>{error}</p><button className={styles.primary} onClick={load}>Try again</button></main>;
 
   const totals = finance?.totals || {}, yearly = finance?.yearly || [], monthly = finance?.monthly || [];
   const income = Number(totals.total_income) || 0, expenses = Number(totals.total_expenses) || 0, net = Number(totals.total_net) || 0;
-  const chronologicalMonths = [...monthly].sort((a: any, b: any) => (Number(a.year) * 12 + Number(a.month_num)) - (Number(b.year) * 12 + Number(b.month_num))).slice(-12).map((item: any) => ({ ...item, label: monthNames[(Number(item.month_num) || 1) - 1], income: Number(item.income) || 0, expenses: Number(item.expenses) || 0 }));
-  const currentYear = yearly[0] || {};
+  const chronologicalMonths = [...monthly].sort((a: any, b: any) => (Number(a.year) * 12 + Number(a.month_num)) - (Number(b.year) * 12 + Number(b.month_num))).map((item: any) => ({ ...item, label: `${monthNames[(Number(item.month_num) || 1) - 1]} '${String(item.year).slice(-2)}`, income: Number(item.income) || 0, expenses: Number(item.expenses) || 0, net: Number(item.net) || 0 }));
+  const currentYearNumber = new Date().getFullYear();
+  const currentYear = yearly.find((item: any) => Number(item.year) === currentYearNumber) || { year: currentYearNumber, income: 0, expenses: 0, net: 0 };
+  const monthCategories = new Map<string, any>();
+  (finance?.monthlyCategory || []).forEach((item: any) => {
+    const key = periodKey(item.year, item.month_num);
+    const current = monthCategories.get(key);
+    if (!current || Number(item.total) > Number(current.total)) monthCategories.set(key, item);
+  });
+  const expenseCategories = (finance?.byCategory || []).filter((item: any) => item.type === "Expense").map((item: any) => ({ ...item, total: Number(item.total) || 0 })).slice(0, 5);
+  const largestExpenseCategory = expenseCategories[0];
+  const averageMonthlySpend = chronologicalMonths.length ? expenses / chronologicalMonths.length : 0;
 
   return <main className={styles.shell}>
     <aside className={styles.sidebar}>
       <a href="/" className={styles.brand}><span><BarChart3 /></span><strong>Mission Control</strong></a>
-      <SegmentedNavigation value={tab} onChange={(next) => { setTab(next); setExpanded(null); }} />
+      <SegmentedNavigation value={tab} onChange={(next) => { setTab(next); setExpanded(null); setExpandedYear(null); setSelectedPeriod(null); setPeriodDetail(null); }} />
       <div className={styles.sidebarBottom}><span><i /> Synced</span><a href="/"><ArrowLeft /> Portfolio</a></div>
     </aside>
 
@@ -174,23 +241,41 @@ export default function DashboardPage() {
         </>}
 
         {tab === "finance" && finance && <>
-          <header className={styles.pageHeader}><div><p>Finance</p><h1>Business overview</h1><span>Income, expenses, and retained earnings at a glance.</span></div><div className={styles.headerStat}><span>Transactions</span><strong>{Number(totals.total_tx) || 0}</strong></div></header>
+          <header className={styles.pageHeader}><div><p>Finance</p><h1>Your money, in context.</h1><span>A complete view of business cash flow — with every month and transaction close at hand.</span></div><div className={styles.headerStat}><span>Transactions</span><strong>{Number(totals.total_tx) || 0}</strong></div></header>
           <section className={styles.financeHero}>
-            <div className={styles.netWorth}><span>Net earnings</span><strong>{money(net)}</strong><p className={net >= 0 ? styles.up : styles.down}>{net >= 0 ? <ArrowUpRight /> : <ArrowDownRight />}{income ? `${Math.abs(net / income * 100).toFixed(1)}% margin` : "No income yet"}</p></div>
-            <div className={styles.financeFacts}><div><span>Total income</span><strong>{money(income)}</strong></div><div><span>Total expenses</span><strong>{money(expenses)}</strong></div><div><span>{currentYear.year || "Current year"} net</span><strong>{money(currentYear.net)}</strong></div></div>
+            <div className={styles.netWorth}><span>All-time net earnings</span><strong>{money(net)}</strong><p className={net >= 0 ? styles.up : styles.down}>{net >= 0 ? <ArrowUpRight /> : <ArrowDownRight />}{income ? `${Math.abs(net / income * 100).toFixed(1)}% retained` : "No income yet"}</p></div>
+            <div className={styles.financeFacts}>
+              <div><span>{currentYearNumber} net earnings</span><strong>{money(currentYear.net)}</strong></div>
+              <div><span>Lifetime income</span><strong>{money(income)}</strong></div>
+              <div><span>Lifetime expenses</span><strong>{money(expenses)}</strong></div>
+              <div><span>Average monthly spend</span><strong>{money(averageMonthlySpend)}</strong></div>
+            </div>
           </section>
+          <div className={styles.insightStrip}>
+            <div><WalletCards /><span><small>Largest spending area</small><strong>{largestExpenseCategory?.category || "No expenses yet"}</strong></span><b>{largestExpenseCategory ? money(largestExpenseCategory.total) : "—"}</b></div>
+            <div><Tags /><span><small>Spend categories</small><strong>{expenseCategories.length}</strong></span><b>across all time</b></div>
+            <div><ReceiptText /><span><small>Monthly history</small><strong>{chronologicalMonths.length} months</strong></span><b>fully explorable</b></div>
+          </div>
           <section className={styles.panel}>
-            <PanelHeader title="Cash flow" detail={<div className={styles.legend}><span><i className={styles.blueDot} />Income</span><span><i className={styles.orangeDot} />Expenses</span></div>} />
+            <PanelHeader title="Cash flow history" detail={<div className={styles.legend}><span><i className={styles.blueDot} />Income</span><span><i className={styles.orangeDot} />Expenses</span></div>} />
             <div className={styles.financeChart}><ResponsiveContainer width="100%" height="100%"><AreaChart data={chronologicalMonths} margin={{ top: 16, right: 12, left: -8, bottom: 0 }}>
               <defs><linearGradient id="incomeFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="var(--blue)" stopOpacity={0.22}/><stop offset="100%" stopColor="var(--blue)" stopOpacity={0}/></linearGradient><linearGradient id="expenseFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="var(--orange)" stopOpacity={0.16}/><stop offset="100%" stopColor="var(--orange)" stopOpacity={0}/></linearGradient></defs>
-              <CartesianGrid vertical={false} stroke="var(--chart-grid)" /><XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: "var(--secondary-label)", fontSize: 11 }} dy={8}/><YAxis axisLine={false} tickLine={false} tick={{ fill: "var(--secondary-label)", fontSize: 10 }} tickFormatter={(value) => compactMoney(value)} width={54}/><Tooltip content={<ChartTooltip />} cursor={{ stroke: "var(--separator)" }}/>
+              <CartesianGrid vertical={false} stroke="var(--chart-grid)" /><XAxis dataKey="label" axisLine={false} tickLine={false} minTickGap={28} tick={{ fill: "var(--secondary-label)", fontSize: 11 }} dy={8}/><YAxis axisLine={false} tickLine={false} tick={{ fill: "var(--secondary-label)", fontSize: 10 }} tickFormatter={(value) => compactMoney(value)} width={54}/><Tooltip content={<ChartTooltip />} cursor={{ stroke: "var(--separator)" }}/>
               <Area type="monotone" dataKey="income" name="Income" stroke="var(--blue)" strokeWidth={2.5} fill="url(#incomeFill)" dot={false} activeDot={{ r: 4 }} animationDuration={500}/><Area type="monotone" dataKey="expenses" name="Expenses" stroke="var(--orange)" strokeWidth={2.5} fill="url(#expenseFill)" dot={false} activeDot={{ r: 4 }} animationDuration={500}/>
             </AreaChart></ResponsiveContainer></div>
           </section>
           <div className={styles.financeGrid}>
-            <section className={styles.panel}><PanelHeader title="By year" /><div className={styles.list}>{yearly.map((item: any) => <div key={item.year}><span>{item.year}</span><span>{money(item.income)}<small>income</small></span><span>{money(item.expenses)}<small>spent</small></span><strong className={Number(item.net) >= 0 ? styles.up : styles.down}>{money(item.net)}</strong></div>)}</div></section>
-            <section className={styles.panel}><PanelHeader title="Recent months" /><div className={styles.list}>{chronologicalMonths.slice(-6).reverse().map((item: any) => <div key={`${item.year}-${item.month_num}`}><span>{item.label}</span><span>{money(item.income)}<small>income</small></span><span>{money(item.expenses)}<small>spent</small></span><strong className={Number(item.income) - Number(item.expenses) >= 0 ? styles.up : styles.down}>{money(Number(item.income) - Number(item.expenses))}</strong></div>)}</div></section>
+            <section className={styles.panel}><PanelHeader title="Where money went" detail={<span className={styles.subtleDetail}>All time</span>} /><div className={styles.categoryOverview}>{expenseCategories.length ? expenseCategories.map((category: any) => <div key={category.category}><div><span>{category.category}</span><strong>{money(category.total)}</strong></div><i><em style={{ width: `${Math.max(4, Number(category.total) / Math.max(1, Number(largestExpenseCategory?.total)) * 100)}%` }} /></i><small>{expenses ? `${(Number(category.total) / expenses * 100).toFixed(1)}% of all expenses` : ""}</small></div>) : <p className={styles.detailEmpty}>Expense categories will appear here.</p>}</div></section>
+            <section className={styles.panel}><PanelHeader title="By year" detail={<span className={styles.subtleDetail}>Tap to expand</span>} /><div className={styles.yearList}>{yearly.map((item: any) => {
+              const isOpen = expandedYear === Number(item.year);
+              const monthsInYear = chronologicalMonths.filter((month: any) => Number(month.year) === Number(item.year)).reverse();
+              return <div className={styles.yearGroup} key={item.year}>
+                <button className={styles.yearRow} aria-expanded={isOpen} onClick={() => setExpandedYear(isOpen ? null : Number(item.year))}><ChevronDown className={isOpen ? styles.yearChevronOpen : ""} /><span>{item.year}</span><span>{money(item.income)}<small>income</small></span><span>{money(item.expenses)}<small>spent</small></span><strong className={Number(item.net) >= 0 ? styles.up : styles.down}>{money(item.net)}<small>net</small></strong></button>
+                <div className={`${styles.yearDetails} ${isOpen ? styles.yearDetailsOpen : ""}`}><div>{monthsInYear.map((month: any) => { const key = periodKey(month.year, month.month_num), topCategory = monthCategories.get(key), isSelected = selectedPeriod === key; return <Fragment key={key}><button className={`${styles.monthRow} ${isSelected ? styles.monthRowSelected : ""}`} onClick={() => void selectPeriod(Number(month.year), Number(month.month_num))}><span><strong>{monthTitle(month.year, month.month_num)}</strong><small>{topCategory ? `Most spent: ${topCategory.category}` : "No expenses"}</small></span><span><b>{money(month.income)}</b><small>income</small></span><span><b>{money(month.expenses)}</b><small>expense</small></span><ChevronRight className={isSelected ? styles.rotate : ""} /></button>{isSelected && <PeriodDetails period={month} detail={periodDetail} loading={periodLoading} />}</Fragment>; })}</div></div>
+              </div>;
+            })}</div></section>
           </div>
+          <section className={`${styles.panel} ${styles.monthHistory}`}><PanelHeader title="Every month" detail={<span className={styles.subtleDetail}>{chronologicalMonths.length} months · Tap for full detail</span>} /><div className={styles.monthList}>{chronologicalMonths.slice().reverse().map((month: any) => { const key = periodKey(month.year, month.month_num), topCategory = monthCategories.get(key), isSelected = selectedPeriod === key; return <Fragment key={key}><button className={`${styles.monthRow} ${isSelected ? styles.monthRowSelected : ""}`} onClick={() => void selectPeriod(Number(month.year), Number(month.month_num))}><span><strong>{monthTitle(month.year, month.month_num)}</strong><small>{topCategory ? `${topCategory.category} was the largest expense` : "No expenses recorded"}</small></span><span><b>{money(month.income)}</b><small>income</small></span><span><b>{money(month.expenses)}</b><small>expense</small></span><strong className={Number(month.net) >= 0 ? styles.up : styles.down}>{money(month.net)}<small>net</small></strong><ChevronRight className={isSelected ? styles.rotate : ""} /></button>{isSelected && <PeriodDetails period={month} detail={periodDetail} loading={periodLoading} />}</Fragment>; })}</div></section>
         </>}
 
         {tab === "seo" && <>
@@ -200,7 +285,7 @@ export default function DashboardPage() {
       </div>
     </section>
     <div className={styles.mobileBottomNav}>
-      <SegmentedNavigation value={tab} onChange={(next) => { setTab(next); setExpanded(null); }} />
+      <SegmentedNavigation value={tab} onChange={(next) => { setTab(next); setExpanded(null); setExpandedYear(null); setSelectedPeriod(null); setPeriodDetail(null); }} />
     </div>
   </main>;
 }

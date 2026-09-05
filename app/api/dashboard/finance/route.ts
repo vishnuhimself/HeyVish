@@ -7,7 +7,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const view = searchParams.get("view") || "summary";
 
-    // Summary: totals by year/month
+    // The overview deliberately returns the whole ledger history. The dashboard
+    // uses this to make the timeline and its drill-downs useful beyond the last
+    // couple of months.
     if (view === "summary") {
       const yearly = await sql`
         SELECT 
@@ -31,7 +33,6 @@ export async function GET(request: NextRequest) {
         FROM transactions
         GROUP BY month, year, month_num
         ORDER BY month DESC
-        LIMIT 24
       `;
 
       const byCategory = await sql`
@@ -43,6 +44,18 @@ export async function GET(request: NextRequest) {
         FROM transactions
         GROUP BY type, category
         ORDER BY type, total DESC
+      `;
+
+      const monthlyCategory = await sql`
+        SELECT
+          EXTRACT(YEAR FROM date)::int as year,
+          EXTRACT(MONTH FROM date)::int as month_num,
+          COALESCE(category, 'Uncategorised') as category,
+          SUM(amount) as total
+        FROM transactions
+        WHERE type = 'Expense'
+        GROUP BY year, month_num, category
+        ORDER BY year DESC, month_num DESC, total DESC
       `;
 
       const totalsResult = await sql`
@@ -60,12 +73,63 @@ export async function GET(request: NextRequest) {
         yearly: yearly || [],
         monthly: monthly || [],
         byCategory: byCategory || [],
+        monthlyCategory: monthlyCategory || [],
         totals: {
           total_income: Number(totalsRow.total_income),
           total_expenses: Number(totalsRow.total_expenses),
           total_net: Number(totalsRow.total_net),
           total_tx: Number(totalsRow.total_tx),
         },
+      });
+    }
+
+    // A focused period powers the expandable month detail. Returning it in one
+    // response keeps the interaction quick even for a large overall ledger.
+    if (view === "period") {
+      const year = Number(searchParams.get("year"));
+      const month = Number(searchParams.get("month"));
+      if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) {
+        return NextResponse.json({ error: "A valid year and month are required." }, { status: 400 });
+      }
+
+      const [summary, categories, transactions] = await Promise.all([
+        sql`
+          SELECT
+            COALESCE(SUM(amount) FILTER (WHERE type = 'Income'), 0) as income,
+            COALESCE(SUM(amount) FILTER (WHERE type = 'Expense'), 0) as expenses,
+            COALESCE(SUM(amount) FILTER (WHERE type = 'Income'), 0) - COALESCE(SUM(amount) FILTER (WHERE type = 'Expense'), 0) as net,
+            COUNT(*) as total_tx
+          FROM transactions
+          WHERE EXTRACT(YEAR FROM date)::int = ${year} AND EXTRACT(MONTH FROM date)::int = ${month}
+        `,
+        sql`
+          SELECT
+            COALESCE(category, 'Uncategorised') as category,
+            SUM(amount) as total,
+            COUNT(*) as count
+          FROM transactions
+          WHERE type = 'Expense' AND EXTRACT(YEAR FROM date)::int = ${year} AND EXTRACT(MONTH FROM date)::int = ${month}
+          GROUP BY category
+          ORDER BY total DESC
+        `,
+        sql`
+          SELECT id, date, type, COALESCE(category, 'Uncategorised') as category, merchant, name, amount, notes
+          FROM transactions
+          WHERE EXTRACT(YEAR FROM date)::int = ${year} AND EXTRACT(MONTH FROM date)::int = ${month}
+          ORDER BY date DESC, id DESC
+        `,
+      ]);
+
+      const summaryRow = (summary as any[])[0] || {};
+      return NextResponse.json({
+        summary: {
+          income: Number(summaryRow.income) || 0,
+          expenses: Number(summaryRow.expenses) || 0,
+          net: Number(summaryRow.net) || 0,
+          total_tx: Number(summaryRow.total_tx) || 0,
+        },
+        categories: ((categories as any[]) || []).map((item: any) => ({ ...item, total: Number(item.total) || 0, count: Number(item.count) || 0 })),
+        transactions: ((transactions as any[]) || []).map((item: any) => ({ ...item, amount: Number(item.amount) || 0 })),
       });
     }
 
