@@ -1,11 +1,11 @@
-// Scrapes the 22K gold price (Coimbatore) and writes it to Neon Postgres.
-// Used by GitHub Actions - Important - Do not Delete - Do not remove this comment
+// Scrapes the 22K gold price (Coimbatore) and writes it to PostgreSQL.
+// Run daily from the HeyVish Site scheduled task in Coolify.
 //
 // Run locally with:
 //   node --env-file=.env.local scripts/scrape-gold-price.mjs
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 
 const connectionString =
   process.env.DATABASE_URL ||
@@ -17,7 +17,7 @@ if (!connectionString) {
   process.exit(1);
 }
 
-const sql = neon(connectionString);
+const sql = postgres(connectionString, { max: 1 });
 
 // Scrape 22K gold price from BankBazaar Coimbatore
 async function scrapeGoldPrice() {
@@ -152,4 +152,4 @@ async function main() {
   }
 }
 
-main();
+main().finally(() => sql.end());

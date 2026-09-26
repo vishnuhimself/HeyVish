@@ -7,7 +7,7 @@
 // Safe to re-run: entries upsert by id.
 import { readFileSync } from "fs";
 import CryptoJS from "crypto-js";
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 import { randomUUID } from "crypto";
 
 const KEY = process.env.MIGRATE_KEY || "vishnu0923";
@@ -75,7 +75,7 @@ if (!connectionString) {
   process.exit(1);
 }
 
-const sql = neon(connectionString);
+const sql = postgres(connectionString, { max: 1 });
 
 function normalizeDate(d) {
   // Accept YYYY-MM-DD or anything Date can parse; store as YYYY-MM-DD.
@@ -144,3 +144,4 @@ console.log(
 console.log(
   "   (Left the current gold price as-is; the scraper keeps it fresh.)"
 );
+await sql.end();

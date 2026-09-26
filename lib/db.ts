@@ -1,8 +1,6 @@
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 
-// Server-only Neon client. The connection string is read from the environment
-// (injected by the Vercel Neon integration in production, and from .env.local
-// during local dev). It is NEVER exposed to the browser.
+// Server-only PostgreSQL client. The connection string is never exposed to the browser.
 const connectionString =
   process.env.DATABASE_URL ||
   process.env.POSTGRES_URL ||
@@ -15,4 +13,4 @@ if (!connectionString) {
 }
 
 // `sql` is a tagged-template query function that safely parameterizes inputs.
-export const sql = neon(connectionString);
+export const sql = postgres(connectionString, { max: 5, idle_timeout: 20 });

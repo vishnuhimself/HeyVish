@@ -6,6 +6,10 @@ import remarkGfm from 'remark-gfm'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  experimental: {
+    webpackMemoryOptimizations: true,
+    webpackBuildWorker: true,
+  },
   // Make canvas optional to avoid build issues on Vercel
   webpack: (config, { isServer }) => {
     // Add canvas to the list of ignored modules
@@ -89,6 +93,12 @@ const nextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return [
+      { source: '/rummy', destination: 'https://rummytrack.vercel.app/' },
+      { source: '/rummy/:path*', destination: 'https://rummytrack.vercel.app/:path*' },
+    ]
+  },
 }
  
 const withMDX = createMDX({
@@ -119,4 +129,4 @@ const withMDX = createMDX({
   },
 })
  
-export default withMDX(nextConfig) 
+export default withMDX(nextConfig)
