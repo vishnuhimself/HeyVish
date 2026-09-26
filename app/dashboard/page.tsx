@@ -5,13 +5,14 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import {
   Activity, ArrowDownRight, ArrowLeft, ArrowUpRight, BarChart3, ChevronDown,
-  ChevronRight, Download, Loader2, Lock, LogOut, ReceiptText, RefreshCw, Tags, WalletCards,
+  ChevronRight, Download, Loader2, Lock, LogOut, Plus, ReceiptText, RefreshCw, Tags, WalletCards,
 } from "lucide-react";
 import {
   Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer,
   Tooltip, XAxis, YAxis,
 } from "recharts";
 import { ModeToggle } from "@/components/mode-toggle";
+import FinanceTransactionForm from "@/components/FinanceTransactionForm";
 import styles from "./dashboard.module.css";
 
 const GoldPortfolio = dynamic(() => import("@/components/GoldPortfolio"));
@@ -169,6 +170,7 @@ export default function DashboardPage() {
   const [goldRefreshKey, setGoldRefreshKey] = useState(0);
   const [expandedYear, setExpandedYear] = useState<number | null>(null), [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
   const [periodDetail, setPeriodDetail] = useState<any>(null), [periodLoading, setPeriodLoading] = useState(false);
+  const [transactionOpen, setTransactionOpen] = useState(false);
   const periodRequest = useRef<string | null>(null);
   const [error, setError] = useState(""), [lastSync, setLastSync] = useState("");
 
@@ -212,9 +214,9 @@ export default function DashboardPage() {
     catch { setError("The report couldn’t be downloaded."); }
   }
 
-  async function selectPeriod(year: number, month: number) {
+  async function selectPeriod(year: number, month: number, force = false) {
     const key = periodKey(year, month);
-    if (selectedPeriod === key) { periodRequest.current = null; setSelectedPeriod(null); setPeriodDetail(null); return; }
+    if (selectedPeriod === key && !force) { periodRequest.current = null; setSelectedPeriod(null); setPeriodDetail(null); return; }
     periodRequest.current = key;
     setSelectedPeriod(key); setPeriodDetail(null); setPeriodLoading(true);
     try {
@@ -224,6 +226,17 @@ export default function DashboardPage() {
       if (periodRequest.current === key) setPeriodDetail(detail);
     } catch { if (periodRequest.current === key) setError("That month’s transactions couldn’t be loaded."); }
     if (periodRequest.current === key) setPeriodLoading(false);
+  }
+
+  async function transactionSaved(date: string) {
+    setTransactionOpen(false);
+    const [year, month] = date.split("-").map(Number);
+    setExpandedYear(year);
+    const summary = fetch("/api/dashboard/finance?view=summary")
+      .then((response) => { if (!response.ok) throw new Error(); return response.json(); })
+      .then((data) => { setFinance(data); setLastSync(new Date().toISOString()); })
+      .catch(() => setError("Transaction saved, but the finance summary could not refresh. Try the refresh button."));
+    await Promise.all([summary, selectPeriod(year, month, true)]);
   }
 
   if (checkingSession) return <main className={styles.status}><div className={styles.appMark}><Loader2 className={styles.spin} /></div><p>Opening workspace…</p></main>;
@@ -275,7 +288,7 @@ export default function DashboardPage() {
         </>}
 
         {tab === "finance" && finance && <>
-          <header className={styles.pageHeader}><div><p>Finance</p><h1>Your money, in context.</h1><span>A complete view of business cash flow — with every month and transaction close at hand.</span></div><div className={styles.headerStat}><span>Transactions</span><strong>{Number(totals.total_tx) || 0}</strong></div></header>
+          <header className={styles.pageHeader}><div><p>Finance</p><h1>Your money, in context.</h1><span>A complete view of business cash flow — with every month and transaction close at hand.</span></div><div className={styles.financeHeaderActions}><div className={styles.headerStat}><span>Transactions</span><strong>{Number(totals.total_tx) || 0}</strong></div><button className={styles.addTransaction} onClick={() => setTransactionOpen(true)}><Plus /> Add transaction</button></div></header>
           <section className={styles.financeHero}>
             <div className={styles.netWorth}><span>All-time net earnings</span><strong>{money(net)}</strong><p className={net >= 0 ? styles.up : styles.down}>{net >= 0 ? <ArrowUpRight /> : <ArrowDownRight />}{income ? `${Math.abs(net / income * 100).toFixed(1)}% retained` : "No income yet"}</p></div>
             <div className={styles.financeFacts}>
@@ -321,5 +334,6 @@ export default function DashboardPage() {
     <div className={styles.mobileBottomNav}>
       <SegmentedNavigation value={tab} onChange={selectTab} />
     </div>
+    {transactionOpen && <FinanceTransactionForm categories={finance?.byCategory || []} onClose={() => setTransactionOpen(false)} onSaved={(date) => void transactionSaved(date)} onUnauthorized={() => { setTransactionOpen(false); setAuth(false); }} />}
   </main>;
 }

@@ -1,6 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSql } from "@/lib/dashboardDb";
 
+export async function POST(request: NextRequest) {
+  let input: unknown;
+  try {
+    input = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Enter a valid transaction." }, { status: 400 });
+  }
+
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    return NextResponse.json({ error: "Enter a valid transaction." }, { status: 400 });
+  }
+
+  const fields = input as Record<string, unknown>;
+  const type = fields.type;
+  const date = fields.date;
+  const amount = fields.amount;
+  const category = typeof fields.category === "string" ? fields.category.trim() : "";
+  const name = typeof fields.name === "string" ? fields.name.trim() : "";
+  const merchant = typeof fields.merchant === "string" ? fields.merchant.trim() : "";
+  const notes = typeof fields.notes === "string" ? fields.notes.trim() : "";
+
+  if (type !== "Income" && type !== "Expense") {
+    return NextResponse.json({ error: "Choose income or expense." }, { status: 400 });
+  }
+  if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+      Number.isNaN(Date.parse(`${date}T00:00:00Z`)) ||
+      new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) !== date) {
+    return NextResponse.json({ error: "Enter a valid date." }, { status: 400 });
+  }
+  const amountText = typeof amount === "number" ? String(amount) : amount;
+  if (typeof amountText !== "string" || !/^\d{1,10}(?:\.\d{1,2})?$/.test(amountText) ||
+      Number(amountText) <= 0 || Number(amountText) > 9999999999.99) {
+    return NextResponse.json({ error: "Enter a positive amount with up to two decimal places." }, { status: 400 });
+  }
+  if (!category || category.length > 100 || !name || name.length > 200 || merchant.length > 200 || notes.length > 2000) {
+    return NextResponse.json({ error: "Enter a name and category within the allowed lengths." }, { status: 400 });
+  }
+
+  try {
+    const sql = getSql();
+    const rows = await sql`
+      INSERT INTO transactions (id, date, type, category, merchant, name, amount, notes)
+      VALUES (${crypto.randomUUID()}, ${date}, ${type}, ${category}, ${merchant || null}, ${name}, ${amountText}, ${notes || null})
+      RETURNING id
+    `;
+    return NextResponse.json({ transaction: { id: rows[0].id, date, type, category, name, amount: Number(amountText) } }, { status: 201 });
+  } catch (error) {
+    console.error("Finance transaction save error:", error);
+    return NextResponse.json({ error: "Could not save the transaction. Try again." }, { status: 500 });
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     const sql = getSql();
@@ -16,7 +68,7 @@ export async function GET(request: NextRequest) {
           EXTRACT(YEAR FROM date)::int as year,
           SUM(amount) FILTER (WHERE type = 'Income') as income,
           SUM(amount) FILTER (WHERE type = 'Expense') as expenses,
-          SUM(amount) FILTER (WHERE type = 'Income') - SUM(amount) FILTER (WHERE type = 'Expense') as net
+          COALESCE(SUM(amount) FILTER (WHERE type = 'Income'), 0) - COALESCE(SUM(amount) FILTER (WHERE type = 'Expense'), 0) as net
         FROM transactions
         GROUP BY year
         ORDER BY year DESC
@@ -29,7 +81,7 @@ export async function GET(request: NextRequest) {
           EXTRACT(MONTH FROM date)::int as month_num,
           SUM(amount) FILTER (WHERE type = 'Income') as income,
           SUM(amount) FILTER (WHERE type = 'Expense') as expenses,
-          SUM(amount) FILTER (WHERE type = 'Income') - SUM(amount) FILTER (WHERE type = 'Expense') as net
+          COALESCE(SUM(amount) FILTER (WHERE type = 'Income'), 0) - COALESCE(SUM(amount) FILTER (WHERE type = 'Expense'), 0) as net
         FROM transactions
         GROUP BY month, year, month_num
         ORDER BY month DESC
