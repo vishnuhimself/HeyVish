@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
-import { SESSION_COOKIE } from "@/lib/auth";
-
-export const runtime = "nodejs";
+import { DASHBOARD_COOKIE } from "@/lib/dashboardAuth";
 
 export async function POST() {
   const response = NextResponse.json({ success: true });
-  // Clear the session cookie.
-  response.cookies.set(SESSION_COOKIE, "", {
+  response.cookies.set(DASHBOARD_COOKIE, "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

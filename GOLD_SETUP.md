@@ -1,54 +1,15 @@
-# Gold Portfolio Setup
+# Gold portfolio
 
-The `/gold` route is a private, password-protected portfolio tracker. It uses
-a proper server-side architecture:
+Gold is a tab in Mission Control at `/dashboard?tab=gold`. The old `/gold` URL
+redirects there. One dashboard password and signed, HTTP-only session cookie
+protect the dashboard and every `/api/gold-data` endpoint.
 
-- **Auth**: password checked server-side; session held in a signed, httpOnly
-  cookie. No password or secret is ever shipped to the browser.
-- **Storage**: Neon Postgres (via the Vercel integration). The database is only
-  reachable from server-side API routes.
-- **Price updates**: a scheduled GitHub Action scrapes the 22K price and writes
-  it directly to Postgres.
+Gold entries, the current price, and price history live in the same Coolify
+PostgreSQL database as the rest of the site. The app uses `DATABASE_URL` for
+Gold and `DASHBOARD_DATABASE_URL` for Mission Control data. Coolify needs
+`DASHBOARD_PASSWORD` and `DASHBOARD_SESSION_SECRET` for login.
 
-## Environment variables
-
-These are **server-only** — never prefix them with `NEXT_PUBLIC_`.
-
-| Variable         | Where            | Purpose                                        |
-| ---------------- | ---------------- | ---------------------------------------------- |
-| `DATABASE_URL`   | Vercel + local   | Neon Postgres connection string (pooled)       |
-| `POSTGRES_URL`   | Vercel + local   | Same value; added by the Neon integration      |
-| `SESSION_SECRET` | Vercel + local   | Signs the session cookie. `openssl rand -hex 32` |
-| `GOLD_PASSWORD`  | Vercel + local   | The password required to open `/gold`          |
-
-Locally these live in `.env.local` (gitignored). In production, set them in the
-Vercel dashboard or via `vercel env add`.
-
-## First-time setup
-
-1. Create the Neon Postgres database from the Vercel dashboard
-   (Storage → Create Database → Neon Postgres) and connect it to the project.
-2. Pull the connection vars locally: `vercel env pull .env.local`.
-3. Add `SESSION_SECRET` and `GOLD_PASSWORD` locally and in Vercel.
-4. Create the tables: `node --env-file=.env.local scripts/db-migrate.mjs`.
-
-## Changing the password
-
-Update `GOLD_PASSWORD` in Vercel (and `.env.local` for local dev). No code
-changes needed.
-
-## Automated price updates
-
-The workflow at `.github/workflows/gold-price-scraper.yml` runs daily and calls
-`scripts/scrape-gold-price.mjs`, which writes the latest price to Postgres. It
-needs a single repository secret:
-
-- `DATABASE_URL` — the same Neon connection string.
-
-Add it under GitHub → Settings → Secrets and variables → Actions.
-
-You can run the scraper manually with:
-
-```bash
-node --env-file=.env.local scripts/scrape-gold-price.mjs
-```
+The Coolify scheduled task `Gold Price Scraper` runs
+`node scripts/scrape-gold-price.mjs` daily at 05:00 UTC. The database has a
+separate daily backup schedule in Coolify. Those scheduled backups currently
+stay on the VPS, so configure S3 storage for automatic offsite copies.

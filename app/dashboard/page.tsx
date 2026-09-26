@@ -2,9 +2,10 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import {
   Activity, ArrowDownRight, ArrowLeft, ArrowUpRight, BarChart3, ChevronDown,
-  ChevronRight, Download, Loader2, Lock, ReceiptText, RefreshCw, Tags, WalletCards,
+  ChevronRight, Download, Loader2, Lock, LogOut, ReceiptText, RefreshCw, Tags, WalletCards,
 } from "lucide-react";
 import {
   Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer,
@@ -12,6 +13,8 @@ import {
 } from "recharts";
 import { ModeToggle } from "@/components/mode-toggle";
 import styles from "./dashboard.module.css";
+
+const GoldPortfolio = dynamic(() => import("@/components/GoldPortfolio"));
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const appMeta: Record<string, { icon: string }> = {
@@ -102,12 +105,16 @@ function FinanceTabIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 5.25A2.25 2.25 0 0 1 6.25 3h10.5A2.25 2.25 0 0 1 19 5.25V7H6.5A2.5 2.5 0 0 0 4 9.5V5.25Z" /><path fill="currentColor" fillRule="evenodd" d="M4 9.5A1.5 1.5 0 0 1 5.5 8h14A1.5 1.5 0 0 1 21 9.5v9a2.5 2.5 0 0 1-2.5 2.5h-12A2.5 2.5 0 0 1 4 18.5v-9Zm12.75 4a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5Z" clipRule="evenodd" /></svg>;
 }
 
+function GoldTabIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fillRule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16Z" clipRule="evenodd" /><circle cx="12" cy="12" r="3" fill="currentColor" /></svg>;
+}
+
 function ReportsTabIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 13.5A1.5 1.5 0 0 1 5.5 12h1A1.5 1.5 0 0 1 8 13.5V20H4v-6.5ZM10 9.5A1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5V20h-4V9.5ZM16 5.5A1.5 1.5 0 0 1 17.5 4h1A1.5 1.5 0 0 1 20 5.5V20h-4V5.5Z" /></svg>;
 }
 
 function SegmentedNavigation({ value, onChange }: { value: Tab; onChange: (tab: Tab) => void }) {
-  const items = [{ id: "aso" as const, label: "App Store", icon: StoreTabIcon }, { id: "finance" as const, label: "Finance", icon: FinanceTabIcon }, { id: "seo" as const, label: "Reports", icon: ReportsTabIcon }];
+  const items = [{ id: "aso" as const, label: "App Store", icon: StoreTabIcon }, { id: "finance" as const, label: "Finance", icon: FinanceTabIcon }, { id: "gold" as const, label: "Gold", icon: GoldTabIcon }, { id: "seo" as const, label: "Reports", icon: ReportsTabIcon }];
   return <nav className={styles.nav} aria-label="Workspace">{items.map(({ id, label, icon: Icon }) => <button key={id} aria-current={value === id ? "page" : undefined} onClick={() => onChange(id)}><Icon />{label}</button>)}</nav>;
 }
 
@@ -153,16 +160,41 @@ function PeriodDetails({ period, detail, loading }: { period: any; detail: any; 
   </div>;
 }
 
-type Tab = "aso" | "finance" | "seo";
+type Tab = "aso" | "finance" | "gold" | "seo";
 
 export default function DashboardPage() {
-  const [auth, setAuth] = useState(false), [loading, setLoading] = useState(true);
+  const [auth, setAuth] = useState(false), [checkingSession, setCheckingSession] = useState(true), [loading, setLoading] = useState(true);
   const [aso, setAso] = useState<any>(null), [finance, setFinance] = useState<any>(null), [seo, setSeo] = useState<any>(null);
   const [tab, setTab] = useState<Tab>("aso"), [selectedApp, setSelectedApp] = useState("GrowthKit"), [expanded, setExpanded] = useState<string | null>(null);
+  const [goldRefreshKey, setGoldRefreshKey] = useState(0);
   const [expandedYear, setExpandedYear] = useState<number | null>(null), [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
   const [periodDetail, setPeriodDetail] = useState<any>(null), [periodLoading, setPeriodLoading] = useState(false);
   const periodRequest = useRef<string | null>(null);
   const [error, setError] = useState(""), [lastSync, setLastSync] = useState("");
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("tab") === "gold") setTab("gold");
+    let active = true;
+    fetch("/api/auth/dashboard-session", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((session) => { if (active) setAuth(Boolean(session.authenticated)); })
+      .catch(() => {})
+      .finally(() => { if (active) setCheckingSession(false); });
+    return () => { active = false; };
+  }, []);
+
+  function selectTab(next: Tab) {
+    setTab(next); setExpanded(null); setExpandedYear(null); setSelectedPeriod(null); setPeriodDetail(null);
+    const url = new URL(window.location.href);
+    if (next === "gold") url.searchParams.set("tab", "gold");
+    else url.searchParams.delete("tab");
+    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+  }
+
+  async function logout() {
+    try { await fetch("/api/auth/dashboard-logout", { method: "POST" }); }
+    finally { setAuth(false); }
+  }
 
   async function load() {
     setLoading(true); setError("");
@@ -194,9 +226,10 @@ export default function DashboardPage() {
     if (periodRequest.current === key) setPeriodLoading(false);
   }
 
+  if (checkingSession) return <main className={styles.status}><div className={styles.appMark}><Loader2 className={styles.spin} /></div><p>Opening workspace…</p></main>;
   if (!auth) return <PasswordGate unlock={() => setAuth(true)} />;
-  if (loading) return <main className={styles.status}><div className={styles.appMark}><Loader2 className={styles.spin} /></div><p>Updating workspace…</p></main>;
-  if (error && !aso) return <main className={styles.status}><p>{error}</p><button className={styles.primary} onClick={load}>Try again</button></main>;
+  if (loading && tab !== "gold") return <main className={styles.status}><div className={styles.appMark}><Loader2 className={styles.spin} /></div><p>Updating workspace…</p></main>;
+  if (error && !aso && tab !== "gold") return <main className={styles.status}><p>{error}</p><button className={styles.primary} onClick={load}>Try again</button></main>;
 
   const totals = finance?.totals || {}, yearly = finance?.yearly || [], monthly = finance?.monthly || [];
   const income = Number(totals.total_income) || 0, expenses = Number(totals.total_expenses) || 0, net = Number(totals.total_net) || 0;
@@ -216,18 +249,19 @@ export default function DashboardPage() {
   return <main className={styles.shell}>
     <aside className={styles.sidebar}>
       <a href="/" className={styles.brand}><span><BarChart3 /></span><strong>Mission Control</strong></a>
-      <SegmentedNavigation value={tab} onChange={(next) => { setTab(next); setExpanded(null); setExpandedYear(null); setSelectedPeriod(null); setPeriodDetail(null); }} />
+      <SegmentedNavigation value={tab} onChange={selectTab} />
       <div className={styles.sidebarBottom}><span><i /> Synced</span><a href="/"><ArrowLeft /> Portfolio</a></div>
     </aside>
 
     <section className={styles.workspace}>
       <header className={styles.toolbar}>
         <div className={styles.mobileBrand}><div className={styles.appMark}><BarChart3 /></div><strong>Mission Control</strong></div>
-        <div className={styles.toolbarActions}><span>{lastSync ? `Updated ${formatSync(lastSync)}` : "Updated now"}</span><button onClick={load} aria-label="Refresh data"><RefreshCw /></button><ModeToggle className={styles.themeToggle} /></div>
+        <div className={styles.toolbarActions}><span>{tab === "gold" ? "Gold portfolio" : lastSync ? `Updated ${formatSync(lastSync)}` : "Updated now"}</span><button onClick={() => tab === "gold" ? setGoldRefreshKey((key) => key + 1) : void load()} aria-label="Refresh data"><RefreshCw /></button><ModeToggle className={styles.themeToggle} /><button onClick={() => void logout()} aria-label="Log out"><LogOut /></button></div>
       </header>
-      {error && <div className={styles.notice}>{error}</div>}
+      {error && tab !== "gold" && <div className={styles.notice}>{error}</div>}
 
       <div className={styles.view} key={tab}>
+        {tab === "gold" && <GoldPortfolio key={goldRefreshKey} onUnauthorized={() => setAuth(false)} />}
         {tab === "aso" && aso && <>
           <header className={styles.pageHeader}><div><p>App Store</p><h1>Search visibility</h1><span>Keyword positions across your apps over the last 30 days.</span></div><div className={styles.headerStat}><span>Keywords ranking</span><strong>{(aso.rankings || []).filter((item: any) => item.found).length}</strong></div></header>
           <section className={styles.appSelector} aria-label="Choose app">{(aso.summary || []).map((item: any) => { const meta = appMeta[item.app] || { icon: "/favicon.png" }; return <button key={item.app} aria-pressed={selectedApp === item.app} onClick={() => { setSelectedApp(item.app); setExpanded(null); }}><Image src={meta.icon} alt="" width={46} height={46} /><span><strong>{item.app}</strong><small>{item.ranking_keywords} of {item.total_keywords} ranking</small></span><i><em style={{ width: `${item.ranking_keywords / Math.max(1, item.total_keywords) * 100}%` }} /></i></button>; })}</section>
@@ -285,7 +319,7 @@ export default function DashboardPage() {
       </div>
     </section>
     <div className={styles.mobileBottomNav}>
-      <SegmentedNavigation value={tab} onChange={(next) => { setTab(next); setExpanded(null); setExpandedYear(null); setSelectedPeriod(null); setPeriodDetail(null); }} />
+      <SegmentedNavigation value={tab} onChange={selectTab} />
     </div>
   </main>;
 }
