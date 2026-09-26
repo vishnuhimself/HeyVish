@@ -5,7 +5,6 @@ import remarkGfm from 'remark-gfm'
  
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   // Make canvas optional to avoid build issues on Vercel
   webpack: (config, { isServer }) => {
