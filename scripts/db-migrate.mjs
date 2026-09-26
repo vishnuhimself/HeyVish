@@ -1,7 +1,7 @@
 // Creates the Postgres schema for the gold portfolio.
 // Run locally with:  node --env-file=.env.local scripts/db-migrate.mjs
 // (safe to run repeatedly - uses IF NOT EXISTS)
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 
 const connectionString =
   process.env.DATABASE_URL ||
@@ -13,7 +13,7 @@ if (!connectionString) {
   process.exit(1);
 }
 
-const sql = neon(connectionString);
+const sql = postgres(connectionString, { max: 1 });
 
 async function migrate() {
   console.log("🔧 Running migration...");
@@ -65,4 +65,4 @@ async function migrate() {
 migrate().catch((err) => {
   console.error("💥 Migration failed:", err);
   process.exit(1);
-});
+}).finally(() => sql.end());

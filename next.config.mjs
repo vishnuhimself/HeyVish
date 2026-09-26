@@ -89,6 +89,12 @@ const nextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return [
+      { source: '/rummy', destination: 'https://rummytrack.vercel.app/' },
+      { source: '/rummy/:path*', destination: 'https://rummytrack.vercel.app/:path*' },
+    ]
+  },
 }
  
 const withMDX = createMDX({
@@ -119,4 +125,4 @@ const withMDX = createMDX({
   },
 })
  
-export default withMDX(nextConfig) 
+export default withMDX(nextConfig)

@@ -1,6 +1,6 @@
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 
-let _sql: ReturnType<typeof neon> | null = null;
+let _sql: ReturnType<typeof postgres> | null = null;
 
 export function getSql() {
   if (_sql) return _sql;
@@ -8,6 +8,6 @@ export function getSql() {
   if (!connectionString) {
     throw new Error("DASHBOARD_DATABASE_URL not configured");
   }
-  _sql = neon(connectionString);
+  _sql = postgres(connectionString, { max: 5, idle_timeout: 20 });
   return _sql;
 }

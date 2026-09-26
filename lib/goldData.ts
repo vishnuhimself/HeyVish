@@ -73,7 +73,7 @@ export async function getGoldData(): Promise<GoldData> {
     | undefined;
 
   const priceHistory: PriceHistoryEntry[] = (
-    historyRows as { date: string; price: string; timestamp: string }[]
+    historyRows as unknown as { date: string; price: string; timestamp: string }[]
   ).map((r) => ({
     date: typeof r.date === "string" ? r.date : String(r.date),
     price: Number(r.price),
@@ -84,7 +84,7 @@ export async function getGoldData(): Promise<GoldData> {
   }));
 
   return {
-    entries: (entryRows as EntryRow[]).map(mapEntry),
+    entries: (entryRows as unknown as EntryRow[]).map(mapEntry),
     currentGoldPrice: meta ? Number(meta.current_gold_price) : 0,
     lastUpdated: meta
       ? typeof meta.last_updated === "string"
