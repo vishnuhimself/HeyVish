@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { DocPage } from "@/components/docs/DocPage";
 
 export const metadata: Metadata = {
   title: "GrowthKit Privacy Policy - Height & Weight Tracking App",
-  description: "GrowthKit's privacy policy explains how we handle your height, weight, and BMI data. Records stay on your device unless you choose optional private iCloud sync or export a backup.",
+  description: "GrowthKit's privacy policy explains how I handle your height, weight, and BMI data. Records stay on your device unless you choose optional private iCloud sync or export a backup.",
   keywords: "GrowthKit, privacy policy, height tracking, weight tracking, BMI calculator, data privacy, local storage",
   robots: "index, follow",
   openGraph: {
@@ -18,18 +19,12 @@ export const metadata: Metadata = {
 
 export default function GrowthKitPrivacy() {
   return (
-    <div>
-      <div className="max-w-4xl mx-auto">
-        {/* Privacy Policy Content */}
-        <article className="prose dark:prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-a:underline prose-a:underline-offset-4 prose-hr:border-foreground">
-          <h1 className="text-3xl font-bold mb-2 text-foreground">GrowthKit Privacy Policy</h1>
-          <p className="text-muted-foreground mb-8">Last updated: September 9, 2026</p>
-
-          <section className="space-y-6">
+    <DocPage kind="privacy" title="GrowthKit Privacy Policy" subtitle="Last updated: October 20, 2026" app="GrowthKit" icon="/growthkit-icon.jpg">
+      <section className="space-y-6">
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Introduction</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At GrowthKit, we take your privacy seriously. This Privacy Policy explains how we handle your data in our height, weight, and BMI tracking application. We believe in complete transparency and user control over personal data.
+                GrowthKit is made by one person, and I take your privacy seriously. This Privacy Policy explains how I handle your data in my height, weight, and BMI tracking application. I believe in complete transparency and user control over personal data.
               </p>
             </div>
 
@@ -47,7 +42,7 @@ export default function GrowthKitPrivacy() {
                 <li>App preferences</li>
               </ul>
               <p className="text-muted-foreground leading-relaxed mt-3">
-                Your family records are not sent to our servers. If you choose iCloud sync or restoration, GrowthKit stores profiles, measurements, notes, photos, and recovery copies in your private Apple iCloud account. iCloud is off by default, and an app update does not turn it on for you. During onboarding, GrowthKit may check whether your Apple Account has existing records available to restore; this check does not upload your local records or enable sync.
+                Your family records are not sent to my servers. If you choose iCloud sync or restoration, GrowthKit stores profiles, measurements, notes, photos, and recovery copies in your private Apple iCloud account. iCloud is off by default, and an app update does not turn it on for you. During onboarding, GrowthKit may check whether your Apple Account has existing records available to restore; this check does not upload your local records or enable sync.
               </p>
             </div>
 
@@ -61,7 +56,7 @@ export default function GrowthKitPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Data Security</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Local records benefit from your device’s security protections. Personal iCloud payloads use CloudKit encrypted fields, and photos and recovery assets use CloudKit asset protection. Apple operates iCloud under its own privacy and security policies. We do not have access to your private family records through our website or CloudKit developer console. We do not make a separate end-to-end encryption guarantee.
+                Local records benefit from your device’s security protections. Personal iCloud payloads use CloudKit encrypted fields, and photos and recovery assets use CloudKit asset protection. Apple operates iCloud under its own privacy and security policies. I do not have access to your private family records through my website or CloudKit developer console. I do not make a separate end-to-end encryption guarantee.
               </p>
             </div>
 
@@ -108,14 +103,14 @@ export default function GrowthKitPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Changes to Privacy Policy</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Any updates to this privacy policy will be reflected in the app and on our website. Users will be notified of significant changes through app updates.
+                Any updates to this privacy policy will be reflected in the app and on my website. Users will be notified of significant changes through app updates.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact Us</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact</h2>
               <p className="text-muted-foreground leading-relaxed">
-                If you have any questions about our privacy policy or data handling practices, please contact us at:{" "}
+                If you have any questions about my privacy policy or data handling practices, please contact me at:{" "}
                 <a href="mailto:hey@heyvish.com" className="text-foreground hover:underline">
                   hey@heyvish.com
                 </a>
@@ -125,12 +120,10 @@ export default function GrowthKitPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Compliance</h2>
               <p className="text-muted-foreground leading-relaxed">
-                For questions about your records, recovery, or this policy, contact us using the address above. Apple and RevenueCat also publish privacy policies describing how they operate their services.
+                For questions about your records, recovery, or this policy, contact me using the address above. Apple and RevenueCat also publish privacy policies describing how they operate their services.
               </p>
             </div>
           </section>
-        </article>
-      </div>
-    </div>
+    </DocPage>
   );
 } 

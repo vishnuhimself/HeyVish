@@ -1,0 +1,4 @@
+.head{display:grid;gap:1.4rem;padding:clamp(7.5rem,16vh,11rem) 0 clamp(2.5rem,6vh,4rem);justify-items:start}
+.title{max-width:14ch}
+.lede{max-width:44ch}
+.extra{display:flex;flex-wrap:wrap;gap:.5rem}

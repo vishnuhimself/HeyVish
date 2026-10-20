@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { DocPage } from "@/components/docs/DocPage";
 
 export const metadata: Metadata = {
   title: "Applio Privacy Policy - 100% On-Device Portfolio Analytics",
-  description: "Applio's privacy policy explains how we handle your App Store Connect data. Your API credentials and app metrics are stored entirely on-device, with zero third-party tracking or external servers.",
+  description: "Applio's privacy policy explains how I handle your App Store Connect data. Your API credentials and app metrics are stored entirely on-device, with zero third-party tracking or external servers.",
   keywords: "Applio, privacy policy, App Store Connect, iOS app, indie developer, analytics, secure storage, local database, on-device, data privacy",
   robots: "index, follow",
   openGraph: {
@@ -18,18 +19,12 @@ export const metadata: Metadata = {
 
 export default function ApplioPrivacy() {
   return (
-    <div>
-      <div className="max-w-4xl mx-auto">
-        {/* Privacy Policy Content */}
-        <article className="prose dark:prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-a:underline prose-a:underline-offset-4 prose-hr:border-foreground">
-          <h1 className="text-3xl font-bold mb-2 text-foreground">Applio Privacy Policy</h1>
-          <p className="text-muted-foreground mb-8">Last updated: June 16, 2026</p>
-
-          <section className="space-y-6">
+    <DocPage kind="privacy" title="Applio Privacy Policy" subtitle="Last updated: October 20, 2026" app="Applio" icon="/applio-icon.jpg" notice="Applio is no longer available on the App Store. This policy still applies to existing installs.">
+      <section className="space-y-6">
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Introduction</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At Applio, we take your privacy and the security of your App Store Connect data extremely seriously. This Privacy Policy explains how we handle your information. We built Applio with a strict "local-first" philosophy to give indie developers and small studios a powerful analytics dashboard without ever exposing their data to third parties.
+                Applio is made by one person, and I take your privacy and the security of your App Store Connect data seriously. This Privacy Policy explains how I handle your information. I built Applio with a strict "local-first" philosophy to give indie developers and small studios a powerful analytics dashboard without ever exposing their data to third parties.
               </p>
             </div>
 
@@ -40,20 +35,20 @@ export default function ApplioPrivacy() {
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
                 <li>All portfolio analytics, sales reports, subscriptions, impressions, and crash metrics are stored in a local SQLite database on your iPhone.</li>
-                <li>We do not operate any backend servers.</li>
-                <li>We do not collect, transmit, or store any of your App Store Connect data on our own infrastructure.</li>
-                <li>We do not share your data with any third-party analytics or tracking networks.</li>
+                <li>I do not operate any backend servers.</li>
+                <li>I do not collect, transmit, or store any of your App Store Connect data on my own infrastructure.</li>
+                <li>I do not share your data with any third-party analytics or tracking networks.</li>
               </ul>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">API Credentials and Security</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                Connecting Applio to your App Store Connect account requires sensitive API credentials (Issuer ID, Key ID, and p8 Private Key). We ensure these are handled securely:
+                Connecting Applio to your App Store Connect account requires sensitive API credentials (Issuer ID, Key ID, and p8 Private Key). I ensure these are handled securely:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
                 <li>Credentials are stored securely in the iOS Keychain using strict access controls, only accessible when the device is unlocked.</li>
-                <li>Your private keys are never transmitted to our servers or any third-party.</li>
+                <li>Your private keys are never transmitted to my servers or any third-party.</li>
                 <li>JWT (JSON Web Token) signing for App Store Connect API requests happens entirely on-device.</li>
               </ul>
             </div>
@@ -68,7 +63,7 @@ export default function ApplioPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">No Account Required</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Applio operates without requiring you to create an account with us. There is no Applio cloud sync or backend registration. You simply enter your App Store Connect API keys locally and start using the app.
+                Applio operates without requiring you to create an account with me. There is no Applio cloud sync or backend registration. You simply enter your App Store Connect API keys locally and start using the app.
               </p>
             </div>
 
@@ -98,22 +93,20 @@ export default function ApplioPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Changes to Privacy Policy</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Any updates to this privacy policy will be reflected in the app and on our website. Users will be notified of significant changes through app updates. Our core commitment to on-device storage and zero third-party tracking will never change.
+                Any updates to this privacy policy will be reflected in the app and on my website. Users will be notified of significant changes through app updates. My core commitment to on-device storage and zero third-party tracking will never change.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact Us</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact</h2>
               <p className="text-muted-foreground leading-relaxed">
-                If you have any questions about our privacy policy or how we secure your App Store Connect API keys, please contact us at:{" "}
+                If you have any questions about my privacy policy or how I secure your App Store Connect API keys, please contact me at:{" "}
                 <a href="mailto:hey@heyvish.com" className="text-foreground hover:underline">
                   hey@heyvish.com
                 </a>
               </p>
             </div>
           </section>
-        </article>
-      </div>
-    </div>
+    </DocPage>
   );
 }

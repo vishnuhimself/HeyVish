@@ -1,20 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Header from "./Header";
-import { SiteFooter } from "./SiteFooter";
+import { SiteShell } from "@/components/site/SiteShell";
+
+const INTERNAL_PREFIXES = ["/dashboard", "/gold"];
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const ownsItsShell = pathname === "/" || pathname === "/gold" || pathname === "/dashboard";
-
-  if (ownsItsShell) return <>{children}</>;
-
-  return (
-    <div className="site-shell">
-      <Header />
-      <main className="site-main">{children}</main>
-      <SiteFooter />
-    </div>
-  );
+  const internal = INTERNAL_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  if (internal) return <>{children}</>;
+  return <SiteShell>{children}</SiteShell>;
 }

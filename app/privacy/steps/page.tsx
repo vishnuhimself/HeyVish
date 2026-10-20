@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { DocPage } from "@/components/docs/DocPage";
 
 export const metadata: Metadata = {
-  title: "Steps App Privacy Policy - Health & Fitness Activity Tracker",
-  description: "Steps App's privacy policy explains how we handle your health data from Apple Health. All data is stored locally on your device with no external servers or data collection.",
-  keywords: "Steps App, privacy policy, step counter, health tracking, activity tracker, data privacy, local storage, Apple Health, HealthKit",
+  title: "Stepsly Privacy Policy - Health & Fitness Activity Tracker",
+  description: "Stepsly's privacy policy explains how I handle your health data from Apple Health. All data is stored locally on your device with no external servers or data collection.",
+  keywords: "Stepsly, privacy policy, step counter, health tracking, activity tracker, data privacy, local storage, Apple Health, HealthKit",
   robots: "index, follow",
   openGraph: {
-    title: "Steps App Privacy Policy",
-    description: "Learn how Steps App protects your health data with local-only storage and no data collection.",
+    title: "Stepsly Privacy Policy",
+    description: "Learn how Stepsly protects your health data with local-only storage and no data collection.",
     type: "website",
     url: "https://heyvish.com/privacy/steps",
   },
@@ -18,25 +19,19 @@ export const metadata: Metadata = {
 
 export default function StepsPrivacy() {
   return (
-    <div>
-      <div className="max-w-4xl mx-auto">
-        {/* Privacy Policy Content */}
-        <article className="prose dark:prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-a:underline prose-a:underline-offset-4 prose-hr:border-foreground">
-          <h1 className="text-3xl font-bold mb-2 text-foreground">Steps App Privacy Policy</h1>
-          <p className="text-muted-foreground mb-8">Last updated: October 15, 2025</p>
-
-          <section className="space-y-6">
+    <DocPage kind="privacy" title="Stepsly Privacy Policy" subtitle="Last updated: October 20, 2026" app="Stepsly" icon="/stepsly-icon.jpg">
+      <section className="space-y-6">
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Introduction</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At Steps App, we take your privacy seriously. This Privacy Policy explains how we handle your health and activity data in our fitness tracking application. We believe in complete transparency and user control over personal data.
+                Stepsly is made by one person, and I take your privacy seriously. This Privacy Policy explains how I handle your health and activity data in my fitness tracking application. I believe in complete transparency and user control over personal data.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Data Collection and Storage</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                Steps App is designed with privacy at its core. We access health data from Apple Health using HealthKit solely to display it in an accessible format. All data is stored locally on your device:
+                Stepsly is designed with privacy at its core. I access health data from Apple Health using HealthKit solely to display it in an accessible format. All data is stored locally on your device:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
                 <li>Step count data from Apple Health</li>
@@ -45,37 +40,37 @@ export default function StepsPrivacy() {
                 <li>App preferences and display settings</li>
               </ul>
               <p className="text-muted-foreground leading-relaxed mt-3">
-                We do not collect, transmit, or store any of your health data on external servers. All information remains exclusively on your device and under your control. We only read data from Apple Health to present it to you in a convenient format.
+                I do not collect, transmit, or store any of your health data on external servers. All information remains exclusively on your device and under your control. Stepsly only reads data from Apple Health to present it to you in a convenient format.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Apple Health and HealthKit Integration</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                Steps App connects to Apple Health using HealthKit to read your activity data. This integration:
+                Stepsly connects to Apple Health using HealthKit to read your activity data. This integration:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
-                <li>Only reads data - we never write data to Apple Health</li>
+                <li>Only reads data - I never write data to Apple Health</li>
                 <li>Requires your explicit permission for each data type</li>
                 <li>Can be revoked at any time through iOS Settings</li>
                 <li>Does not share your health data with any third parties</li>
               </ul>
               <p className="text-muted-foreground leading-relaxed mt-3">
-                Your health data is protected by Apple&apos;s strict HealthKit privacy guidelines, which we fully comply with.
+                Your health data is protected by Apple&apos;s strict HealthKit privacy guidelines, which I fully comply with.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">No Account Required</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Steps App operates without user accounts or registration. You can start using the app immediately without providing any personal information. There is no sync functionality or cloud backup - everything stays on your device.
+                Stepsly operates without user accounts or registration. You can start using the app immediately without providing any personal information. There is no sync functionality or cloud backup - everything stays on your device.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Data Security</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Your data is secured by your device&apos;s built-in security features. Since all data is stored locally and accessed through Apple&apos;s HealthKit framework, it benefits from iOS&apos;s encryption and security measures. We never transmit your health data over the internet.
+                Your data is secured by your device&apos;s built-in security features. Since all data is stored locally and accessed through Apple&apos;s HealthKit framework, it benefits from iOS&apos;s encryption and security measures. I never transmit your health data over the internet.
               </p>
             </div>
 
@@ -88,21 +83,21 @@ export default function StepsPrivacy() {
                 <li>Revoke HealthKit permissions at any time through iOS Settings</li>
                 <li>All app preferences can be reset within the app</li>
                 <li>Uninstalling the app removes all associated data and preferences</li>
-                <li>Your health data in Apple Health remains unaffected by our app</li>
+                <li>Your health data in Apple Health remains unaffected by my app</li>
               </ul>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Third-Party Services</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Steps App does not integrate with any third-party services, analytics platforms, or advertising networks. We do not share any data with external parties. The only external system we interact with is Apple&apos;s HealthKit framework on your device.
+                Stepsly does not integrate with any third-party services, analytics platforms, or advertising networks. I do not share any data with external parties. The only external system I interact with is Apple&apos;s HealthKit framework on your device.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">App Permissions</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                Steps App requires minimal device permissions:
+                Stepsly requires minimal device permissions:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
                 <li>HealthKit access (to read steps, calories, and distance data only)</li>
@@ -114,14 +109,14 @@ export default function StepsPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Changes to Privacy Policy</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Any updates to this privacy policy will be reflected in the app and on our website. Users will be notified of significant changes through app updates. We will never change our core commitment to local-only data storage without explicit notification.
+                Any updates to this privacy policy will be reflected in the app and on my website. Users will be notified of significant changes through app updates. I will never change my core commitment to local-only data storage without explicit notification.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact Us</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact</h2>
               <p className="text-muted-foreground leading-relaxed">
-                If you have any questions about our privacy policy or data handling practices, please contact us at:{" "}
+                If you have any questions about my privacy policy or data handling practices, please contact me at:{" "}
                 <a href="mailto:hey@heyvish.com" className="text-foreground hover:underline">
                   hey@heyvish.com
                 </a>
@@ -131,13 +126,11 @@ export default function StepsPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Compliance</h2>
               <p className="text-muted-foreground leading-relaxed">
-                This privacy policy complies with the requirements of the Apple App Store, including Apple&apos;s HealthKit guidelines and data privacy requirements. We are committed to protecting your privacy and maintaining the security of your personal health information.
+                This privacy policy complies with the requirements of the Apple App Store, including Apple&apos;s HealthKit guidelines and data privacy requirements. I am committed to protecting your privacy and maintaining the security of your personal health information.
               </p>
             </div>
           </section>
-        </article>
-      </div>
-    </div>
+    </DocPage>
   );
 }
 

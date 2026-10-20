@@ -1,0 +1,9 @@
+.switch{display:inline-flex;align-items:center;padding:4px;border-radius:999px}
+.track{position:relative;width:44px;height:24px;border-radius:999px;border:1px solid var(--line-2);background:var(--paper-2);transition:background-color .4s var(--ease-expo),border-color .4s}
+.knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;transition:transform .55s var(--ease-expo),background-color .4s}
+.switch[data-dark="true"] .knob{transform:translateX(20px)}
+.sun,.moon{position:absolute;width:11px;height:11px;transition:transform .5s var(--ease-expo),opacity .3s}
+.moon{opacity:0;transform:rotate(-90deg) scale(.5)}
+.switch[data-dark="true"] .moon{opacity:1;transform:none}
+.switch[data-dark="true"] .sun{opacity:0;transform:rotate(90deg) scale(.5)}
+.switch:hover .track{border-color:var(--ink-3)}

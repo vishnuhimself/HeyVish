@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { DocPage } from "@/components/docs/DocPage";
 
 export const metadata: Metadata = {
   title: "Applio Support - Help & Contact",
-  description: "Get help with Applio. Contact us for support, report bugs, suggest features, or find answers to common questions about App Store Connect API keys and reporting delays.",
+  description: "Get help with Applio. Contact me for support, report bugs, suggest features, or find answers to common questions about App Store Connect API keys and reporting delays.",
   keywords: "Applio, support, help, contact, bug report, feature request, customer service, App Store Connect, API keys",
   robots: "index, follow",
   openGraph: {
     title: "Applio Support",
-    description: "Need help with Applio? Contact us for support, bug reports, or feature suggestions.",
+    description: "Need help with Applio? Contact me for support, bug reports, or feature suggestions.",
     type: "website",
     url: "https://heyvish.com/support/applio",
   },
@@ -18,18 +19,12 @@ export const metadata: Metadata = {
 
 export default function ApplioSupport() {
   return (
-    <div>
-      <div className="max-w-4xl mx-auto">
-        {/* Support Page Content */}
-        <article className="prose dark:prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-a:underline prose-a:underline-offset-4 prose-hr:border-foreground">
-          <h1 className="text-3xl font-bold mb-2 text-foreground">Applio Support</h1>
-          <p className="text-muted-foreground mb-8">We&apos;re here to help you monitor your app portfolio with Applio</p>
-
-          <section className="space-y-6">
+    <DocPage kind="support" title="Applio Support" subtitle="I&apos;m here to help you monitor your app portfolio with Applio" app="Applio" icon="/applio-icon.jpg" notice="Applio is no longer available on the App Store. If you still have it installed, I&apos;m happy to help by email.">
+      <section className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact Us</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                For any support inquiries, bug reports, feature requests, or general questions, please email us at:
+                For any support inquiries, bug reports, feature requests, or general questions, please email me at:
               </p>
               <div className="border border-foreground p-6">
                 <a 
@@ -40,14 +35,14 @@ export default function ApplioSupport() {
                 </a>
               </div>
               <p className="text-muted-foreground leading-relaxed mt-4">
-                We typically respond within 24-48 hours. Please include &quot;Applio&quot; in your email subject line to help us route your message appropriately.
+                I usually reply within a day, and always within 48 hours. Please include &quot;Applio&quot; in your email subject line so it&apos;s easy to spot.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">General Help & Support</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                Need help getting started with Applio? We can assist you with:
+                Need help getting started with Applio? I can assist you with:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
                 <li>Generating and configuring App Store Connect API keys</li>
@@ -71,7 +66,7 @@ export default function ApplioSupport() {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Team Key vs. Individual Key: What&apos;s the difference?</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    We highly recommend using a <strong>Team key (Admin access)</strong>. Team keys allow Applio to fetch full analytics, sales reports, and subscription data. If you use an <strong>Individual key</strong>, Apple restricts access to certain protected endpoints, and you won&apos;t be able to view sales or analytics reports.
+                    I highly recommend using a <strong>Team key (Admin access)</strong>. Team keys allow Applio to fetch full analytics, sales reports, and subscription data. If you use an <strong>Individual key</strong>, Apple restricts access to certain protected endpoints, and you won&apos;t be able to view sales or analytics reports.
                   </p>
                 </div>
 
@@ -92,7 +87,7 @@ export default function ApplioSupport() {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Is my API key secure?</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Yes. Applio stores your API credentials securely in your iOS Keychain, which is strictly sandboxed. All communication happens directly between your device and Apple. We do not have servers and your data is never sent to us. Learn more in our{" "}
+                    Yes. Applio stores your API credentials securely in your iOS Keychain, which is strictly sandboxed. All communication happens directly between your device and Apple. I do not have servers and your data is never sent to me. Learn more in my{" "}
                     <a href="/privacy/applio" className="text-foreground hover:underline">
                       Privacy Policy
                     </a>.
@@ -104,7 +99,7 @@ export default function ApplioSupport() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Report a Bug</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                Found something that&apos;s not working as expected? Please let us know! When reporting a bug, it helps to include:
+                Found something that&apos;s not working as expected? Please let me know! When reporting a bug, it helps to include:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
                 <li>A description of the issue</li>
@@ -117,19 +112,17 @@ export default function ApplioSupport() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Feature Requests</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Applio is built for indie developers, and we love community feedback. If there&apos;s a specific metric, chart, or view you&apos;d love to see on your dashboard, let us know and we might include it in a future update!
+                Applio is built for indie developers, and I love community feedback. If there&apos;s a specific metric, chart, or view you&apos;d love to see on your dashboard, let me know and I might include it in a future update!
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Thank You</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Thank you for using Applio to manage your app portfolio. We&apos;re committed to providing you with the best on-device analytics experience possible.
+                Thank you for using Applio to manage your app portfolio. I&apos;m committed to making it the best on-device analytics experience I can.
               </p>
             </div>
           </section>
-        </article>
-      </div>
-    </div>
+    </DocPage>
   );
 }

@@ -21,6 +21,10 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      { source: '/privacy/stepsly', destination: '/privacy/steps', permanent: true },
+      { source: '/support/stepsly', destination: '/support/steps', permanent: true },
+      { source: '/privacy/expenly', destination: '/privacy/expensekit', permanent: true },
+      { source: '/support/expenly', destination: '/support/expensekit', permanent: true },
       {
         source: '/wordpress-shortcode-to-get-estimated-reading-time',
         destination: '/blog/wordpress-shortcode-to-get-estimated-reading-time',

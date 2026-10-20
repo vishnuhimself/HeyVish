@@ -1,42 +1,39 @@
-import { getAllPosts } from "@/lib/blog"
 import Link from "next/link"
-import type { Post } from "@/lib/types"
-import { format, parseISO } from "date-fns"
+import { getAllPosts } from "@/lib/blog"
+import { toSummary } from "@/lib/types"
 import { generateMetadata as genMeta } from "@/lib/metadata"
+import { PostList } from "@/components/blog/PostList"
+import { PageHead } from "@/components/blog/PageHead"
+import styles from "./blog.module.css"
 
 export const metadata = genMeta({
-  title: "Blog — Notes & Essays",
+  title: "Writing — Notes & Essays",
   description:
-    "Notes & essays by Srivishnu Ramakrishnan on shipping iOS apps, Swift, React Native, Next.js, and indie development.",
+    "Notes by Srivishnu Ramakrishnan on shipping iOS apps, Swift, React Native, Next.js, WordPress, and independent development.",
   path: "/blog",
 })
 
 export default async function BlogPage() {
-  const posts = getAllPosts()
+  const posts = getAllPosts().map(toSummary)
+  const categories = [...new Set(posts.flatMap((p) => (Array.isArray(p.category) ? p.category : [p.category])))].sort()
 
   return (
-    <div>
-      <header className="mb-16"><h1 className="text-3xl font-normal tracking-[-0.035em] mb-6">Writing</h1><p className="text-base leading-relaxed">Notes from building and shipping independent software.</p></header>
-      <div className="border-t border-border">
-        {posts.map((post: Post) => (
-          <Link
-            key={post.slug}
-            href={`/blog/${post.slug}`}
-            className="group grid grid-cols-[1fr_auto] gap-5 items-baseline py-4 border-b border-border"
-          >
-            <h2 className="text-sm font-normal leading-snug group-hover:opacity-50 transition-opacity">
-              {post.title}
-            </h2>
-            <time dateTime={post.date} className="text-xs text-muted-foreground text-right shrink-0">
-              {format(parseISO(post.date), "dd/MM/yy")}
-            </time>
+    <main id="main" className="container">
+      <PageHead
+        eyebrow={<>Writing · {String(posts.length).padStart(2, "0")} notes</>}
+        title="Things I had to figure out."
+        italic={["figure", "out."]}
+        lede="Short, practical notes from building and shipping independent software. Mostly fixes, occasionally opinions."
+      >
+        {categories.map((c) => (
+          <Link key={c} href={`/blog/category/${c.toLowerCase()}`} className={styles.chip}>
+            {c}
           </Link>
         ))}
-      </div>
+      </PageHead>
 
-      {posts.length === 0 && (
-        <p className="text-sm text-muted-foreground py-12">No notes yet.</p>
-      )}
-    </div>
+      <PostList posts={posts} />
+      {posts.length === 0 && <p className="lede">No notes yet.</p>}
+    </main>
   )
 }

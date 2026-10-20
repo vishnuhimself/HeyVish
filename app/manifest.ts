@@ -5,11 +5,11 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "HeyVish — Srivishnu Ramakrishnan",
     short_name: "HeyVish",
     description:
-      "Indie iOS developer building Calmraine, MNML, Applio, Nova Widgets, Expenly, Stepsly, and GrowthKit.",
+      "Independent iOS developer building Stepsly, Expenly, GrowthKit, and MNML.",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#000000",
+    background_color: "#f8f6f2",
+    theme_color: "#1c1916",
     icons: [
       {
         src: "/favicon.svg",
@@ -20,6 +20,12 @@ export default function manifest(): MetadataRoute.Manifest {
         src: "/favicon.png",
         sizes: "256x256",
         type: "image/png",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
       },
     ],
   };

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { DocPage } from "@/components/docs/DocPage";
 
 export const metadata: Metadata = {
-  title: "ExpenseKit Privacy Policy - Daily Expense Tracker App",
-  description: "ExpenseKit's privacy policy explains how we handle your expense tracking data. All data is stored locally on your device with no external servers or data collection.",
-  keywords: "ExpenseKit, privacy policy, expense tracking, daily expenses, data privacy, local storage",
+  title: "Expenly Privacy Policy - Daily Expense Tracker App",
+  description: "Expenly's privacy policy explains how I handle your expense tracking data. All data is stored locally on your device with no external servers or data collection.",
+  keywords: "Expenly, privacy policy, expense tracking, daily expenses, data privacy, local storage",
   robots: "index, follow",
   openGraph: {
-    title: "ExpenseKit Privacy Policy",
-    description: "Learn how ExpenseKit protects your expense data with local-only storage and no data collection.",
+    title: "Expenly Privacy Policy",
+    description: "Learn how Expenly protects your expense data with local-only storage and no data collection.",
     type: "website",
     url: "https://heyvish.com/privacy/expensekit",
   },
@@ -16,27 +17,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ExpenseKitPrivacy() {
+export default function ExpenlyPrivacy() {
   return (
-    <div>
-      <div className="max-w-4xl mx-auto">
-        {/* Privacy Policy Content */}
-        <article className="prose dark:prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-a:underline prose-a:underline-offset-4 prose-hr:border-foreground">
-          <h1 className="text-3xl font-bold mb-2 text-foreground">ExpenseKit Privacy Policy</h1>
-          <p className="text-muted-foreground mb-8">Last updated: December 12, 2025</p>
-
-          <section className="space-y-6">
+    <DocPage kind="privacy" title="Expenly Privacy Policy" subtitle="Last updated: October 20, 2026" app="Expenly" icon="/expenly-icon.jpg">
+      <section className="space-y-6">
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Introduction</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At ExpenseKit, we take your privacy seriously. This Privacy Policy explains how we handle your data in our daily expense tracking application. We believe in complete transparency and user control over personal data.
+                Expenly is made by one person, and I take your privacy seriously. This Privacy Policy explains how I handle your data in my daily expense tracking application. I believe in complete transparency and user control over personal data.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Data Collection and Storage</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                ExpenseKit is designed with privacy at its core. All data is stored locally on your device:
+                Expenly is designed with privacy at its core. All data is stored locally on your device:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
                 <li>Expense records</li>
@@ -46,14 +41,14 @@ export default function ExpenseKitPrivacy() {
                 <li>App preferences</li>
               </ul>
               <p className="text-muted-foreground leading-relaxed mt-3">
-                We do not collect, transmit, or store any of your data on external servers. All information remains exclusively on your device and under your control.
+                I do not collect, transmit, or store any of your data on external servers. All information remains exclusively on your device and under your control.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">No Account Required</h2>
               <p className="text-muted-foreground leading-relaxed">
-                ExpenseKit operates without user accounts or registration. You can start using the app immediately without providing any personal information.
+                Expenly operates without user accounts or registration. You can start using the app immediately without providing any personal information.
               </p>
             </div>
 
@@ -67,7 +62,7 @@ export default function ExpenseKitPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Children&apos;s Privacy</h2>
               <p className="text-muted-foreground leading-relaxed">
-                ExpenseKit is designed for adult users to manage their personal finances. We do not knowingly collect any personal information from children.
+                Expenly is designed for adult users to manage their personal finances. I do not knowingly collect any personal information from children.
               </p>
             </div>
 
@@ -86,17 +81,16 @@ export default function ExpenseKitPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Third-Party Services</h2>
               <p className="text-muted-foreground leading-relaxed">
-                ExpenseKit does not integrate with any third-party services or analytics platforms. We do not share any data with external parties.
+                Expenly does not integrate with any third-party services or analytics platforms. I do not share any data with external parties.
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">App Permissions</h2>
               <p className="text-muted-foreground leading-relaxed mb-3">
-                ExpenseKit requires minimal device permissions:
+                Expenly requires minimal device permissions:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
-                <li>Storage access (for local data storage only)</li>
                 <li>No access to contacts, location, or other sensitive information</li>
               </ul>
             </div>
@@ -104,14 +98,14 @@ export default function ExpenseKitPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Changes to Privacy Policy</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Any updates to this privacy policy will be reflected in the app and on our website. Users will be notified of significant changes through app updates.
+                Any updates to this privacy policy will be reflected in the app and on my website. Users will be notified of significant changes through app updates.
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact Us</h2>
+              <h2 className="text-xl font-semibold mb-3 text-foreground">Contact</h2>
               <p className="text-muted-foreground leading-relaxed">
-                If you have any questions about our privacy policy or data handling practices, please contact us at:{" "}
+                If you have any questions about my privacy policy or data handling practices, please contact me at:{" "}
                 <a href="mailto:hey@heyvish.com" className="text-foreground hover:underline">
                   hey@heyvish.com
                 </a>
@@ -121,13 +115,11 @@ export default function ExpenseKitPrivacy() {
             <div>
               <h2 className="text-xl font-semibold mb-3 text-foreground">Compliance</h2>
               <p className="text-muted-foreground leading-relaxed">
-                This privacy policy complies with the requirements of the Apple App Store and Google Play Store. We are committed to protecting your privacy and maintaining the security of your personal information.
+                This policy is written to meet the App Store&apos;s privacy requirements. I am committed to protecting your privacy and maintaining the security of your personal information.
               </p>
             </div>
           </section>
-        </article>
-      </div>
-    </div>
+    </DocPage>
   );
 }
 

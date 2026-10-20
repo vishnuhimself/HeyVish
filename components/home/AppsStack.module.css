@@ -1,0 +1,45 @@
+.section{padding:clamp(5rem,12vh,9rem) 0 0}
+.head{display:grid;gap:1.4rem;margin-bottom:clamp(2.5rem,6vh,4.5rem)}
+.title{max-width:14ch}
+.lede{max-width:44ch}
+.stack{position:relative;width:min(100% - 2*var(--gutter),var(--measure));margin-inline:auto}
+.markers{position:absolute;inset:0;pointer-events:none;visibility:hidden}
+.marker{height:calc(100svh - 84px)}
+.slot{position:sticky;top:calc(84px + var(--i) * 14px);height:calc(100svh - 84px)}
+.pin{padding-bottom:4rem}
+.card{position:relative;width:100%;min-height:min(70svh,640px);border-radius:28px;border:1px solid var(--line);background:var(--paper-2);overflow:hidden;transform-origin:top center;will-change:transform,opacity,filter;box-shadow:0 30px 80px -40px oklch(0 0 0 / .35)}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 70% at 85% 40%,oklch(78% var(--chroma) var(--hue) / .32),transparent 70%);pointer-events:none}
+.dark .card::before{background:radial-gradient(60% 70% at 85% 40%,oklch(55% var(--chroma) var(--hue) / .32),transparent 70%)}
+.cardInner{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:2rem;min-height:inherit;padding:clamp(1.75rem,4vw,3.5rem)}
+.text{display:grid;gap:1rem;align-content:center}
+.topline{display:flex;align-items:center;gap:1.2rem;margin-bottom:.4rem}
+.index{font-family:var(--font-mono);font-size:.75rem;color:var(--accent);letter-spacing:.1em}
+.name{font-size:clamp(2.6rem,6vw,5rem)}
+.tagline{font-size:1.125rem;color:var(--ink-2);letter-spacing:-.01em}
+.note{font-size:1.0625rem;line-height:1.55;max-width:40ch;margin-top:.4rem}
+.links{display:flex;align-items:center;flex-wrap:wrap;gap:1.3rem;margin-top:1.2rem}
+.minor{font-size:.9rem;color:var(--ink-2)}
+.minor:hover{color:var(--ink)}
+.visual{position:relative;display:grid;place-items:center;min-height:280px}
+.halo{position:absolute;width:min(68%,360px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,oklch(80% var(--chroma) var(--hue) / .55),transparent 68%);filter:blur(10px);animation:breathe 6s ease-in-out infinite}
+.dark .halo{background:radial-gradient(circle,oklch(60% var(--chroma) var(--hue) / .5),transparent 68%)}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.orbit,.orbit2{position:absolute;border-radius:50%;border:1px dashed color-mix(in oklch,var(--ink) 22%,transparent);width:min(86%,420px);aspect-ratio:1;animation:spin 48s linear infinite}
+.orbit2{width:min(60%,300px);animation-duration:30s;animation-direction:reverse;border-style:solid;border-color:color-mix(in oklch,var(--ink) 10%,transparent)}
+.orbit::after,.orbit2::after{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.orbit2::after{background:var(--ink);width:6px;height:6px;top:auto;bottom:-3px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.iconWrap{position:relative;width:min(44%,200px);aspect-ratio:1;border-radius:22.5%;box-shadow:0 30px 60px -20px oklch(0 0 0 / .45),0 0 0 1px oklch(0 0 0 / .06);overflow:hidden}
+.icon{width:100%;height:100%;object-fit:cover}
+@media(max-width:800px){
+  .marker{height:0}
+  .slot{position:relative;top:auto;height:auto}
+  .pin{padding-bottom:1rem}
+  .card{min-height:0}
+  .cardInner{grid-template-columns:1fr;gap:1rem;padding:1.5rem}
+  .visual{order:-1;min-height:220px}
+  .iconWrap{width:120px}
+  .halo{width:220px}
+  .orbit{width:260px}.orbit2{width:180px}
+  .name{font-size:2.4rem}
+}

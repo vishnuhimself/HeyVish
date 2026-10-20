@@ -1,0 +1,10 @@
+.cursor{
+  position:fixed;top:0;left:0;z-index:80;width:10px;height:10px;border-radius:50%;
+  background:var(--accent);pointer-events:none;opacity:0;
+  mix-blend-mode:normal;will-change:transform;
+  transition:opacity .3s,background-color .3s;
+}
+.cursor[data-visible="true"]{opacity:1}
+.cursor[data-mode="hover"]{background:var(--ink);opacity:.9}
+.cursor[data-mode="big"]{background:var(--ink);opacity:.12}
+@media(hover:none),(pointer:coarse){.cursor{display:none}}

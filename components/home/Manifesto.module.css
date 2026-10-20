@@ -1,0 +1,8 @@
+.section{padding:clamp(6rem,16vh,12rem) 0 0}
+.inner{display:grid;grid-template-columns:minmax(0,.35fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,5rem);align-items:start}
+.side{display:grid;gap:1.2rem;justify-items:start;position:sticky;top:7rem}
+.mark{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--font-display);font-weight:600;font-size:1.6rem;letter-spacing:-.04em}
+.text{font-family:var(--font-display);font-size:clamp(1.7rem,3.6vw,3.1rem);line-height:1.18;letter-spacing:-.03em;font-weight:500;text-wrap:pretty;font-variation-settings:"opsz" 48}
+.word{display:inline}
+.word>span{display:inline-block;will-change:opacity,transform}
+@media(max-width:800px){.inner{grid-template-columns:1fr}.side{position:static;grid-auto-flow:column;align-items:center}}

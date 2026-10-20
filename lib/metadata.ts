@@ -6,7 +6,7 @@ const SITE_URL =
 const siteConfig = {
   title: "HeyVish",
   defaultDescription:
-    "Srivishnu Ramakrishnan — indie iOS developer building Stepsly, Expenly, and GrowthKit. Notes on shipping software.",
+    "Srivishnu Ramakrishnan, independent iOS developer building Stepsly, Expenly, GrowthKit, and MNML. Notes on shipping software.",
   author: "Srivishnu Ramakrishnan",
   url: SITE_URL,
   twitter: "@VishHimself",
