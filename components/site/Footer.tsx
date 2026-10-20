@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import { useLenis } from "lenis/react";
 import { LocalTime } from "./LocalTime";
 import { Magnetic } from "./Magnetic";
 import styles from "./Footer.module.css";
@@ -14,8 +15,8 @@ export function Footer() {
   const y = useTransform(scrollYProgress, [0, 1], reduced ? ["0%", "0%"] : ["42%", "0%"]);
   const year = new Date().getFullYear();
 
+  const lenis = useLenis();
   const toTop = () => {
-    const lenis = (window as unknown as { lenis?: { scrollTo: (t: number, o?: object) => void } }).lenis;
     if (lenis) lenis.scrollTo(0, { duration: 1.4 });
     else window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -26,7 +27,6 @@ export function Footer() {
         <div className={styles.col}>
           <span className="eyebrow">Elsewhere</span>
           <a href="https://x.com/VishHimself" target="_blank" rel="noreferrer" className="u-link u-link--draw">X / @VishHimself</a>
-          <a href="https://apps.apple.com/us/developer/srivishnu-ramakrishnan/id1792193135" target="_blank" rel="noreferrer" className="u-link u-link--draw">App Store</a>
           <a href="mailto:hey@heyvish.com" className="u-link u-link--draw">hey@heyvish.com</a>
         </div>
         <div className={styles.col}>

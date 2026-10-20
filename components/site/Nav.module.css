@@ -2,6 +2,8 @@
 .inner{pointer-events:auto;width:min(100%,var(--measure));margin-inline:auto;display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 6px 0 18px;border-radius:999px;border:1px solid transparent;transition:background-color .5s var(--ease-expo),border-color .5s,backdrop-filter .5s,box-shadow .5s}
 .header[data-scrolled="true"] .inner{background:color-mix(in oklch,var(--paper) 86%,transparent);border-color:var(--line);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);box-shadow:0 10px 40px -20px oklch(0 0 0 / .35)}
 .wordmark{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--font-display);font-weight:600;font-size:1.0625rem;letter-spacing:-.03em;height:100%}
+.appmark{display:inline-flex;align-items:center;gap:.65rem;font-family:var(--font-display);font-weight:600;font-size:1.0625rem;letter-spacing:-.03em;height:100%}
+.appIcon{width:28px;height:28px;border-radius:8px;border:1px solid var(--line)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent);animation:pulse 2.6s var(--ease-in-out) infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in oklch,var(--accent) 55%,transparent)}70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
 .nav{display:flex;align-items:center;gap:2px}

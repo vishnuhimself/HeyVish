@@ -36,7 +36,7 @@ export function ContactCta({ heading = "Say hey.", compact = false }: { heading?
         </Reveal>
 
         <Reveal className={styles.emailWrap} delay={0.2}>
-          <a href={`mailto:${EMAIL}`} className={styles.email} onClick={copy} data-cursor="big" aria-label={`Email ${EMAIL} (click to copy)`}>
+          <a href={`mailto:${EMAIL}`} className={styles.email} onClick={copy} aria-label={`Email ${EMAIL} (click to copy)`}>
             <Scramble text={EMAIL} hover duration={700} className={styles.emailText} />
             <AnimatePresence>
               {copied && (
@@ -61,12 +61,6 @@ export function ContactCta({ heading = "Say hey.", compact = false }: { heading?
             <a href="https://x.com/VishHimself" target="_blank" rel="noreferrer" className="btn">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" /></svg>
               @VishHimself
-            </a>
-          </Magnetic>
-          <Magnetic>
-            <a href="https://apps.apple.com/us/developer/srivishnu-ramakrishnan/id1792193135" target="_blank" rel="noreferrer" className="btn btn--ghost">
-              Developer page
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M7 17 17 7m0 0H9m8 0v8" /></svg>
             </a>
           </Magnetic>
         </Reveal>

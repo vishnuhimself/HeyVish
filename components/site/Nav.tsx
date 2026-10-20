@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { ThemeSwitch } from "./ThemeSwitch";
+import { docAppFromPath } from "@/lib/docApps";
 import styles from "./Nav.module.css";
 
 const LINKS = [
@@ -27,6 +29,36 @@ export function Nav() {
   }, [pathname]);
 
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 24));
+
+  const doc = docAppFromPath(pathname);
+
+  // App-specific header for privacy and support pages.
+  if (doc) {
+    const sibling = doc.kind === "privacy" ? "support" : "privacy";
+    const hasSibling = doc.app.pages.includes(sibling);
+    return (
+      <header className={styles.header} data-scrolled={scrolled}>
+        <div className={styles.inner}>
+          <span className={styles.appmark}>
+            {doc.app.icon ? (
+              <Image src={doc.app.icon} alt="" width={28} height={28} className={styles.appIcon} />
+            ) : (
+              <span className={styles.dot} aria-hidden="true" />
+            )}
+            {doc.app.name}
+          </span>
+          <nav className={styles.nav} aria-label="App pages">
+            {hasSibling && (
+              <Link href={`/${sibling}/${doc.app.slug}`} className={styles.link}>
+                <span className={styles.label}>{sibling === "support" ? "Support" : "Privacy policy"}</span>
+              </Link>
+            )}
+            <ThemeSwitch className={styles.theme} />
+          </nav>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className={styles.header} data-scrolled={scrolled}>
